@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rooms, drawn out!</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#262525;background:#FBF6E6}
+a{color:inherit;text-decoration:none}a:hover{color:#786653}
+button{font:inherit;color:inherit}
+img{max-width:100%}
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+
+/* --- the page drops in, and leaves no clip behind --- */
+@keyframes pf-drop{from{opacity:0;transform:translateY(-48px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:translateY(0);clip-path:inset(0 0 0 0)}}
+.pf-drop{animation:pf-drop 900ms cubic-bezier(.2,.8,.2,1) backwards}
+@media (prefers-reduced-motion: reduce){.pf-drop{animation:none}}
+@keyframes pf-marquee{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.pf-marquee{animation:pf-marquee 34s linear infinite}
+@media (prefers-reduced-motion: reduce){.pf-marquee{animation:none}}
+
+/* --- hero carousel: manual only, no hover swap, no auto advance --- */
+.pf-layer{transition:opacity 420ms ease}
+.pf-herowrap{cursor:pointer}
+.pf-fit-contain .pf-layer img{width:100%!important;height:100%!important;object-fit:contain!important}
+.pf-fit-cover .pf-layer img{width:100%!important;height:100%!important;object-fit:cover!important}
+.pf-glass{position:absolute;top:50%;z-index:6;display:flex;align-items:center;justify-content:center;
+width:54px;height:54px;margin-top:-27px;padding:0 0 5px;border:1px solid rgba(255,255,255,0.55);
+border-radius:50%;background:rgba(254,249,237,0.26);
+backdrop-filter:blur(10px) saturate(1.35);-webkit-backdrop-filter:blur(10px) saturate(1.35);
+box-shadow:0 8px 24px rgba(36,25,16,0.18),inset 0 1px 0 rgba(255,255,255,0.65);
+color:#241910;font-size:28px;line-height:1;cursor:pointer;
+opacity:0;transition:opacity 260ms ease,transform 220ms ease}
+.pf-herowrap:hover .pf-glass,.pf-herowrap:focus-within .pf-glass{opacity:1}
+.pf-glass:hover{transform:scale(1.09);background:rgba(254,249,237,0.4)}
+.pf-timelabel{position:absolute;left:50%;bottom:26px;z-index:6;transform:translateX(-50%);
+padding:8px 18px;border:1px solid rgba(255,255,255,0.5);border-radius:999px;
+background:rgba(254,249,237,0.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+box-shadow:0 6px 18px rgba(36,25,16,0.14),inset 0 1px 0 rgba(255,255,255,0.6);
+color:#241910;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;
+opacity:0;transition:opacity 260ms ease;pointer-events:none}
+.pf-herowrap:hover .pf-timelabel,.pf-herowrap:focus-within .pf-timelabel{opacity:1}
+@media (hover:none){.pf-glass,.pf-timelabel{opacity:1}}
+.pf-dots{display:flex;justify-content:center;gap:10px;margin-top:16px}
+.pf-dot{width:9px;height:9px;padding:0;border-radius:50%;cursor:pointer;
+transition:transform 200ms ease,background-color 200ms ease,border-color 200ms ease}
+.pf-dot:hover{transform:scale(1.2)}
+
+/* --- mood boards: four square tiles trading places --- */
+.pf-mbgrid{position:relative;box-sizing:border-box;overflow:hidden}
+.pf-mbcell{position:absolute;left:0;top:0;box-sizing:border-box;overflow:hidden;
+width:calc(50% - var(--pf-g) / 2);height:calc(50% - var(--pf-g) / 2);
+border:1px solid rgba(38,37,37,0.28);
+transform:translate(0px, 0px);
+transition:transform var(--pf-move) cubic-bezier(.5, 0, .18, 1);will-change:transform}
+.pf-mbcell img{width:100%!important;height:100%!important;object-fit:contain!important}
+.pf-mbred{border-color:transparent}
+.pf-mbopen{padding:0;background:none;font:inherit;color:inherit;cursor:zoom-in}
+.pf-mbopen:focus-visible{outline:2px solid #C62B23;outline-offset:3px}
+
+/* --- a board, opened over the page --- */
+.pf-lb{position:fixed;left:0;top:0;right:0;bottom:0;z-index:90;display:flex;align-items:center;
+justify-content:center;padding:40px 76px;background:rgba(11,11,11,0.84);
+-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:pf-lbin 220ms ease both}
+@keyframes pf-lbin{from{opacity:0}to{opacity:1}}
+.pf-lbveil{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;border:0;padding:0;
+background:transparent;cursor:zoom-out}
+.pf-lbframe{position:relative;z-index:2;box-sizing:border-box;width:min(1040px,100%);
+height:min(80vh,880px);padding:10px;background:#FEF9ED;
+box-shadow:0 30px 70px -30px rgba(0,0,0,0.75)}
+.pf-lbslide{position:absolute;left:10px;top:10px;right:10px;bottom:10px;overflow:hidden}
+.pf-lbslide img{width:100%!important;height:100%!important;object-fit:contain!important}
+.pf-lbbtn{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;
+width:46px;height:46px;padding:0 0 3px;border:1px solid rgba(254,249,237,0.5);border-radius:50%;
+background:rgba(254,249,237,0.14);color:#FEF9ED;font-size:26px;line-height:1;cursor:pointer;
+transition:background-color 180ms ease,transform 180ms ease}
+.pf-lbbtn:hover{background:rgba(254,249,237,0.32);transform:scale(1.07)}
+.pf-lbprev{left:16px;top:50%;margin-top:-23px}
+.pf-lbnext{right:16px;top:50%;margin-top:-23px}
+.pf-lbclose{z-index:6;right:12px;top:12px;width:40px;height:40px;padding:0 0 2px;border-color:rgba(36,25,16,0.5);background:rgba(254,249,237,0.94);color:#241910;font-size:20px}
+.pf-lbclose:hover{background:#241910;color:#FEF9ED}
+.pf-lb:focus,.pf-lb:focus-visible{outline:none}
+.pf-lbcount{position:absolute;left:50%;bottom:16px;z-index:4;transform:translateX(-50%);
+color:rgba(254,249,237,0.78);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+font-weight:500}
+@media (max-width:760px){.pf-lb{padding:14px}.pf-lbframe{height:64vh}
+.pf-lbprev{left:4px}.pf-lbnext{right:4px}}
+@media (prefers-reduced-motion:reduce){.pf-lb{animation:none}}
+@media (prefers-reduced-motion:reduce){.pf-mbcell{transition:none}}
+.pf-mob .pf-herowrap{width:auto !important;padding-left:0 !important}
+.pf-mob .pf-mbgrid{width:100% !important}
+
+/* --- taped notepad, the CV page's paper --- */
+.pf-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+.pf-npaper{position:relative;box-sizing:border-box;
+background-image:repeating-linear-gradient(to bottom,transparent 0 27px,rgba(36,25,16,0.09) 27px 28px);
+box-shadow:0 1px 0 rgba(36,25,16,0.10),0 14px 30px -20px rgba(36,25,16,0.55)}
+.pf-ntape{position:absolute;background-color:rgba(214,196,170,0.6);
+border-left:1px solid rgba(36,25,16,0.12);border-right:1px solid rgba(36,25,16,0.12)}
+
+
+.pf-fnav{position:absolute;top:50%;z-index:4;transform:translateY(-50%);color:#241910;font-size:17px;line-height:1}
+.pf-fcontacts{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px;padding:18px 36px;border-top:1px solid rgba(36,25,16,0.25);background-color:#FEF9ED}
+.pf-hero.pf-ndemo .pf-day{opacity:0 !important}
+.pf-hero.pf-ndemo .pf-night{opacity:1 !important}
+.pf-mob .pf-fcontacts{grid-template-columns:1fr !important;justify-items:center;gap:12px;text-align:center}
+.pf-mob .pf-fnav{position:static !important;transform:none !important;display:block;text-align:center;margin:6px 0}
+.pf-mob .pf-fnavrow{display:block !important;padding:10px 0 !important}
+
+/* pf-fit-pass — one fixed layout, scaled to fit any window */
+html,body{overflow-x:hidden}
+.pf-stage{width:100%;overflow:hidden}
+.pf-fit{width:1440px;transform-origin:top left;will-change:transform}
+
+/* --- below 760px the notepad sits above the carousel --- */
+.pf-fit.pf-mob{width:100% !important;transform:none !important;margin-left:0 !important}
+.pf-mob .pf-introgrid{display:block !important;height:auto !important;min-height:0 !important;padding:18px 16px 40px !important}
+.pf-mob .pf-aside{position:static !important;width:auto !important;margin-bottom:26px}
+.pf-mob .pf-herocol{width:auto !important;max-width:none !important;height:auto !important}
+.pf-mob .pf-herowrap{max-width:none !important;height:auto !important}
+.pf-mob .pf-hframe{height:58vw !important;max-width:none !important}
+.pf-mob .pf-heroannot{display:none}
+.pf-mob .pf-heropage{min-height:0 !important}
+</style>
+</helmet>
+<sc-if value="{{lbOpen}}" hint-placeholder-val="{{ false }}">
+<div class="pf-lb" id="pf-lb-Chapter6" tabindex="-1" role="dialog" aria-modal="true" aria-label="Mood board">
+<button type="button" class="pf-lbveil" onClick="{{lbClose}}" aria-label="Close mood board"></button>
+<div class="pf-lbframe">
+<div class="pf-lbslide" style="display: {{lbD0}};"><dc-import name="Slot-C6-Checkpoint1" hint-size="100%,100%"></dc-import></div>
+<div class="pf-lbslide" style="display: {{lbD1}};"><dc-import name="Slot-C6-Checkpoint2" hint-size="100%,100%"></dc-import></div>
+<div class="pf-lbslide" style="display: {{lbD2}};"><dc-import name="Slot-C6-Checkpoint3" hint-size="100%,100%"></dc-import></div>
+<button type="button" class="pf-lbbtn pf-lbclose" onClick="{{lbClose}}" aria-label="Close mood board">×</button>
+</div>
+<button type="button" class="pf-lbbtn pf-lbprev" onClick="{{lbPrev}}" aria-label="Previous mood board">‹</button>
+<button type="button" class="pf-lbbtn pf-lbnext" onClick="{{lbNext}}" aria-label="Next mood board">›</button>
+<span class="pf-lbcount">{{lbLabel}}</span>
+</div>
+</sc-if>
+<div class="pf-stage" id="pf-stage-Chapter6">
+<div class="pf-fit" id="pf-fit-Chapter6">
+<div class="pf-heropage" style="position: relative; width: 100%; min-height: 900px; box-sizing: border-box; overflow: hidden; background-color: {{paper}}; color: #262525; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300;">
+<div aria-hidden="true" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; z-index: 0; pointer-events: none; opacity: {{gridOp}}; background-image: linear-gradient(to right, #2A4A86 1px, transparent 1px), linear-gradient(to bottom, #2A4A86 1px, transparent 1px); background-size: {{gridStep}} {{gridStep}};"></div>
+
+<header style="position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 36px; border-bottom: 1px solid rgba(156, 151, 149, 0.45); text-transform: uppercase; font-weight: 500; letter-spacing: 0.16em; font-size: 10px;">
+<a href="Home.dc.html" style="color: #262525;">SHANMATHI SIVAKUMAR</a>
+<nav aria-label="Main navigation" style="display: flex; gap: 22px; color: #9C9795;">
+<a href="About.dc.html" style="color: #9C9795;">About</a>
+<a href="Main.dc.html" style="color: #9C9795;">Projects</a>
+<a href="Library.dc.html" style="color: #9C9795;">Owner workspace</a>
+</nav>
+</header>
+
+<main>
+<section style="position: relative; z-index: 1;">
+
+
+
+<header data-pf-marquee="1" style="z-index: 1; position: relative; overflow: hidden; padding: 22px 0; border-bottom: 1px solid rgba(38, 37, 37, 0.5);">
+<div class="pf-marquee" data-pf-track="1" style="display: flex; width: max-content;">
+<div style="display: flex; flex: 0 0 auto;"><h1 style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;">{{title}}</h1><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span></div>
+<div style="display: flex; flex: 0 0 auto;" aria-hidden="true"><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span></div>
+</div>
+</header>
+
+<div class="pf-drop pf-introgrid" style="animation-delay: 100ms; z-index: 1; position: relative; display: grid; grid-template-columns: 200px minmax(0, 760px); justify-content: center; gap: 34px; min-height: 496px; padding: 20px 16px 32px; box-sizing: border-box; height: 698px">
+
+<aside class="pf-aside" style="position: absolute; left: 36px; top: 20px; width: 333px; height: 229px">
+<div class="pf-npaper" style="padding: 58px 24px 48px; background-color: {{notePaper}}; transform: rotate(-1.8deg); height: 219px; width: 342px">
+<span class="pf-ntape" aria-hidden="true" style="left: 74px; top: -13px; width: 96px; height: 25px; transform: rotate(-4deg);"></span>
+<p class="pf-hand" style="margin: 0; color: {{noteColor}}; font-size: {{noteSize}}; line-height: {{noteLead}}; letter-spacing: {{noteTrack}}; text-align: {{noteAlign}}; height: 23px; padding-right: 12px; padding-left: 16px; padding-bottom: 20px; padding-top: 0px">{{note}}</p><p style="margin: 30px auto 0; width: 243px; max-width: 100%; font-size: 14px; font-weight: 300; line-height: 1.4; text-align: center; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; height: 45px; padding-top: 0px; padding-bottom: 0px">{{tagline}}</p>
+</div>
+</aside>
+
+<div class="pf-herocol" style="grid-column: 2; width: 832px; max-width: 1062px; justify-self: center; height: 486px">
+<div class="pf-herowrap" style="position: relative; user-select: none; width: 595px; max-width: 1076px; padding-left: 224px; height: 525px">
+<div class="pf-mbgrid" id="pf-mbgrid-Chapter6" role="group" aria-label="Mood boards" style="width: 765px; max-width: none; aspect-ratio: 1 / 1; --pf-g: {{gap}}; --pf-move: {{moveMs}}; height: 648px">
+<button type="button" class="pf-mbcell pf-mbopen" data-pf-tile="1" onClick="{{open1}}" aria-label="Open mood board 1" style="background-color: {{tileBg1}};"><dc-import name="Slot-C6-Checkpoint1" hint-size="100%,100%"></dc-import></button>
+<button type="button" class="pf-mbcell pf-mbopen" data-pf-tile="2" onClick="{{open2}}" aria-label="Open mood board 2" style="background-color: {{tileBg2}};"><dc-import name="Slot-C6-Checkpoint2" hint-size="100%,100%"></dc-import></button>
+<button type="button" class="pf-mbcell pf-mbopen" data-pf-tile="3" onClick="{{open3}}" aria-label="Open mood board 3" style="background-color: {{tileBg3}};"><dc-import name="Slot-C6-Checkpoint3" hint-size="100%,100%"></dc-import></button>
+<div class="pf-mbcell pf-mbred" data-pf-tile="4" aria-hidden="true" style="background-color: {{redColor}};"></div>
+</div>
+</div>
+
+</div>
+<div class="pf-heroannot" style="position: absolute; left: 137px; top: 408px; z-index: 12; width: 343px; height: 310px">
+<div style="position: absolute; left: 94px; top: -165px; width: 385px; height: 278px">
+<dc-import name="AnnotBubble" tail="tail left" hint-size="225,154" t-size="60" text="CLICK THE IMAGES TO VIEW THEM BIGGER!!! "></dc-import>
+</div>
+<div style="position: absolute; left: 59px; top: 80px; width: 142px; transform: rotate(-15deg); height: 132px">
+<dc-import name="AnnotFace" face="neutral" hint-size="150,116"></dc-import>
+</div>
+</div></div>
+</section>
+</main>
+
+<footer style="position: relative; z-index: 3;">
+<div class="pf-fnavrow" style="position: relative; display: flex; justify-content: space-between; gap: 24px; padding: 20px 44px;">
+<a class="pf-hand" href="Chapter5.dc.html" style="color: #241910; font-size: 17px;">{{prevLabel}}</a>
+</div>
+<div class="pf-fcontacts">
+<a class="pf-hand" href="https://www.instagram.com/shansivakumar" target="_blank" rel="noopener" style="justify-self: start; color: #241910; font-size: 17px;">{{ig}}</a>
+<a href="Main.dc.html" style="justify-self: center; color: #241910; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">Return to index ↗</a>
+<a class="pf-hand" href="mailto:shanmathisivakumar30@gmail.com" style="justify-self: end; color: #241910; font-size: 17px;">{{mail}}</a>
+</div>
+</footer>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;ig&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shansivakumar&quot;}, &quot;mail&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shanmathisivakumar30@gmail.com&quot;}, &quot;prevLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;previous project&quot;}, &quot;nextLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;next project&quot;}, &quot;title&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;spatial fragments&quot;}, &quot;tagline&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A few things caught my eye. Then they started making a room.&quot;}, &quot;heroCount&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;], &quot;default&quot;: &quot;4&quot;}, &quot;imgFit&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;fit&quot;, &quot;fill&quot;], &quot;default&quot;: &quot;fit&quot;}, &quot;note&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;mood boards&quot;}, &quot;noteSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;40px&quot;}, &quot;noteColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#C62B23&quot;, &quot;options&quot;: [&quot;#C62B23&quot;, &quot;#C8432B&quot;, &quot;#241910&quot;, &quot;#786653&quot;]}, &quot;noteLead&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;1.02&quot;}, &quot;noteTrack&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;0.01em&quot;}, &quot;noteAlign&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;left&quot;, &quot;center&quot;, &quot;right&quot;], &quot;default&quot;: &quot;left&quot;}, &quot;notePaper&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FDF7EA&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FBF6E6&quot;}, &quot;gridOp&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;0.17&quot;}, &quot;gridStep&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;17px&quot;}, &quot;slogan&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A room is a verb. It keeps happening.&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#786653&quot;, &quot;options&quot;: [&quot;#786653&quot;, &quot;#241910&quot;, &quot;#9C9795&quot;]}, &quot;redColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#C62B23&quot;, &quot;options&quot;: [&quot;#C62B23&quot;, &quot;#C8432B&quot;, &quot;#241910&quot;, &quot;#0B0B0B&quot;]}, &quot;shuffle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;playing&quot;, &quot;paused&quot;], &quot;default&quot;: &quot;playing&quot;}, &quot;holdMs&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;600&quot;, &quot;800&quot;, &quot;1000&quot;, &quot;1200&quot;, &quot;1600&quot;, &quot;2000&quot;, &quot;2400&quot;, &quot;3000&quot;], &quot;default&quot;: &quot;1200&quot;}, &quot;moveMs&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;300&quot;, &quot;400&quot;, &quot;600&quot;, &quot;800&quot;, &quot;1000&quot;, &quot;1500&quot;, &quot;2000&quot;], &quot;default&quot;: &quot;800&quot;}, &quot;gap&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;10px&quot;}, &quot;boardSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;520px&quot;}, &quot;tileBg1&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFFFFF&quot;}, &quot;tileBg2&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFFFFF&quot;}, &quot;tileBg3&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFFFFF&quot;}, &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 900}}">
+class Component extends DCLogic {
+pfFit() {
+try {
+const stage = document.getElementById('pf-stage-Chapter6');
+const fit = document.getElementById('pf-fit-Chapter6');
+if (!stage || !fit) return;
+const w = stage.clientWidth || document.documentElement.clientWidth || 1440;
+const mob = w > 0 && w < 760;
+fit.classList.toggle('pf-mob', mob);
+if (mob) { fit.style.transform = ''; fit.style.marginLeft = ''; stage.style.height = ''; return; }
+const s = Math.min(1, w / 1440);
+fit.style.transform = 'scale(' + s + ')';
+fit.style.marginLeft = Math.max(0, (w - 1440 * s) / 2) + 'px';
+stage.style.height = Math.ceil(fit.offsetHeight * s) + 'px';
+} catch (e) {}
+}
+pfFitBind() {
+this._pfFit = () => this.pfFit();
+this.pfFit();
+try { window.addEventListener('resize', this._pfFit); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+this._pfRO = new ResizeObserver(this._pfFit);
+this._pfRO.observe(document.getElementById('pf-fit-Chapter6'));
+}
+} catch (e) {}
+try { setTimeout(this._pfFit, 120); setTimeout(this._pfFit, 700); } catch (e) {}
+}
+componentDidMount() { this.pfFitBind(); this.mbBind(); try { window.scrollTo(0, 0); } catch (e) {} }
+componentWillUnmount() {
+this.mbFree();
+try { window.removeEventListener('resize', this._pfFit); } catch (e) {}
+try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e) {}
+}
+mbEl() { try { return document.getElementById('pf-mbgrid-Chapter6'); } catch (e) { return null; } }
+mbReduced() {
+try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+}
+mbCanRun() {
+return !this.mbReduced()
+&& (this.props.shuffle ?? 'playing') !== 'paused'
+&& this._mbVis !== false
+&& this._mbHidden !== true
+&& this._mbLb !== true;
+}
+mbApply() {
+const g = this.mbEl();
+if (!g) return;
+const off = 'calc(100% + ' + (this._mbGap || '10px') + ')';
+const pos = this._mbPos || [0, 1, 2, 3];
+const tiles = g.querySelectorAll('[data-pf-tile]');
+for (let i = 0; i < tiles.length; i++) {
+const t = tiles[i];
+const p = typeof pos[i] === 'number' ? pos[i] : i;
+const tf = 'translate(' + ((p % 2) ? off : '0px') + ', ' + ((p > 1) ? off : '0px') + ')';
+if (t.style.transform === tf) continue;
+// a re-render can hand back a fresh element: place it with no transition,
+// otherwise every tile would slide in from the top-left corner
+const fresh = !t.style.transform;
+if (fresh) t.style.transition = 'none';
+t.style.transitionDelay = (i * 70) + 'ms';
+t.style.transform = tf;
+if (fresh) { void t.offsetWidth; t.style.transition = ''; }
+}
+}
+mbShuffle() {
+// a permutation: every tile lands somewhere, every cell gets exactly one tile
+const cur = this._mbPos || [0, 1, 2, 3];
+let next = cur, guard = 0;
+while (guard < 40) {
+guard++;
+const a = [0, 1, 2, 3];
+for (let i = 3; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+const t = a[i]; a[i] = a[j]; a[j] = t;
+}
+let same = true;
+for (let i = 0; i < 4; i++) { if (a[i] !== cur[i]) { same = false; break; } }
+if (!same) { next = a; break; }
+}
+this._mbPos = next;
+this.mbApply();
+}
+mbLoop() {
+this._mbT = null;
+if (!this.mbCanRun()) return;
+this.mbShuffle();
+this._mbT = setTimeout(() => this.mbLoop(), this._mbHold || 1200);
+}
+mbArm() {
+if (this._mbT || !this.mbCanRun()) return;
+this._mbT = setTimeout(() => this.mbLoop(), this._mbHold || 1200);
+}
+mbDisarm() { try { clearTimeout(this._mbT); } catch (e) {} this._mbT = null; }
+mbRead() {
+const p = this.props;
+this._mbGap = String(p.gap ?? '10px').trim();
+this._mbMove = Math.max(120, parseInt(p.moveMs ?? '800', 10) || 800);
+const _h = Math.max(300, parseInt(p.holdMs ?? '1200', 10) || 1200);
+this._mbHold = Math.max(_h, this._mbMove + 150);
+}
+mbSync() {
+this._mbPend = false;
+const p = this.props;
+const sig = [p.shuffle ?? 'playing', p.holdMs ?? '1200', p.moveMs ?? '800', p.gap ?? '10px',
+this._mbLb ? 'lb' : '-'].join('|');
+this.mbRead();
+this.mbApply();
+if (sig === this._mbSig) return;
+this._mbSig = sig;
+this.mbDisarm();
+this.mbArm();
+}
+mbBind() {
+const g = this.mbEl();
+if (!g) return;
+this.mbRead();
+this._mbSig = [this.props.shuffle ?? 'playing', this.props.holdMs ?? '1200',
+this.props.moveMs ?? '800', this.props.gap ?? '10px', '-'].join('|');
+this._mbVis = true;
+this._mbHidden = false;
+this._mbPos = [0, 1, 2, 3];
+this.mbApply();
+try {
+if (typeof IntersectionObserver !== 'undefined') {
+this._mbIO = new IntersectionObserver((es) => {
+es.forEach((e) => {
+this._mbVis = e.isIntersecting;
+if (e.isIntersecting) this.mbArm(); else this.mbDisarm();
+});
+}, { threshold: 0.05 });
+this._mbIO.observe(g);
+}
+} catch (e) {}
+this._mbVisH = () => {
+this._mbHidden = !!document.hidden;
+if (this._mbHidden) this.mbDisarm(); else this.mbArm();
+};
+try { document.addEventListener('visibilitychange', this._mbVisH); } catch (e) {}
+this.mbArm();
+}
+mbFree() {
+this.mbDisarm();
+try { if (this._mbIO) { this._mbIO.disconnect(); this._mbIO = null; } } catch (e) {}
+try { document.removeEventListener('visibilitychange', this._mbVisH); } catch (e) {}
+}
+lbKeyBind() {
+const el = document.getElementById('pf-lb-Chapter6');
+if (!el) { this._lbEl = null; return; }
+if (this._lbEl === el) return;
+this._lbEl = el;
+// element-scoped, never on the document: this platform forbids that, and it
+// is also what lets one Escape close the viewer and the next one leave Play
+this._lbKey = (e) => {
+const k = e.key;
+if (k !== 'Escape' && k !== 'Esc' && k !== 'ArrowLeft' && k !== 'ArrowRight') return;
+e.preventDefault();
+e.stopPropagation();
+try { e.stopImmediatePropagation(); } catch (err) {}
+const a = this._lbActs || {};
+try {
+if (k === 'ArrowLeft') { if (a.prev) a.prev(); }
+else if (k === 'ArrowRight') { if (a.next) a.next(); }
+else if (a.close) a.close();
+} catch (err) {}
+};
+try { el.addEventListener('keydown', this._lbKey); } catch (err) {}
+try { el.focus({ preventScroll: true }); } catch (err) {
+try { el.focus(); } catch (e2) {}
+}
+}
+renderVals() {
+const p = this.props;
+const a = p.accent ?? '#786653';
+const st = this.state || {};
+const n = Math.max(1, Math.min(6, parseInt(p.heroCount ?? '4', 10) || 1));
+const i = Math.min(Math.max(0, st.h || 0), n - 1);
+const pad = (k) => (k < 10 ? '0' : '') + k;
+const v = {
+accent: a,
+title: p.title ?? 'Rooms, drawn out!',
+slogan: p.slogan ?? 'A room is a verb. It keeps happening.',
+tagline: p.tagline ?? 'The premise for this room is waiting in the editing workspace.',
+note: p.note ?? 'mood boards',
+noteSize: p.noteSize ?? '40px',
+noteColor: p.noteColor ?? '#C62B23',
+noteLead: p.noteLead ?? '1.02',
+noteTrack: p.noteTrack ?? '0.01em',
+noteAlign: p.noteAlign ?? 'left',
+notePaper: p.notePaper ?? '#FDF7EA',
+paper: p.paper ?? '#FBF6E6',
+gridOp: p.gridOp ?? '0.17',
+gridStep: p.gridStep ?? '17px',
+fitClass: (p.imgFit ?? 'fit') === 'fill' ? 'pf-fit-cover' : 'pf-fit-contain',
+hLabel: pad(i + 1) + ' / ' + pad(n)
+};
+for (let k = 0; k < 6; k++) {
+const on = k === i;
+v['hO' + k] = on ? 1 : 0; v['hZ' + k] = on ? 2 : 1; v['hP' + k] = on ? 'auto' : 'none';
+v['dD' + k] = k < n ? 'block' : 'none';
+v['dBg' + k] = on ? a : 'transparent';
+v['dBd' + k] = on ? a : '#9C9795';
+v['pick' + k] = () => this.setState({ h: k });
+}
+v.hNext = () => this.setState({ h: (i + 1) % n });
+v.hPrev = () => this.setState({ h: (i + n - 1) % n });
+v.ig = this.props.ig ?? 'shansivakumar';
+v.mail = this.props.mail ?? 'shanmathisivakumar30@gmail.com';
+v.prevLabel = this.props.prevLabel ?? 'previous project';
+v.nextLabel = this.props.nextLabel ?? 'next project';
+const _lb = typeof st.lb === 'number' ? st.lb : -1;
+this._mbLb = _lb >= 0;
+v.lbOpen = _lb >= 0;
+v.lbLabel = (_lb >= 0 ? '0' + (_lb + 1) : '00') + ' / 03';
+v.lbClose = () => this.setState({ lb: -1 });
+v.lbNext = () => this.setState({ lb: (_lb + 1) % 3 });
+v.lbPrev = () => this.setState({ lb: (_lb + 2) % 3 });
+this._lbActs = { close: v.lbClose, next: v.lbNext, prev: v.lbPrev };
+if (!this._lbPend) {
+this._lbPend = true;
+try { setTimeout(() => { this._lbPend = false; this.lbKeyBind(); }, 0); }
+catch (e) { this._lbPend = false; }
+}
+
+for (let k = 0; k < 3; k++) {
+v['lbD' + k] = k === _lb ? 'block' : 'none';
+v['open' + (k + 1)] = () => this.setState({ lb: k });
+}
+v.boardSize = p.boardSize ?? '520px';
+v.gap = p.gap ?? '10px';
+v.moveMs = (Math.max(120, parseInt(p.moveMs ?? '800', 10) || 800)) + 'ms';
+v.redColor = p.redColor ?? '#C62B23';
+v.tileBg1 = p.tileBg1 ?? '#FFFFFF';
+v.tileBg2 = p.tileBg2 ?? '#FFFFFF';
+v.tileBg3 = p.tileBg3 ?? '#FFFFFF';
+if (!this._mbPend) { this._mbPend = true; try { setTimeout(() => this.mbSync(), 0); } catch (e) { this._mbPend = false; } }
+return v;
+}
+}
+</script>
+</body>
+</html>

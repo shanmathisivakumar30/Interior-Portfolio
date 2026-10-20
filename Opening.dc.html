@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Opening — pushed name</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#262525;background:#FEF9ED}
+a{color:inherit;text-decoration:none}a:hover{color:#786653}
+button{font:inherit;color:inherit}
+.pf-tab{transition:transform 240ms cubic-bezier(.2,.8,.2,1),height 240ms cubic-bezier(.2,.8,.2,1),background-color 240ms ease}
+.pf-tab:hover{height:88.8px !important;transform:translateX(-8.8px);background-color:#f4d45b !important;color:#262525}
+.pf-layer{transition:opacity 360ms ease}
+.pf-hero .pf-night,.pf-hero .pf-day{transition:opacity 220ms ease}
+.pf-hero:hover .pf-day{opacity:0 !important}
+.pf-hero:hover .pf-night{opacity:1 !important}
+.pf-card:hover h3{color:#786653 !important}
+.pf-dot:hover{border-color:#786653 !important;background-color:#786653 !important;transform:scale(1.15)}
+.pf-ttab:hover{border-bottom-color:#786653 !important;color:#786653 !important}
+@keyframes op-group{0%{transform:translateX(0.00vw);animation-timing-function:linear}5%{transform:translateX(0.00vw);animation-timing-function:cubic-bezier(.2,.8,.2,1)}15%{transform:translateX(25.00vw);animation-timing-function:linear}22%{transform:translateX(25.00vw);animation-timing-function:cubic-bezier(.62,0,.32,1)}34%{transform:translateX(50.60vw);animation-timing-function:ease-out}36%{transform:translateX(50.00vw);animation-timing-function:linear}42%{transform:translateX(50.00vw);animation-timing-function:cubic-bezier(.62,0,.32,1)}54%{transform:translateX(75.60vw);animation-timing-function:ease-out}56%{transform:translateX(75.00vw);animation-timing-function:linear}62%{transform:translateX(75.00vw);animation-timing-function:cubic-bezier(.62,0,.32,1)}74%{transform:translateX(100.40vw);animation-timing-function:ease-out}76%{transform:translateX(100.00vw);animation-timing-function:linear}81%{transform:translateX(100.00vw);animation-timing-function:cubic-bezier(.55,0,.85,.35)}93%{transform:translateX(calc(100vw + 100%));animation-timing-function:linear}100%{transform:translateX(calc(100vw + 100%));animation-timing-function:linear}}
+@keyframes op-field{0%{transform:scaleX(0.0000);animation-timing-function:linear}5%{transform:scaleX(0.0000);animation-timing-function:cubic-bezier(.2,.8,.2,1)}15%{transform:scaleX(0.2500);animation-timing-function:linear}22%{transform:scaleX(0.2500);animation-timing-function:cubic-bezier(.62,0,.32,1)}34%{transform:scaleX(0.5060);animation-timing-function:ease-out}36%{transform:scaleX(0.5000);animation-timing-function:linear}42%{transform:scaleX(0.5000);animation-timing-function:cubic-bezier(.62,0,.32,1)}54%{transform:scaleX(0.7560);animation-timing-function:ease-out}56%{transform:scaleX(0.7500);animation-timing-function:linear}62%{transform:scaleX(0.7500);animation-timing-function:cubic-bezier(.62,0,.32,1)}74%{transform:scaleX(1.0000);animation-timing-function:ease-out}76%{transform:scaleX(1.0000);animation-timing-function:linear}81%{transform:scaleX(1.0000);animation-timing-function:cubic-bezier(.55,0,.85,.35)}93%{transform:scaleX(1);animation-timing-function:linear}100%{transform:scaleX(1);animation-timing-function:linear}}
+@keyframes op-girl{0%{transform:translateY(0)}10%{transform:translateY(-4px)}20%{transform:translateY(0)}30%{transform:translateY(-4px)}40%{transform:translateY(0)}50%{transform:translateY(-4px)}60%{transform:translateY(0)}70%{transform:translateY(-4px)}80%{transform:translateY(0)}90%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+@keyframes op-marks{0%{opacity:0}8%{opacity:0}15%{opacity:1}90%{opacity:1}97%{opacity:0}100%{opacity:0}}
+.op-field{transform-origin:left center;animation:op-field 2.6s linear both}
+.op-group{animation:op-group 2.6s linear both}
+.op-girl{transform-origin:50% 100%;animation:op-girl 2.6s linear both}
+.op-marks{animation:op-marks 2.6s linear both}
+.op-still{animation:none !important}
+@media (prefers-reduced-motion: reduce){.op-field,.op-group,.op-girl,.op-marks{animation:none !important}}
+/* pf-responsive-pass */
+img{max-width:100%}
+.pf-introgrid,.pf-occgrid,.pf-drawgrid{max-width:100%}
+@media (max-width: 1200px){
+.pf-introgrid{display:block !important;min-height:0 !important}
+.pf-introgrid aside{position:static !important;width:auto !important;height:auto !important;margin:0 0 28px !important}
+.pf-introgrid aside > *{position:static !important;display:block !important;width:auto !important;margin:0 0 10px !important;left:auto !important;top:auto !important}
+.pf-occgrid{display:block !important;gap:0 !important}
+.pf-occgrid > div + div{margin-top:32px}
+.pf-drawgrid{grid-template-columns:1fr !important}
+}
+@media (max-width: 900px){
+[data-pf-marquee] h1,[data-pf-marquee] span{font-size:46px !important;padding-right:32px !important}
+.ok-grid p,.ok-grid span{font-size:24px !important}
+.ok-grid{gap:8px !important}
+.pf-tab{height:auto !important;padding:14px 8px !important}
+.pf-tab:hover{height:auto !important;transform:none !important}
+.pf-tab h2{font-size:34px !important;letter-spacing:-0.04em !important;white-space:normal !important}
+.pf-tab > div:first-child{flex-direction:column !important;align-items:flex-start !important;gap:8px !important}
+.op-name{font-size:52px !important}
+section,main,header{padding-left:20px !important;padding-right:20px !important}
+}
+@media (max-width: 620px){
+[data-pf-marquee] h1,[data-pf-marquee] span{font-size:32px !important}
+.pf-tab h2{font-size:24px !important}
+.op-name{font-size:34px !important}
+}
+</style>
+</helmet>
+<div style="position: relative; width: 100%; min-height: max(900px, 100vh); box-sizing: border-box; overflow: hidden; background-color: #0b0b0b; color: #262525; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300;" onAnimationEnd="{{done}}">
+<div aria-label="Portfolio opening" style="position: absolute; inset: 0; overflow: hidden; background-color: #0b0b0b;">
+<div class="op-field{{still}}" style="position: absolute; inset: 0; background-color: #FEF9ED; transform: scaleX(0.75);"></div>
+<div class="op-marks{{still}}" style="position: absolute; inset: 0; pointer-events: none;">
+<div style="position: absolute; bottom: 64px; left: 25%; display: flex; flex-direction: column; align-items: center; gap: 8px; transform: translateX(-50%); color: #9C9795; font-size: 9px; letter-spacing: 0.16em; font-weight: 500;"><span style="display: block; width: 1px; height: 14px; background-color: #9C9795;"></span><span>25</span></div>
+<div style="position: absolute; bottom: 64px; left: 50%; display: flex; flex-direction: column; align-items: center; gap: 8px; transform: translateX(-50%); color: #9C9795; font-size: 9px; letter-spacing: 0.16em; font-weight: 500;"><span style="display: block; width: 1px; height: 14px; background-color: #9C9795;"></span><span>50</span></div>
+<div style="position: absolute; bottom: 64px; left: 75%; display: flex; flex-direction: column; align-items: center; gap: 8px; transform: translateX(-50%); color: #9C9795; font-size: 9px; letter-spacing: 0.16em; font-weight: 500;"><span style="display: block; width: 1px; height: 14px; background-color: #9C9795;"></span><span>75</span></div>
+</div>
+<div style="position: absolute; top: 0; bottom: 0; left: 0; width: 0; display: flex; align-items: center; justify-content: flex-end;">
+<div class="op-group{{still}}" style="display: flex; flex: 0 0 auto; align-items: center; transform: translateX(75vw);">
+<div class="op-girl{{still}}" style="position: relative; z-index: 4; flex: 0 0 auto; align-self: flex-start; width: 316.8px; margin-top: 12px; margin-right: -38px;">
+<img src="./assets/9720d750c49e603dcc2ecbdaabfd2e81.png" alt="Illustrated architect pushing the name into place" style="display: block; width: 100%; height: auto;">
+</div>
+<div style="position: relative; z-index: 2; flex: 0 0 auto; padding-right: 24px; text-align: center;">
+<p style="margin: 0 0 20px; color: #241910; font-size: 9px; letter-spacing: 0.27em; line-height: 1; text-transform: uppercase; font-weight: 500;">An interior architecture portfolio</p>
+<h1 class="op-name" style="display: flex; flex-direction: column; align-items: center; margin: 0; color: #241910; font-size: 137.6px; font-weight: 400; letter-spacing: -0.075em; line-height: 0.9;"><span style="display: block; white-space: nowrap;">Shanmathi</span><span style="display: block; white-space: nowrap;">Sivakumar</span></h1>
+</div>
+</div>
+</div>
+<sc-if value="{{standalone}}" hint-placeholder-val="{{ true }}">
+<a href="Home.dc.html" data-op-next="1" style="position: absolute; right: 24px; bottom: 24px; z-index: 6; border-bottom: 1px solid rgba(255, 255, 255, 0.45); padding-bottom: 4px; color: #ffffff; mix-blend-mode: difference; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">Skip opening · Enter</a>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent": {"editor": "color", "default": "#786653", "options": ["#786653", "#241910", "#9C9795"]}, "motion": {"editor": "enum", "options": ["play", "hold"], "default": "play"}, "embedded": {"editor": null, "default": ""}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+componentDidMount() { try { if (!this.props.embedded) window.scrollTo(0, 0); } catch (e) {} }
+renderVals() {
+const hold = (this.props.motion ?? 'play') === 'hold';
+const embedded = !!this.props.embedded;
+return {
+accent: this.props.accent ?? '#786653',
+still: hold ? ' op-still' : '',
+standalone: !embedded,
+done: (e) => {
+if (embedded || hold || !e || e.animationName !== 'op-group') return;
+// the opening has already played, so the studio page must not replay it
+try { sessionStorage.setItem('pf-home-intro', '1'); } catch (err) {}
+try { const a = document.querySelector('a[data-op-next]'); if (a) a.click(); } catch (err) {}
+}
+};
+}
+}
+</script>
+</body>
+</html>

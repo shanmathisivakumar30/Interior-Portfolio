@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chapter 02 — The breakfast club</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#262525;background:#FEF9ED}
+a{color:inherit;text-decoration:none}a:hover{color:#786653}
+button{font:inherit;color:inherit}
+.pf-tab{transition:transform 240ms cubic-bezier(.2,.8,.2,1),height 240ms cubic-bezier(.2,.8,.2,1),background-color 240ms ease}
+.pf-tab:hover{height:88.8px !important;transform:translateX(-8.8px);background-color:#E3DCCE !important;color:#262525}
+.pf-layer{transition:opacity 360ms ease}
+.pf-hero .pf-night,.pf-hero .pf-day{transition:opacity 220ms ease}
+.pf-hero:hover .pf-day{opacity:0 !important}
+.pf-hero:hover .pf-night{opacity:1 !important}
+.pf-card:hover h3{color:#786653 !important}
+.pf-dot:hover{border-color:#786653 !important;background-color:#786653 !important;transform:scale(1.15)}
+.pf-ttab:hover{border-bottom-color:#786653 !important;color:#786653 !important}
+@keyframes pf-drop{from{opacity:0;transform:translateY(-48px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:translateY(0);clip-path:inset(0 0 0 0)}}
+.pf-drop{animation:pf-drop 900ms cubic-bezier(.2,.8,.2,1) backwards}
+@media (prefers-reduced-motion: reduce){.pf-drop{animation:none}}
+@keyframes pf-marquee{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.pf-marquee{animation:pf-marquee 34s linear infinite}
+@media (prefers-reduced-motion: reduce){.pf-marquee{animation:none}}
+@keyframes ok-row0{0.0%{transform:translateX(51.2px)}22.222%{transform:translateX(128.0px)}66.667%{transform:translateX(128.0px)}75.556%{transform:translateX(51.2px)}100.0%{transform:translateX(51.2px)}}
+@keyframes ok-row2{0.0%{transform:translateX(22.4px)}22.222%{transform:translateX(56.0px)}44.444%{transform:translateX(0px)}75.556%{transform:translateX(0px)}91.111%{transform:translateX(22.4px)}100.0%{transform:translateX(22.4px)}}
+@keyframes ok-row4{0.0%{transform:translateX(51.2px)}22.222%{transform:translateX(128.0px)}66.667%{transform:translateX(128.0px)}75.556%{transform:translateX(51.2px)}100.0%{transform:translateX(51.2px)}}
+@keyframes ok-w0-1{0.0%{clip-path:inset(0% 0% 0% 0%)}25.0%{clip-path:inset(0% 0% 0% 0%)}36.111%{clip-path:inset(0% 0% 0% 100%)}77.5%{clip-path:inset(0% 0% 0% 100%)}85.278%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w0-3{0.0%{clip-path:inset(0% 0% 0% 0%)}30.556%{clip-path:inset(0% 0% 0% 0%)}41.667%{clip-path:inset(0% 0% 0% 100%)}81.389%{clip-path:inset(0% 0% 0% 100%)}89.167%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w1-0{0.0%{clip-path:inset(0% 0% 0% 0%)}33.333%{clip-path:inset(0% 0% 0% 0%)}44.444%{clip-path:inset(0% 100% 0% 0%)}83.333%{clip-path:inset(0% 100% 0% 0%)}91.111%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w1-2{0.0%{clip-path:inset(0% 0% 0% 0%)}27.778%{clip-path:inset(0% 0% 0% 0%)}38.889%{clip-path:inset(0% 100% 0% 0%)}79.444%{clip-path:inset(0% 100% 0% 0%)}87.222%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w1-4{0.0%{clip-path:inset(0% 0% 0% 0%)}22.222%{clip-path:inset(0% 0% 0% 0%)}33.333%{clip-path:inset(0% 100% 0% 0%)}75.556%{clip-path:inset(0% 100% 0% 0%)}83.333%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w2-1{0.0%{clip-path:inset(0% 0% 0% 0%)}25.0%{clip-path:inset(0% 0% 0% 0%)}36.111%{clip-path:inset(0% 0% 0% 100%)}77.5%{clip-path:inset(0% 0% 0% 100%)}85.278%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w2-4{0.0%{clip-path:inset(0% 0% 0% 0%)}33.333%{clip-path:inset(0% 0% 0% 0%)}44.444%{clip-path:inset(0% 0% 0% 100%)}83.333%{clip-path:inset(0% 0% 0% 100%)}91.111%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w3-1{0.0%{clip-path:inset(0% 0% 0% 0%)}30.556%{clip-path:inset(0% 0% 0% 0%)}41.667%{clip-path:inset(0% 100% 0% 0%)}81.389%{clip-path:inset(0% 100% 0% 0%)}89.167%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w3-3{0.0%{clip-path:inset(0% 0% 0% 0%)}25.0%{clip-path:inset(0% 0% 0% 0%)}36.111%{clip-path:inset(0% 100% 0% 0%)}77.5%{clip-path:inset(0% 100% 0% 0%)}85.278%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w4-0{0.0%{clip-path:inset(0% 0% 0% 0%)}22.222%{clip-path:inset(0% 0% 0% 0%)}33.333%{clip-path:inset(0% 0% 0% 100%)}75.556%{clip-path:inset(0% 0% 0% 100%)}83.333%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w4-2{0.0%{clip-path:inset(0% 0% 0% 0%)}27.778%{clip-path:inset(0% 0% 0% 0%)}38.889%{clip-path:inset(0% 0% 0% 100%)}79.444%{clip-path:inset(0% 0% 0% 100%)}87.222%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+@keyframes ok-w4-4{0.0%{clip-path:inset(0% 0% 0% 0%)}33.333%{clip-path:inset(0% 0% 0% 0%)}44.444%{clip-path:inset(0% 0% 0% 100%)}83.333%{clip-path:inset(0% 0% 0% 100%)}91.111%{clip-path:inset(0% 0% 0% 0%)}100.0%{clip-path:inset(0% 0% 0% 0%)}}
+.ok-row0{animation:ok-row0 4.5s ease-in-out infinite;will-change:transform}
+.ok-row2{animation:ok-row2 4.5s ease-in-out infinite;will-change:transform}
+.ok-row4{animation:ok-row4 4.5s ease-in-out infinite;will-change:transform}
+.ok-w0-1{animation:ok-w0-1 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w0-3{animation:ok-w0-3 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w1-0{animation:ok-w1-0 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w1-2{animation:ok-w1-2 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w1-4{animation:ok-w1-4 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w2-1{animation:ok-w2-1 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w2-4{animation:ok-w2-4 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w3-1{animation:ok-w3-1 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w3-3{animation:ok-w3-3 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w4-0{animation:ok-w4-0 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w4-2{animation:ok-w4-2 4.5s ease-in-out infinite;will-change:clip-path}
+.ok-w4-4{animation:ok-w4-4 4.5s ease-in-out infinite;will-change:clip-path}
+
+/* --- time-of-day: tap the picture, or use the glass arrows --- */
+.pf-timewrap{cursor:pointer;touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+@media (max-width:760px){.pf-glass{width:36px;height:56px;margin-top:-28px}.pf-chev{width:18px;height:34px}.pf-timewrap .pf-glassL{left:4px}.pf-tbar{right:44px;gap:3px;padding:7px 5px}.pf-tbtn{width:31px;height:31px;border-radius:10px}.pf-tbtn svg{width:17px;height:17px}}
+.pf-day img,.pf-night img,.pf-layer img,.pf-thrbox img,div[data-pf-backdrop] img{width:100%!important;height:100%!important;object-fit:cover!important}
+.pf-glass{position:absolute;top:50%;z-index:5;display:flex;align-items:center;
+justify-content:center;width:46px;height:70px;margin-top:-35px;padding:0;border:0;border-radius:0;
+background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+color:#0B0B0B;line-height:1;cursor:pointer;opacity:1;
+transition:transform 240ms cubic-bezier(.2,.8,.2,1),opacity 200ms ease}
+.pf-chev{display:block;width:23px;height:42px;overflow:visible}
+.pf-chev path{fill:none;stroke:#0B0B0B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+vector-effect:non-scaling-stroke;
+filter:drop-shadow(0 0 3px rgba(255,255,255,0.9)) drop-shadow(0 0 8px rgba(255,255,255,0.6))}
+.pf-glassL .pf-chev{transform:scaleX(-1)}
+.pf-glass:hover{transform:translateX(4px) scale(1.12)}
+.pf-glassL:hover{transform:translateX(-4px) scale(1.12)}
+.pf-glass:active{transform:scale(0.95)}
+.pf-glass:focus-visible{outline:2px solid #C62B23;outline-offset:4px}
+
+/* --- the time-of-day bar: glass, rounded ends, beside the right chevron --- */
+.pf-tbar{position:absolute;top:50%;right:74px;z-index:6;transform:translateY(-50%);
+display:flex;flex-direction:column;align-items:center;gap:5px;box-sizing:border-box;
+padding:9px 7px;border:1px solid rgba(255,255,255,0.75);border-radius:999px;
+background:rgba(254,249,237,0.56);
+backdrop-filter:blur(16px) saturate(1.8);-webkit-backdrop-filter:blur(16px) saturate(1.8);
+box-shadow:0 14px 36px -12px rgba(36,25,16,0.55),0 0 0 1px rgba(36,25,16,0.14),
+inset 0 1px 0 rgba(255,255,255,0.9),inset 0 -10px 18px -14px rgba(36,25,16,0.4)}
+.pf-tbtn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;
+border:0;border-radius:12px;background:transparent;cursor:pointer;
+transition:background-color 260ms ease,color 260ms ease,transform 220ms ease}
+.pf-tbtn:hover{transform:scale(1.09)}
+.pf-tbtn:active{transform:scale(0.94)}
+.pf-tbtn:focus-visible{outline:2px solid #C62B23;outline-offset:2px}
+.pf-tbtn svg{display:block;width:21px;height:21px}
+.pf-tbtn svg .f{fill:currentColor}
+.pf-tbtn svg .s{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+@media (prefers-reduced-motion:reduce){
+.pf-glass,.pf-glass:hover,.pf-tbtn,.pf-tbtn:hover{transition:none;transform:none}}
+.pf-timelabel{position:absolute;left:50%;bottom:20px;z-index:5;transform:translateX(-50%);
+padding:8px 18px;border:1px solid rgba(255,255,255,0.5);border-radius:999px;
+background:rgba(254,249,237,0.56);backdrop-filter:blur(14px) saturate(1.7);
+-webkit-backdrop-filter:blur(14px) saturate(1.7);
+box-shadow:0 8px 22px -6px rgba(36,25,16,0.42),0 0 0 1px rgba(36,25,16,0.18),
+inset 0 1px 0 rgba(255,255,255,0.9);
+color:#241910;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;
+opacity:1;transition:opacity 220ms ease;pointer-events:none}
+@media (hover:none){.pf-glass,.pf-timelabel{opacity:1}}
+
+/* --- drawings open in a pop-up carousel ---------------------------- */
+.pf-lb{position:fixed;left:0;top:0;right:0;bottom:0;z-index:90;display:flex;
+align-items:center;justify-content:center;box-sizing:border-box;
+padding:clamp(16px,5vmin,56px);background:rgba(36,25,16,0.80);
+backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+animation:pf-lbin 240ms ease both}
+@keyframes pf-lbin{from{opacity:0}to{opacity:1}}
+.pf-lbback{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;
+border:0;padding:0;background:transparent;cursor:pointer}
+.pf-lbframe{position:relative;z-index:1;width:100%;max-width:1180px;height:100%;
+max-height:86vh;background:#FEF9ED;cursor:pointer;
+box-shadow:0 30px 80px -30px rgba(0,0,0,0.65)}
+.pf-lbframe .pf-layer{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;
+padding:22px;box-sizing:border-box;transition:opacity 320ms ease}
+.pf-lbframe .pf-layer img{width:100%!important;height:100%!important;object-fit:contain!important}
+
+.pf-lbclose,.pf-lbzoom{position:absolute;top:14px;z-index:6;padding:10px 18px;
+border:1px solid rgba(36,25,16,0.55);border-radius:999px;background:rgba(254,249,237,0.94);
+-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#241910;font-size:10px;
+letter-spacing:0.16em;text-transform:uppercase;font-weight:500;cursor:pointer;
+box-shadow:0 6px 18px -8px rgba(0,0,0,0.55);
+transition:background-color 200ms ease,color 200ms ease}
+.pf-lbclose{right:14px}
+.pf-lbzoom{left:14px}
+.pf-lbclose:hover,
+.pf-lb:focus,.pf-lb:focus-visible{outline:none}
+@media (prefers-reduced-motion:reduce){.pf-lb{animation:none}}
+
+/* --- the drawing sheet --------------------------------------------- */
+.pf-sheet{position:relative;box-sizing:border-box;width:100%;max-width:1368px;margin:0 auto;
+overflow:hidden}
+.pf-sheetgrid{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;
+background-image:linear-gradient(to right,#2A4A86 1px,transparent 1px),
+linear-gradient(to bottom,#2A4A86 1px,transparent 1px)}
+.pf-sheetbody{position:relative;z-index:2}
+.pf-strip{position:absolute;z-index:3;display:flex;align-items:center;justify-content:center;
+border-right:1px solid rgba(36,25,16,0.5);color:#241910;font-size:9px;letter-spacing:0.3em;
+text-transform:uppercase;font-weight:500}
+.pf-stripL{left:0;top:0;bottom:0;width:34px}
+.pf-stripL span{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}
+.pf-bigword{position:absolute;left:-4px;top:0;z-index:1;margin:0;pointer-events:none;
+font-family:'Helvetica Neue',Helvetica,'Arial Black',Arial,sans-serif;font-weight:700;
+line-height:0.78;letter-spacing:-0.055em;text-transform:uppercase;color:#0B0B0B;
+white-space:nowrap}
+.pf-dwblock{position:relative}
+.pf-dwgrid{position:relative;z-index:2;display:grid;gap:26px}
+.pf-dw{display:block;margin:0;padding:0;border:0;background:transparent;text-align:left;
+color:#241910;cursor:pointer}
+.pf-dwimg{position:relative;overflow:hidden;box-sizing:border-box;width:100%;
+border:1px solid #241910;background-color:#FFFFFF;
+filter:grayscale(1) contrast(1.05) brightness(1.02);transition:filter 260ms ease}
+.pf-dw:hover .pf-dwimg{filter:grayscale(1) contrast(1.18) brightness(1.0)}
+.pf-dwimg img{width:100%!important;height:100%!important;object-fit:contain!important}
+.pf-dwcap{display:block;margin-top:10px;color:#241910;font-size:10px;letter-spacing:0.15em;
+text-transform:uppercase;font-weight:500}
+.pf-dwcap b{font-weight:700;letter-spacing:0.08em}
+.pf-dw:hover .pf-dwcap{color:#000000}
+.pf-tblock{position:relative;z-index:3;display:grid;border:1px solid #241910;
+border-right:0;border-bottom:0}
+.pf-tblock div{box-sizing:border-box;padding:10px 12px;border-right:1px solid #241910;
+border-bottom:1px solid #241910}
+.pf-tblock span{display:block;color:rgba(36,25,16,0.62);font-size:8px;letter-spacing:0.24em;
+text-transform:uppercase;font-weight:500}
+.pf-tblock b{display:block;margin-top:5px;font-size:11px;letter-spacing:0.09em;
+text-transform:uppercase;font-weight:500}
+.pf-quote{margin:0;position:relative}
+.pf-quotetext{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+.pf-quoteby{margin:14px 0 0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:500}
+
+/* --- viewer: zoom and pan ------------------------------------------ */
+.pf-lbscroll{position:absolute;left:0;top:0;right:0;bottom:0;overflow:auto;
+-webkit-overflow-scrolling:touch}
+
+.pf-lbzoom:hover{background:rgba(254,249,237,0.34)}
+
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+.pf-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+
+.pf-fnav{position:absolute;top:50%;z-index:4;transform:translateY(-50%);color:#241910;font-size:17px;line-height:1}
+.pf-fcontacts{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px;padding:18px 36px;border-top:1px solid rgba(36,25,16,0.25);background-color:#FEF9ED}
+/* the night view blinks three times on arrival, then rests on day */
+.pf-hero.pf-ndemo .pf-day{animation:pf-flick-day 2800ms linear 1 both}
+.pf-hero.pf-ndemo .pf-night{animation:pf-flick-night 2800ms linear 1 both}
+@keyframes pf-flick-day{
+0%,9%{opacity:1}11%,20%{opacity:0}22%,31%{opacity:1}
+33%,45%{opacity:0}47%,56%{opacity:1}58%,80%{opacity:0}
+82%,100%{opacity:1}}
+@keyframes pf-flick-night{
+0%,9%{opacity:0}11%,20%{opacity:1}22%,31%{opacity:0}
+33%,45%{opacity:1}47%,56%{opacity:0}58%,80%{opacity:1}
+82%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){
+.pf-hero.pf-ndemo .pf-day,.pf-hero.pf-ndemo .pf-night{animation:none}}
+
+
+/* --- checkpoints: one horizontal strip, every image at its own size --- */
+.pf-cpsheet{position:relative;box-sizing:border-box;width:100%;max-width:1368px;margin:0 auto;
+overflow:hidden}
+.pf-cpview{position:relative;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
+scroll-snap-type:x proximity;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+outline:none;cursor:grab;scrollbar-width:thin;
+scrollbar-color:rgba(36,25,16,0.55) rgba(36,25,16,0.10)}
+.pf-cpview.pf-drag{cursor:grabbing;scroll-behavior:auto;scroll-snap-type:none}
+.pf-cpview:focus-visible{outline:2px solid #C62B23;outline-offset:3px}
+.pf-cpview::-webkit-scrollbar{height:8px}
+.pf-cpview::-webkit-scrollbar-track{background:rgba(36,25,16,0.10);border-radius:99px}
+.pf-cpview::-webkit-scrollbar-thumb{background:rgba(36,25,16,0.55);border-radius:99px}
+.pf-cpview::-webkit-scrollbar-thumb:hover{background:rgba(36,25,16,0.75)}
+.pf-cptrack{display:flex;align-items:flex-start;width:max-content}
+.pf-cpslide{flex:0 0 auto;scroll-snap-align:start;background:transparent}
+.pf-cpnav{display:flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;
+border:1px solid rgba(36,25,16,0.55);border-radius:50%;background:transparent;color:#241910;
+font-size:14px;line-height:1;cursor:pointer;
+transition:background-color 180ms ease,border-color 180ms ease,color 180ms ease,opacity 180ms ease}
+.pf-cpnav:hover:not([disabled]){background-color:#241910;border-color:#241910;color:#FBF6E6}
+.pf-cpnav[disabled]{opacity:0.28;cursor:default}
+@media (prefers-reduced-motion:reduce){.pf-cpview{scroll-behavior:auto}}
+
+/* --- the day-in-the-life frame is sized by the window, not by width alone --- */
+.pf-timewrap{max-width:100%}
+.pf-timewrap .pf-layer img{object-fit:contain!important}
+
+/* --- the page rests at three places: the hero, the checkpoints, the day --- */
+html{scroll-snap-type:y proximity}
+.pf-snap{scroll-snap-align:start;scroll-snap-stop:normal;scroll-margin-top:10px}
+@media (max-height:620px){html{scroll-snap-type:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-snap-type:none}}
+
+/* pf-fit-pass — one fixed layout, scaled to fit any window */
+html,body{overflow-x:hidden}
+img{max-width:100%}
+.pf-stage{width:100%;overflow:hidden}
+.pf-fit{width:1440px;transform-origin:top left;will-change:transform}
+</style>
+</helmet>
+<div class="pf-stage" id="pf-stage-Chapter2">
+<sc-if value="{{lbOpen}}" hint-placeholder-val="{{ true }}">
+<div class="pf-lb" id="pf-lb-Chapter2" tabindex="-1" role="dialog" aria-modal="true" aria-label="Project drawings">
+<button type="button" class="pf-lbback" onClick="{{lbNext}}" aria-label="Next drawing"></button>
+<div class="pf-lbframe">
+<div class="pf-lbscroll">
+<div class="pf-layer" style="opacity: {{pO0}}; z-index: {{pZ0}}; pointer-events: {{pP0}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawMainPlan" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{pO1}}; z-index: {{pZ1}}; pointer-events: {{pP1}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawMainPlan2" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{pO2}}; z-index: {{pZ2}}; pointer-events: {{pP2}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawMainPlan3" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{pO3}}; z-index: {{pZ3}}; pointer-events: {{pP3}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawMainPlan4" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{pO4}}; z-index: {{pZ4}}; pointer-events: {{pP4}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawMainPlan5" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{pO5}}; z-index: {{pZ5}}; pointer-events: {{pP5}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawMainPlan6" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{sO0}}; z-index: {{sZ0}}; pointer-events: {{sP0}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawSections" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{sO1}}; z-index: {{sZ1}}; pointer-events: {{sP1}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawSections2" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{sO2}}; z-index: {{sZ2}}; pointer-events: {{sP2}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawSections3" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{sO3}}; z-index: {{sZ3}}; pointer-events: {{sP3}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawSections4" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{sO4}}; z-index: {{sZ4}}; pointer-events: {{sP4}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawSections5" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="opacity: {{sO5}}; z-index: {{sZ5}}; pointer-events: {{sP5}}; width: calc(100% * {{lbZ}}); height: calc(100% * {{lbZ}});"><dc-import name="Slot-C2-DrawSections6" hint-size="100%,100%"></dc-import></div>
+</div>
+<button type="button" onClick="{{lbNext}}" aria-label="Next drawing" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; z-index: 4; border: 0; padding: 0; background: transparent; cursor: pointer; pointer-events: {{lbTapPE}};"></button>
+<button type="button" class="pf-glass pf-glassL" onClick="{{lbPrev}}" aria-label="Previous drawing" style="left: 14px;"><svg class="pf-chev" viewBox="0 0 40 72" aria-hidden="true" focusable="false"><path d="M11.4 4.2 C 22.6 19.6, 31.2 29.8, 34.1 35.2 C 35.5 37.5, 34.5 39.6, 32.4 42.5 C 26.6 51.2, 18.6 60.2, 11.8 68.4"></path></svg></button>
+<button type="button" class="pf-glass" onClick="{{lbNext}}" aria-label="Next drawing" style="right: 14px;"><svg class="pf-chev" viewBox="0 0 40 72" aria-hidden="true" focusable="false"><path d="M11.4 4.2 C 22.6 19.6, 31.2 29.8, 34.1 35.2 C 35.5 37.5, 34.5 39.6, 32.4 42.5 C 26.6 51.2, 18.6 60.2, 11.8 68.4"></path></svg></button>
+<div class="pf-timelabel">{{lbTitle}} · {{lbCount}}</div>
+<button type="button" class="pf-lbzoom" onClick="{{lbZoom}}">Zoom {{lbZ}}×</button>
+<button type="button" class="pf-lbclose" onClick="{{lbClose}}">Close ✕</button>
+</div>
+</div>
+</sc-if>
+
+<div class="pf-fit" id="pf-fit-Chapter2">
+<div style="position: relative; width: 100%; min-height: 4720px; box-sizing: border-box; overflow: hidden; background-color: #FEF9ED; background-image: radial-gradient(circle at center, rgba(125, 116, 104, 0.035) 0 1px, transparent 1.15px); background-size: 5px 5px; color: #262525; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300;">
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 36px; border-bottom: 1px solid rgba(156, 151, 149, 0.45); text-transform: uppercase; font-weight: 500; letter-spacing: 0.16em; font-size: 10px;">
+<a href="Home.dc.html" style="color: #262525;">SHANMATHI SIVAKUMAR</a>
+<nav aria-label="Main navigation" style="display: flex; gap: 22px; color: #9C9795;">
+<a href="About.dc.html" style="color: #9C9795;">About</a>
+<a href="Main.dc.html" style="color: #9C9795;">Projects</a>
+<a href="Library.dc.html" style="color: #9C9795;">Owner workspace</a>
+</nav>
+</header>
+<main>
+<section style="background-color: #F1EADE; position: relative; height: 825px">
+<div style="position: absolute; left: -31px; top: 447px; z-index: 12; width: 340px; height: 290px">
+<div style="position: absolute; left: 94px; top: -40px; width: 225px">
+<dc-import name="AnnotBubble" text="HOVER OVER" tail="tail left" hint-size="225,154"></dc-import>
+</div>
+<div style="position: absolute; left: 62px; top: 105px; width: 122px; transform: rotate(-15deg); height: 109px">
+<dc-import name="AnnotFace" face="smile" hint-size="150,116"></dc-import>
+</div>
+</div>
+<div data-pf-backdrop="1" style="position: absolute; inset: 0; overflow: hidden; opacity: 0.5; pointer-events: none; z-index: 0;"><dc-import name="Slot-C2-Backdrop" hint-size="100%,100%"></dc-import></div>
+<header data-pf-marquee="1" style="z-index: 1; position: relative; overflow: hidden; padding: 22px 0; border-bottom: 1px solid rgba(38, 37, 37, 0.5);">
+<div class="pf-marquee" data-pf-track="1" style="display: flex; width: max-content;">
+<div style="display: flex; flex: 0 0 auto;"><h1 style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;">{{title}}</h1><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span></div>
+<div style="display: flex; flex: 0 0 auto;" aria-hidden="true"><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span><span style="margin: 0; padding-right: 72px; flex: 0 0 auto; font-size: 103.68px; font-weight: 300; letter-spacing: -0.09em; line-height: 1; text-transform: uppercase; white-space: nowrap;" aria-hidden="true">{{title}}</span></div>
+</div>
+</header>
+<div class="pf-drop pf-introgrid pf-snap" style="animation-delay: 100ms; z-index: 1; position: relative; display: grid; grid-template-columns: 200px minmax(0, 760px); justify-content: center; gap: 34px; min-height: 496px; padding: 20px 16px 32px; box-sizing: border-box; height: 698px">
+<aside style="position: absolute; left: 36px; top: 20px; width: 200px; height: 216px;">
+<button type="button" style="position: absolute; left: 0px; top: 0px; margin: 0; border: 0; padding: 0; background: transparent; cursor: pointer; color: #262525; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;">○ Credits</button>
+<a href="Chapter2.dc.html" style="position: absolute; left: 0px; top: 24px; color: #262525; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;">○ Summary</a>
+<span style="position: absolute; left: 0px; top: 72px; color: {{accent}}; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;">◌ HOSPITALITY REMODEL + DESIGN</span>
+<p style="position: absolute; left: 0px; top: 100px; margin: 0; width: 200px; color: #9C9795; font-size: 10px; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;">CHENNAI, INDIA</p>
+<p style="position: absolute; left: 0px; top: 124px; margin: 0; width: 200px; color: #9C9795; font-size: 10px; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;">2024</p>
+<p style="position: absolute; left: 0px; top: 148px; margin: 0; width: 200px; color: #9C9795; font-size: 10px; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;">3000 SQ.FT</p>
+
+</aside>
+<div style="grid-column: 2; width: 1117px; max-width: 1062px; justify-self: center; height: 431px">
+<div class="pf-hero" id="pf-hero-Chapter2" style="position: relative; user-select: none; width: 100%; max-width: 1076px; height: 549px">
+<div style="position: relative; height: 541px; box-sizing: border-box; overflow: hidden; border: 1px solid rgba(38, 37, 37, 0.42); padding: 8px; background-color: rgba(255, 255, 255, 0.4); box-shadow: 0.5rem 0.5rem 0 -0.3rem #E3DCCE, 0.55rem 0.55rem 0 -0.25rem rgba(38, 37, 37, 0.45); width: 100%; max-width: 1088px">
+<div class="pf-day" style="position: absolute; inset: 8px; overflow: hidden; background-color: #FFFFFF; opacity: 1;"><dc-import name="Slot-C2-HeroDay" hint-size="100%,100%"></dc-import></div>
+<div class="pf-night" style="position: absolute; inset: 8px; overflow: hidden; background-color: #FFFFFF; opacity: 0; pointer-events: none;"><dc-import name="Slot-C2-HeroNight" hint-size="100%,100%"></dc-import></div>
+</div>
+<span style="display: block; margin-top: 12px; color: #9C9795; font-size: 9px; letter-spacing: 0.12em; text-align: right; text-transform: uppercase; font-weight: 500;">Hover / hold for night view</span>
+</div>
+<p style="margin: 36px auto 0; width: 100%; max-width: 100%; font-size: 24px; font-weight: 300; line-height: 1.4; text-align: center; font-family: Penpoint">What if a café could hold a morning long after the coffee had gone cold?</p>
+</div>
+</div>
+</section>
+<section class="pf-drop" style="animation-delay: 270ms; padding: 32px 36px 80px; ">
+<div style="width: 100%; max-width: 1280px; margin: auto; height: 677px">
+<div class="pf-thrbox" style="position: relative; display: block; overflow: hidden; background-color: #FFFFFF; width: 100%; height: 707px"><dc-import name="Slot-C2-Threshold" hint-size="100%,100%"></dc-import></div>
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 14px; color: #9C9795; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">● A threshold into the chapter</div>
+</div>
+</section>
+<section class="pf-drop" style="position: relative; animation-delay: 360ms; background-color: #F1EADE; color: #000000; ">
+<div style="position: absolute; right: 162px; bottom: 12px; z-index: 12; width: 340px; height: 290px">
+
+<div style="position: absolute; left: 281px; top: 143px; width: 150px">
+<dc-import name="AnnotFace" face="curious" hint-size="150,116"></dc-import>
+</div>
+</div>
+<div data-pf-backdrop="1" style="position: absolute; inset: 0; overflow: hidden; opacity: 0.5; pointer-events: none; z-index: 0;"><dc-import name="Slot-C2-Backdrop" hint-size="100%,100%"></dc-import></div>
+<div style="position: relative; z-index: 1; padding: 96px 36px; padding-bottom: 0px">
+<div class="pf-occgrid" style="display: grid; grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.5fr); gap: 172.8px; width: 100%; max-width: 1280px; margin: auto;">
+<div>
+<p style="margin: 0; color: #000000; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">01 / The breakfast club</p><p style="margin: 18px 0 0; font-size: 20px;">Let the morning stay awhile!</p>
+
+</div>
+<div style="max-width: 100%; max-width: 672px; font-size: 20px; line-height: 1.08;">
+<div style="margin: 20px 0; white-space: pre-line;"><p data-pm-slice="1 1 []">EGCO is a courtyard café shaped around the unhurried rituals of morning. Set within a 1940s home on a quiet street, the design does not erase what stood before. It allows new life to gather within it. A glass roof draws daylight inward, a mango tree holds the courtyard, and concrete, terracotta and Kota stone give everyday rituals something tactile to settle into.</p></div><div style="margin: 20px 0; white-space: pre-line;"><p data-pm-slice="1 1 []">The café is not designed simply around breakfast. It is designed around the pleasure of staying a little longer.</p></div>
+<div style="height: 1px; margin: 34px 0; background-color: rgba(0, 0, 0, 0.22);"></div>
+<div style="margin: 57.6px 0; color: #000000; font-size: 57.6px; line-height: 0.96; width: 762px"><p data-pm-slice="1 1 []" style="font-size: 48px">Here, morning is not served.<br>It unfolds.</p></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pf-cpsec-Chapter2" class="pf-drop pf-snap" style="animation-delay: 450ms; padding: 32px 36px 46px;">
+<div class="pf-cpsheet" style="background-color: {{paper}}; border: {{border}} solid #241910; padding: 36px 0 28px;">
+<div class="pf-sheetgrid" style="opacity: {{gridOp}}; background-size: {{gridStep}} {{gridStep}};"></div>
+<div style="position: relative; z-index: 2;">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 0 44px; padding-bottom: 20px; border-bottom: 1px solid rgba(36, 25, 16, 0.35);">
+<div>
+<p style="margin: 0; color: #241910; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 500;">01 &nbsp;/&nbsp; Walking through</p>
+<h2 style="margin: 10px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; text-transform: uppercase; color: #0B0B0B;">Checkpoints</h2>
+</div>
+<span id="pf-cplabel-Chapter2" style="color: #241910; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;">{{cpLabel}}</span>
+</header>
+<div class="pf-cpview" id="pf-cpview-Chapter2" tabindex="0" role="group" aria-label="Checkpoint images" style="height: {{cpView}}; margin-top: 26px;">
+<div class="pf-cptrack" style="padding: 0 44px;">
+<div class="pf-cpslide" style="display: {{cpD0}}; margin-right: 26px;"><img src="./assets/864bb1aebd49d2a99d505be0e34416bd.webp" alt="Supporting view slot — replace with project evidence" style="display: block; height: {{cpH}}; width: auto; max-width: none;"></div>
+<div class="pf-cpslide" style="display: {{cpD1}}; margin-right: 26px;"><img src="./assets/1b8a602bd180d98b28e8459b56d1d66c.webp" alt="Supporting view slot — replace with project evidence" style="display: block; height: {{cpH}}; width: auto; max-width: none;"></div>
+<div class="pf-cpslide" style="display: {{cpD2}}; margin-right: 26px;"><img src="./assets/f247daaca5559db4dee872e31a9167cf.webp" alt="Checkpoint image 3 pending" style="display: block; height: {{cpH}}; width: auto; max-width: none;"></div>
+<div class="pf-cpslide" style="display: {{cpD3}}; margin-right: 26px;"><img src="./assets/2d5375bcf8bc5db75032df0e5e7a35f2.webp" alt="Checkpoint image 4 pending" style="display: block; height: {{cpH}}; width: auto; max-width: none;"></div>
+</div>
+</div>
+<div style="display: flex; gap: 12px; margin: 16px 44px 0;">
+<button type="button" class="pf-cpnav" id="pf-cpprev-Chapter2" onClick="{{cpPrev}}" aria-label="Previous image">‹</button>
+<button type="button" class="pf-cpnav" id="pf-cpnext-Chapter2" onClick="{{cpNext}}" aria-label="Next image">›</button>
+</div>
+</div>
+</div>
+</section>
+<section id="pf-timesec-Chapter2" class="pf-drop pf-snap" style="animation-delay: 540ms; padding: 32px 36px 80px; position: relative">
+<div style="position: absolute; left: 782px; bottom: 86px; z-index: 12; width: 488px; height: 187px; font-weight: 400; color: rgb(36, 25, 16)">
+
+
+</div>
+<section style="width: 100%;">
+<div class="pf-timewrap" data-pf-h="769.5" id="pf-timewrap-Chapter2" style="position: relative; height: 769.5px; overflow: hidden; background-color: #FFFFFF;">
+<div class="pf-layer" style="position: absolute; inset: 0; overflow: hidden; background-color: #FFFFFF; opacity: {{tO0}}; z-index: {{tZ0}}; pointer-events: {{tP0}};"><dc-import name="Slot-C2-Morning" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="position: absolute; inset: 0; overflow: hidden; background-color: #FFFFFF; opacity: {{tO1}}; z-index: {{tZ1}}; pointer-events: {{tP1}};"><dc-import name="Slot-C2-Midday" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="position: absolute; inset: 0; overflow: hidden; background-color: #FFFFFF; opacity: {{tO2}}; z-index: {{tZ2}}; pointer-events: {{tP2}};"><dc-import name="Slot-C2-Evening" hint-size="100%,100%"></dc-import></div>
+<div class="pf-layer" style="position: absolute; inset: 0; overflow: hidden; background-color: #FFFFFF; opacity: {{tO3}}; z-index: {{tZ3}}; pointer-events: {{tP3}};"><dc-import name="Slot-C2-AfterHours" hint-size="100%,100%"></dc-import></div>
+<button type="button" onClick="{{nextT}}" aria-label="Show the next time of day" style="position: absolute; inset: 0; z-index: 4; border: 0; padding: 0; background: transparent; cursor: pointer;"></button>
+<button type="button" class="pf-glass pf-glassL" onClick="{{prevT}}" aria-label="Previous time of day" style="left: 14px;"><svg class="pf-chev" viewBox="0 0 40 72" aria-hidden="true" focusable="false"><path d="M11.4 4.2 C 22.6 19.6, 31.2 29.8, 34.1 35.2 C 35.5 37.5, 34.5 39.6, 32.4 42.5 C 26.6 51.2, 18.6 60.2, 11.8 68.4"></path></svg></button>
+<button type="button" class="pf-glass" onClick="{{nextT}}" aria-label="Next time of day" style="right: 14px;"><svg class="pf-chev" viewBox="0 0 40 72" aria-hidden="true" focusable="false"><path d="M11.4 4.2 C 22.6 19.6, 31.2 29.8, 34.1 35.2 C 35.5 37.5, 34.5 39.6, 32.4 42.5 C 26.6 51.2, 18.6 60.2, 11.8 68.4"></path></svg></button>
+<div class="pf-tbar" role="group" aria-label="Time of day">
+<button type="button" class="pf-tbtn" onClick="{{pickT0}}" aria-label="Morning" aria-pressed="{{tabSel0}}" style="background-color: {{tbBg0}}; color: {{tbC0}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="f" cx="12" cy="13" r="3.9"></circle><g class="s"><path d="M12 4.7v2.2"></path><path d="M3.5 13h2.2"></path><path d="M18.3 13h2.2"></path><path d="M6.4 7.4 7.9 8.9"></path><path d="M17.6 7.4 16.1 8.9"></path><path d="M3.2 19.4h17.6"></path></g></svg></button>
+<button type="button" class="pf-tbtn" onClick="{{pickT1}}" aria-label="Midday" aria-pressed="{{tabSel1}}" style="background-color: {{tbBg1}}; color: {{tbC1}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="f" cx="12" cy="12" r="4.4"></circle><g class="s"><path d="M12 2.4v2.2"></path><path d="M12 19.4v2.2"></path><path d="M2.4 12h2.2"></path><path d="M19.4 12h2.2"></path><path d="M5.4 5.4 6.9 6.9"></path><path d="M17.1 17.1 18.6 18.6"></path><path d="M18.6 5.4 17.1 6.9"></path><path d="M6.9 17.1 5.4 18.6"></path></g></svg></button>
+<button type="button" class="pf-tbtn" onClick="{{pickT2}}" aria-label="Evening" aria-pressed="{{tabSel2}}" style="background-color: {{tbBg2}}; color: {{tbC2}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="f" d="M5.7 15.3a6.3 6.3 0 0 1 12.6 0z"></path><g class="s"><path d="M3.2 18.9h17.6"></path><path d="M12 3.2v2.3"></path><path d="M4.9 6.9 6.5 8.5"></path><path d="M19.1 6.9 17.5 8.5"></path></g></svg></button>
+<button type="button" class="pf-tbtn" onClick="{{pickT3}}" aria-label="After hours" aria-pressed="{{tabSel3}}" style="background-color: {{tbBg3}}; color: {{tbC3}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="f" d="M20.3 14.8A8.7 8.7 0 0 1 9.2 3.7 8.9 8.9 0 1 0 20.3 14.8z"></path></svg></button>
+</div>
+<div class="pf-timelabel">{{tName}}</div>
+</div>
+<div style="display: flex; justify-content: space-between; gap: 28px; padding-top: 18px;">
+<div>
+<h2 style="margin: 0; font-size: 53.6px; font-weight: 300; line-height: 1;"></h2><h2 style="margin: 0px; font-size: 53.6px; font-weight: 300; line-height: 1">A day in the life of a space</h2>
+<p style="max-width: 1000px; margin: 10px 0 0; color: #000000; font-size: 17px; font-family: Penpoint">Same place, different hours. Watch the light shift and everyday life unfold.</p>
+</div>
+<div role="tablist" style="display: flex; flex-wrap: wrap; gap: 14px; align-content: start; justify-content: flex-end;"><button class="pf-ttab" type="button" role="tab" aria-selected="{{tabSel0}}" onClick="{{pickT0}}" style="padding: 0 0 5px; border: 0; border-bottom: 1px solid {{tabB0}}; background: transparent; color: {{tabC0}}; font-size: 10px; letter-spacing: 0.12em; cursor: pointer; text-transform: uppercase; font-weight: 500;">Morning</button><button class="pf-ttab" type="button" role="tab" aria-selected="{{tabSel1}}" onClick="{{pickT1}}" style="padding: 0 0 5px; border: 0; border-bottom: 1px solid {{tabB1}}; background: transparent; color: {{tabC1}}; font-size: 10px; letter-spacing: 0.12em; cursor: pointer; text-transform: uppercase; font-weight: 500;">Midday</button><button class="pf-ttab" type="button" role="tab" aria-selected="{{tabSel2}}" onClick="{{pickT2}}" style="padding: 0 0 5px; border: 0; border-bottom: 1px solid {{tabB2}}; background: transparent; color: {{tabC2}}; font-size: 10px; letter-spacing: 0.12em; cursor: pointer; text-transform: uppercase; font-weight: 500;">Evening</button><button class="pf-ttab" type="button" role="tab" aria-selected="{{tabSel3}}" onClick="{{pickT3}}" style="padding: 0 0 5px; border: 0; border-bottom: 1px solid {{tabB3}}; background: transparent; color: {{tabC3}}; font-size: 10px; letter-spacing: 0.12em; cursor: pointer; text-transform: uppercase; font-weight: 500;">After hours</button></div>
+</div>
+</section>
+<div style="position: absolute; left: 1291px; top: 851px; width: 118px; height: 90px">
+<dc-import name="AnnotFace" face="smile" hint-size="150,116"></dc-import>
+</div></section>
+<section class="pf-drop" style="animation-delay: 630ms; padding: 74px 36px; background-color: rgba(226, 215, 202, 0.7); border-top: 1px solid #9C9795;">
+<div class="pf-sheet" style="background-color: {{paper}}; border: {{border}} solid #241910; padding: {{pad}};">
+<div class="pf-sheetgrid" style="opacity: {{gridOp}}; background-size: {{gridStep}} {{gridStep}};"></div>
+<div class="pf-strip pf-stripL"><span>Drawings &nbsp;·&nbsp; {{title}}</span></div>
+<div class="pf-sheetbody">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 26px; border-bottom: 1px solid rgba(36, 25, 16, 0.35);">
+<div>
+<p style="margin: 0; color: #241910; font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 500;">02 &nbsp;/&nbsp; Thinking in lines</p>
+<h2 style="margin: 10px 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; text-transform: uppercase; color: #0B0B0B;">Drawings</h2>
+</div>
+<span style="color: #241910; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;">{{sheetCount}}</span>
+</header>
+<div class="pf-dwblock" style="display: {{pBlock}}; margin-top: 54px;">
+<h3 class="pf-bigword" style="font-size: {{bigSize}};">Plans</h3>
+<div style="display: {{pEmpty}}; margin-top: 64px; box-sizing: border-box; padding: 56px 30px; border: 2px dashed rgba(36, 25, 16, 0.45); background-color: rgba(255, 255, 255, 0.45); text-align: center;">
+<p style="margin: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #241910;">Upload plans</p>
+<p style="margin: 11px 0 0; font-size: 11px; line-height: 1.5; letter-spacing: 0.04em; color: rgba(36, 25, 16, 0.68);">Replace the image in <b>Slot-C2-DrawMainPlan</b> on the canvas, then set the plans count on this page to how many you added. Visitors see nothing here until then.</p>
+</div>
+<div class="pf-dwgrid" style="display: {{pGrid}}; margin-top: {{pTop}}; grid-template-columns: {{pCols}};"><button type="button" class="pf-dw" onClick="{{openPlan0}}" style="display: {{pD0}};" aria-label="Open main plan 1 at full size"><span class="pf-dwimg" style="display: block; height: {{pH}};"><dc-import name="Slot-C2-DrawMainPlan" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>P-01</b> &nbsp;Main plan</span></button><button type="button" class="pf-dw" onClick="{{openPlan1}}" style="display: {{pD1}};" aria-label="Open main plan 2 at full size"><span class="pf-dwimg" style="display: block; height: {{pH}};"><dc-import name="Slot-C2-DrawMainPlan2" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>P-02</b> &nbsp;Main plan</span></button><button type="button" class="pf-dw" onClick="{{openPlan2}}" style="display: {{pD2}};" aria-label="Open main plan 3 at full size"><span class="pf-dwimg" style="display: block; height: {{pH}};"><dc-import name="Slot-C2-DrawMainPlan3" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>P-03</b> &nbsp;Main plan</span></button><button type="button" class="pf-dw" onClick="{{openPlan4}}" style="display: {{pD4}};" aria-label="Open main plan 5 at full size"><span class="pf-dwimg" style="display: block; height: {{pH}};"><dc-import name="Slot-C2-DrawMainPlan5" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>P-05</b> &nbsp;Main plan</span></button><button type="button" class="pf-dw" onClick="{{openPlan5}}" style="display: {{pD5}};" aria-label="Open main plan 6 at full size"><span class="pf-dwimg" style="display: block; height: {{pH}};"><dc-import name="Slot-C2-DrawMainPlan6" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>P-06</b> &nbsp;Main plan</span></button></div>
+</div>
+<div class="pf-dwblock" style="display: {{sBlock}}; margin-top: 54px;">
+<h3 class="pf-bigword" style="font-size: {{bigSize}};">Sections</h3>
+<div style="display: {{sEmpty}}; margin-top: 64px; box-sizing: border-box; padding: 56px 30px; border: 2px dashed rgba(36, 25, 16, 0.45); background-color: rgba(255, 255, 255, 0.45); text-align: center;">
+<p style="margin: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: #241910;">Upload sections</p>
+<p style="margin: 11px 0 0; font-size: 11px; line-height: 1.5; letter-spacing: 0.04em; color: rgba(36, 25, 16, 0.68);">Replace the image in <b>Slot-C2-DrawSections</b> on the canvas, then set the sections count on this page to how many you added. Visitors see nothing here until then.</p>
+</div>
+<div class="pf-dwgrid" style="display: {{sGrid}}; margin-top: {{sTop}}; grid-template-columns: {{sCols}};"><button type="button" class="pf-dw" onClick="{{openSect0}}" style="display: {{sD0}};" aria-label="Open section / elevation 1 at full size"><span class="pf-dwimg" style="display: block; height: {{sH}};"><dc-import name="Slot-C2-DrawSections" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>S-01</b> &nbsp;Section / elevation</span></button><button type="button" class="pf-dw" onClick="{{openSect1}}" style="display: {{sD1}};" aria-label="Open section / elevation 2 at full size"><span class="pf-dwimg" style="display: block; height: {{sH}};"><dc-import name="Slot-C2-DrawSections2" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>S-02</b> &nbsp;Section / elevation</span></button><button type="button" class="pf-dw" onClick="{{openSect2}}" style="display: {{sD2}};" aria-label="Open section / elevation 3 at full size"><span class="pf-dwimg" style="display: block; height: {{sH}};"><dc-import name="Slot-C2-DrawSections3" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>S-03</b> &nbsp;Section / elevation</span></button><button type="button" class="pf-dw" onClick="{{openSect3}}" style="display: {{sD3}};" aria-label="Open section / elevation 4 at full size"><span class="pf-dwimg" style="display: block; height: {{sH}};"><dc-import name="Slot-C2-DrawSections4" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>S-04</b> &nbsp;Section / elevation</span></button><button type="button" class="pf-dw" onClick="{{openSect4}}" style="display: {{sD4}};" aria-label="Open section / elevation 5 at full size"><span class="pf-dwimg" style="display: block; height: {{sH}};"><dc-import name="Slot-C2-DrawSections5" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>S-05</b> &nbsp;Section / elevation</span></button><button type="button" class="pf-dw" onClick="{{openSect5}}" style="display: {{sD5}};" aria-label="Open section / elevation 6 at full size"><span class="pf-dwimg" style="display: block; height: {{sH}};"><dc-import name="Slot-C2-DrawSections6" hint-size="100%,100%"></dc-import></span><span class="pf-dwcap"><b>S-06</b> &nbsp;Section / elevation</span></button></div>
+</div>
+<blockquote class="pf-quote" style="display: {{quoteShow}}; position: relative; left: 0px; top: 0px; width: 620px; max-width: 100%; margin: 72px 0 0; transform: rotate(0deg);">
+<p class="pf-quotetext" style="font-size: {{qSize}}; font-weight: {{qWeight}}; line-height: {{qLead}}; letter-spacing: {{qTrack}}; text-align: {{qAlign}}; color: {{qColor}};">“{{quote}}”</p>
+<footer class="pf-quoteby" style="text-align: {{qAlign}}; color: {{qColor}};">{{quoteBy}}</footer>
+</blockquote>
+<div class="pf-tblock" style="grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 72px;">
+<div><span>Project</span><b>{{title}}</b></div>
+<div><span>Category</span><b>Hospitality interior</b></div>
+<div><span>Drawing</span><b>{{sheetKinds}}</b></div>
+<div><span>Drawn by</span><b>Shanmathi Sivakumar</b></div>
+</div>
+</div>
+</div>
+</section>
+<section class="pf-drop" style="animation-delay: 720ms; background-color: #FEF9ED;">
+<div style="position: relative;">
+<dc-import name="DreamFooter" title="{{title}}" hint-size="100%,620"></dc-import>
+<a class="pf-hand pf-fnav" href="Chapter4.dc.html" style="left: 44px;">{{prevLabel}}</a>
+<a class="pf-hand pf-fnav" href="Chapter5.dc.html" style="right: 44px;">{{nextLabel}}</a>
+</div>
+<div class="pf-fcontacts">
+<a class="pf-hand" href="https://www.instagram.com/shansivakumar" target="_blank" rel="noopener" style="justify-self: start; color: #241910; font-size: 17px;">{{ig}}</a>
+<a href="Main.dc.html" style="justify-self: center; color: #241910; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">Return to index ↗</a>
+<a class="pf-hand" href="mailto:shanmathisivakumar30@gmail.com" style="justify-self: end; color: #241910; font-size: 17px;">{{mail}}</a>
+</div>
+</section>
+</main>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"cpH": {"editor": "text", "default": "460px"}, "cpCount": {"editor": "enum", "options": ["1", "2", "3", "4"], "default": "4"}, "ig": {"editor": "text", "default": "shansivakumar"}, "mail": {"editor": "text", "default": "shanmathisivakumar30@gmail.com"}, "prevLabel": {"editor": "text", "default": "previous project"}, "nextLabel": {"editor": "text", "default": "next project"}, "nightDemo": {"editor": "enum", "options": ["on", "off"], "default": "on"}, "paper": {"editor": "color", "default": "#FBF6E6"}, "border": {"editor": "text", "default": "2px"}, "pad": {"editor": "text", "default": "54px 46px 46px 58px"}, "gridOp": {"editor": "text", "default": "0.17"}, "gridStep": {"editor": "text", "default": "17px"}, "bigSize": {"editor": "text", "default": "134px"}, "quote": {"editor": "text", "default": "Even a brick wants to be something"}, "quoteBy": {"editor": "text", "default": "Louis Kahn"}, "quoteShow": {"editor": "enum", "options": ["show", "hide"], "default": "show"}, "qSize": {"editor": "text", "default": "30px"}, "qWeight": {"editor": "text", "default": "300"}, "qLead": {"editor": "text", "default": "1.3"}, "qTrack": {"editor": "text", "default": "-0.01em"}, "qAlign": {"editor": "enum", "options": ["left", "center", "right"], "default": "left"}, "qColor": {"editor": "color", "default": "#0B0B0B"}, "planCount": {"editor": "enum", "options": ["0", "1", "2", "3", "4", "5", "6"], "default": "4"}, "sectCount": {"editor": "enum", "options": ["0", "1", "2", "3", "4", "5", "6"], "default": "3"}, "title": {"editor": "text", "default": "The breakfast club"}, "slogan": {"editor": "text", "default": "Add a closing line from the project&#39;s actual design story."}, "accent": {"editor": "color", "default": "#786653", "options": ["#786653", "#241910", "#9C9795"]}, "fitDay": {"editor": "enum", "options": ["on", "off"], "default": "on"}, "$preview": {"width": 1440, "height": 4720}}'>
+class Component extends DCLogic {
+pfFit() {
+try {
+const stage = document.getElementById('pf-stage-Chapter2');
+const fit = document.getElementById('pf-fit-Chapter2');
+if (!stage || !fit) return;
+const w = stage.clientWidth || document.documentElement.clientWidth || 1440;
+const s = Math.min(1, w / 1440);
+fit.style.transform = 'scale(' + s + ')';
+fit.style.marginLeft = Math.max(0, (w - 1440 * s) / 2) + 'px';
+this.tsFit();
+this.cpFit();
+this.snapOn();
+stage.style.height = Math.ceil(fit.offsetHeight * s) + 'px';
+} catch (e) {}
+}
+pfFitBind() {
+this._pfFit = () => this.pfFit();
+this.pfFit();
+try { window.addEventListener('resize', this._pfFit); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+this._pfRO = new ResizeObserver(this._pfFit);
+this._pfRO.observe(document.getElementById('pf-fit-Chapter2'));
+}
+} catch (e) {}
+try { setTimeout(this._pfFit, 120); setTimeout(this._pfFit, 700); } catch (e) {}
+}
+pfFitFree() {
+try { window.removeEventListener('resize', this._pfFit); } catch (e) {}
+try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e) {}
+}
+
+componentDidMount() {
+this.cpBind();
+this.pfFitBind();
+this.ndemoBind();
+
+try { window.scrollTo(0, 0); } catch (e) {}
+try {
+const bar = document.querySelector('[data-pf-marquee]');
+const track = document.querySelector('[data-pf-track]');
+if (bar && track && typeof IntersectionObserver !== 'undefined') {
+this.io = new IntersectionObserver((entries) => {
+entries.forEach((en) => { track.style.animationPlayState = en.isIntersecting ? 'running' : 'paused'; });
+});
+this.io.observe(bar);
+}
+} catch (e) {}
+}
+componentWillUnmount() {
+this.ndemoFree();
+this.cpFree();
+this.pfFitFree(); try { if (this.io) this.io.disconnect(); } catch (e) {}
+try { clearTimeout(this._nd1); clearTimeout(this._nd2); } catch (e) {} }
+cpFit() {
+try {
+const view = document.getElementById('pf-cpview-Chapter2');
+const sec = document.getElementById('pf-cpsec-Chapter2');
+if (!view || !sec) return;
+const nat = Math.max(120, parseFloat(this.props.cpH ?? '460') || 460);
+const put = (h) => {
+view.style.height = Math.round(h + 26) + 'px';
+const imgs = view.querySelectorAll('.pf-cpslide img');
+for (let i = 0; i < imgs.length; i++) imgs[i].style.height = Math.round(h) + 'px';
+};
+if ((this.props.fitDay ?? 'on') === 'off') { put(nat); return; }
+const stage = document.getElementById('pf-stage-Chapter2');
+const w = (stage && stage.clientWidth) || document.documentElement.clientWidth || 1440;
+const s = Math.min(1, w / 1440) || 1;
+const vh = (window.visualViewport && window.visualViewport.height)
+|| window.innerHeight || 900;
+if (vh < 520) { put(nat); return; }
+// everything in the section that is not the strip, in design pixels
+const chrome = Math.max(0, sec.offsetHeight - view.offsetHeight);
+put(Math.max(180, Math.min(nat, ((vh - 44) / s) - chrome - 26)));
+} catch (e) {}
+}
+snapOn() {
+try {
+const el = document.scrollingElement || document.documentElement;
+if (!el) return;
+let red = false;
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+const vh = (window.visualViewport && window.visualViewport.height)
+|| window.innerHeight || 900;
+el.style.scrollSnapType = (red || vh < 620) ? 'none' : 'y proximity';
+} catch (e) {}
+}
+cpEl() { try { return document.getElementById('pf-cpview-Chapter2'); } catch (e) { return null; } }
+cpTiles() {
+const el = this.cpEl();
+if (!el) return [];
+const t = el.firstElementChild;
+if (!t) return [];
+return Array.prototype.slice.call(t.children).filter((c) => c.style.display !== 'none');
+}
+cpGo(d) {
+const el = this.cpEl(); const tiles = this.cpTiles();
+if (!el || !tiles.length) return;
+const x = el.scrollLeft;
+let i = 0;
+for (let k = 0; k < tiles.length; k++) { if (tiles[k].offsetLeft - 44 <= x + 2) i = k; }
+const j = Math.max(0, Math.min(tiles.length - 1, i + d));
+el.scrollTo({ left: Math.max(0, tiles[j].offsetLeft - 44), behavior: 'smooth' });
+}
+cpSync() {
+const el = this.cpEl(); const tiles = this.cpTiles();
+if (!el || !tiles.length) return;
+const x = el.scrollLeft;
+let i = 0;
+for (let k = 0; k < tiles.length; k++) { if (tiles[k].offsetLeft - 44 <= x + 2) i = k; }
+const pad = (k) => (k < 10 ? '0' : '') + k;
+const lab = document.getElementById('pf-cplabel-Chapter2');
+if (lab) { const t = pad(i + 1) + ' / ' + pad(tiles.length); if (lab.textContent !== t) lab.textContent = t; }
+const prev = document.getElementById('pf-cpprev-Chapter2');
+const next = document.getElementById('pf-cpnext-Chapter2');
+if (prev) prev.disabled = x <= 2;
+if (next) next.disabled = x >= el.scrollWidth - el.clientWidth - 2;
+}
+cpSnap() {
+const el = this.cpEl(); const tiles = this.cpTiles();
+if (!el || !tiles.length) return;
+const x = el.scrollLeft;
+let best = tiles[0], bd = Infinity;
+tiles.forEach((t) => { const d = Math.abs((t.offsetLeft - 44) - x); if (d < bd) { bd = d; best = t; } });
+el.scrollTo({ left: Math.max(0, best.offsetLeft - 44), behavior: 'smooth' });
+}
+cpBind() {
+const el = this.cpEl();
+if (!el) return;
+let down = false, sx = 0, sl = 0;
+this._cpScroll = () => this.cpSync();
+this._cpDown = (e) => {
+if (e.pointerType === 'touch') return;
+down = true; sx = e.clientX; sl = el.scrollLeft;
+el.classList.add('pf-drag');
+try { el.setPointerCapture(e.pointerId); } catch (err) {}
+};
+this._cpMove = (e) => { if (down) el.scrollLeft = sl - (e.clientX - sx); };
+this._cpUp = () => {
+if (!down) return;
+down = false; el.classList.remove('pf-drag'); this.cpSnap();
+};
+try {
+el.addEventListener('scroll', this._cpScroll, { passive: true });
+el.addEventListener('pointerdown', this._cpDown);
+el.addEventListener('pointermove', this._cpMove);
+el.addEventListener('pointerup', this._cpUp);
+el.addEventListener('pointercancel', this._cpUp);
+} catch (e) {}
+try { setTimeout(() => this.cpSync(), 240); setTimeout(() => this.cpSync(), 900); } catch (e) {}
+}
+cpFree() {
+const el = this.cpEl();
+if (!el) return;
+try {
+el.removeEventListener('scroll', this._cpScroll);
+el.removeEventListener('pointerdown', this._cpDown);
+el.removeEventListener('pointermove', this._cpMove);
+el.removeEventListener('pointerup', this._cpUp);
+el.removeEventListener('pointercancel', this._cpUp);
+} catch (e) {}
+}
+ndemoPlay() {
+const hero = document.getElementById('pf-hero-Chapter2');
+if (!hero) return;
+let red = false;
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+if (red || (this.props.nightDemo ?? 'on') === 'off') return;
+const now = Date.now();
+if (this._ndAt && now - this._ndAt < 4000) return;
+this._ndAt = now;
+try { clearTimeout(this._nd1); clearTimeout(this._nd2); } catch (e) {}
+this._nd1 = setTimeout(() => {
+try {
+// the class goes on the element directly: a class written as a {{hole}}
+// is not re-patched on render. remove + reflow + add restarts the run
+hero.classList.remove('pf-ndemo');
+void hero.offsetWidth;
+hero.classList.add('pf-ndemo');
+} catch (e) {}
+this._nd2 = setTimeout(() => {
+try { hero.classList.remove('pf-ndemo'); } catch (e) {}
+}, 2920);
+}, 900);
+}
+ndemoBind() {
+this.ndemoPlay();
+this._ndVis = () => { try { if (!document.hidden) this.ndemoPlay(); } catch (e) {} };
+try { document.addEventListener('visibilitychange', this._ndVis); } catch (e) {}
+try { window.addEventListener('pageshow', this._ndVis); } catch (e) {}
+try {
+const hero = document.getElementById('pf-hero-Chapter2');
+if (hero && typeof IntersectionObserver !== 'undefined') {
+this._ndIO = new IntersectionObserver((es) => {
+es.forEach((e) => {
+if (!e.isIntersecting) { this._ndOut = true; return; }
+if (this._ndOut) { this._ndOut = false; this.ndemoPlay(); }
+});
+}, { threshold: 0.35 });
+this._ndIO.observe(hero);
+}
+} catch (e) {}
+}
+ndemoFree() {
+try { clearTimeout(this._nd1); clearTimeout(this._nd2); } catch (e) {}
+try { document.removeEventListener('visibilitychange', this._ndVis); } catch (e) {}
+try { window.removeEventListener('pageshow', this._ndVis); } catch (e) {}
+try { if (this._ndIO) { this._ndIO.disconnect(); this._ndIO = null; } } catch (e) {}
+}
+tsWrap() { try { return document.getElementById('pf-timewrap-Chapter2'); } catch (e) { return null; } }
+tsFit() {
+try {
+const wrap = this.tsWrap();
+const sec = document.getElementById('pf-timesec-Chapter2');
+if (!wrap || !sec) return;
+// the height she set on the board is the ceiling; a tall window changes nothing
+const nat = parseFloat(wrap.getAttribute('data-pf-h')) || wrap.offsetHeight || 700;
+if ((this.props.fitDay ?? 'on') === 'off') {
+wrap.style.height = nat + 'px';
+wrap.style.width = ''; wrap.style.marginLeft = ''; wrap.style.marginRight = '';
+return;
+}
+const stage = document.getElementById('pf-stage-Chapter2');
+const w = (stage && stage.clientWidth) || document.documentElement.clientWidth || 1440;
+const s = Math.min(1, w / 1440) || 1;
+const box = Math.max(240, sec.clientWidth || 1440);
+// the picture's own proportions, once it has loaded
+let ar = this._tsAR || 0;
+const img = wrap.querySelector('.pf-layer img');
+if (!ar && img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+ar = this._tsAR = img.naturalWidth / img.naturalHeight;
+}
+if (!ar) {
+if (img && !this._tsImgBound) {
+this._tsImgBound = 1;
+try { img.addEventListener('load', () => { this._tsAR = 0; this.tsFit(); }); } catch (e) {}
+}
+ar = box / nat;
+}
+// visualViewport is the honest number once a browser toolbar is in the way
+const vh = (window.visualViewport && window.visualViewport.height)
+|| window.innerHeight || 900;
+// everything in the section that is not the picture, in design pixels
+const chrome = Math.max(0, sec.offsetHeight - wrap.offsetHeight);
+if (vh < 520) {
+// too short to fit anything legibly: let the page scroll instead
+wrap.style.height = nat + 'px';
+wrap.style.width = ''; wrap.style.marginLeft = ''; wrap.style.marginRight = '';
+return;
+}
+const room = ((vh - 44) / s) - chrome;
+const h = Math.max(300, Math.min(nat, box / ar, room));
+const ww = Math.min(box, h * ar);
+wrap.style.height = Math.round(h) + 'px';
+wrap.style.width = Math.round(ww) + 'px';
+wrap.style.marginLeft = 'auto';
+wrap.style.marginRight = 'auto';
+} catch (e) {}
+}
+tsBind() {
+const el = document.getElementById('pf-timewrap-Chapter2');
+if (!el) { this._tsEl = null; return; }
+if (this._tsEl === el) return;
+this._tsEl = el;
+let id = null, sx = 0, sy = 0;
+// element-scoped, like the checkpoint strip: no document-level listeners
+this._tsDown = (e) => { id = e.pointerId; sx = e.clientX; sy = e.clientY; };
+this._tsEnd = (e) => {
+if (e.pointerId !== id) return;
+const dx = e.clientX - sx, dy = e.clientY - sy;
+id = null;
+if (Math.abs(dx) < 44 || Math.abs(dx) <= Math.abs(dy) * 1.4) return;
+this._tsSwiped = true;
+const a = this._tsActs || {};
+try { if (dx < 0) { if (a.next) a.next(); } else if (a.prev) a.prev(); } catch (err) {}
+try { clearTimeout(this._tsT); } catch (err) {}
+this._tsT = setTimeout(() => { this._tsSwiped = false; }, 400);
+};
+this._tsCancel = () => { id = null; };
+// a swipe must not also read as a tap on the full-frame button underneath
+this._tsClick = (e) => {
+if (!this._tsSwiped) return;
+e.preventDefault();
+e.stopPropagation();
+try { e.stopImmediatePropagation(); } catch (err) {}
+};
+try {
+el.addEventListener('pointerdown', this._tsDown);
+el.addEventListener('pointerup', this._tsEnd);
+el.addEventListener('pointercancel', this._tsCancel);
+el.addEventListener('click', this._tsClick, true);
+} catch (err) {}
+}
+lbKeyBind() {
+const el = document.getElementById('pf-lb-Chapter2');
+if (!el) { this._lbEl = null; return; }
+if (this._lbEl === el) return;
+this._lbEl = el;
+// element-scoped, never on the document: this platform forbids that, and it
+// is also what lets one Escape close the viewer and the next one leave Play
+this._lbKey = (e) => {
+const k = e.key;
+if (k !== 'Escape' && k !== 'Esc' && k !== 'ArrowLeft' && k !== 'ArrowRight') return;
+e.preventDefault();
+e.stopPropagation();
+try { e.stopImmediatePropagation(); } catch (err) {}
+const a = this._lbActs || {};
+try {
+if (k === 'ArrowLeft') { if (a.prev) a.prev(); }
+else if (k === 'ArrowRight') { if (a.next) a.next(); }
+else if (a.close) a.close();
+} catch (err) {}
+};
+try { el.addEventListener('keydown', this._lbKey); } catch (err) {}
+try { el.focus({ preventScroll: true }); } catch (err) {
+try { el.focus(); } catch (e2) {}
+}
+}
+renderVals() {
+const a = this.props.accent ?? '#786653';
+const st = this.state || {};
+const cp = st.cp || 0;
+const t = st.t || 0;
+const v = { accent: a, slogan: this.props.slogan ?? "Add a closing line from the project's actual design story.", title: this.props.title ?? 'The breakfast club' };
+for (let i = 0; i < 4; i++) {
+const c = i === cp, tt = i === t;
+v['cpO' + i] = c ? 1 : 0; v['cpZ' + i] = c ? 2 : 1; v['cpP' + i] = c ? 'auto' : 'none';
+v['dotBg' + i] = c ? a : 'transparent'; v['dotBd' + i] = c ? a : '#9C9795'; v['dotS' + i] = c ? 'scale(1.15)' : 'none';
+v['tO' + i] = tt ? 1 : 0; v['tZ' + i] = tt ? 2 : 1; v['tP' + i] = tt ? 'auto' : 'none';
+v['tabC' + i] = tt ? a : '#262525'; v['tabB' + i] = tt ? a : 'transparent'; v['tabSel' + i] = tt ? 'true' : 'false';
+v['tbBg' + i] = tt ? '#0B0B0B' : 'transparent'; v['tbC' + i] = tt ? '#FEF9ED' : '#1A1208';
+v['pickC' + i] = () => this.setState({ cp: i });
+v['pickT' + i] = () => this.setState({ t: i });
+}
+v.nextCp = () => this.setState({ cp: (cp + 1) % 4 });
+v.nextT = () => this.setState({ t: (t + 1) % 4 });
+v.prevT = () => this.setState({ t: (t + 3) % 4 });
+v.tName = ['Morning', 'Midday', 'Evening', 'After hours'][t] + ' \u00b7 0' + (t + 1) + ' / 04';
+this._tsActs = { next: v.nextT, prev: v.prevT };
+const _pc = Math.max(0, Math.min(6, parseInt(this.props.planCount ?? '4', 10) || 0));
+const _sc = Math.max(0, Math.min(6, parseInt(this.props.sectCount ?? '3', 10) || 0));
+const _set = st.lbSet || '';
+const _n = _set === 'sect' ? _sc : _pc;
+const _i = Math.max(0, Math.min(Math.max(0, st.lbI || 0), _n - 1));
+const _z = Math.max(1, Math.min(4, st.lbZ || 1));
+const _pad = (k) => (k < 10 ? '0' : '') + k;
+const _cols = (c) => c <= 1 ? 'minmax(0, 1fr)' : (c === 2 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(3, minmax(0, 1fr))');
+const _h = (c) => c <= 1 ? '520px' : (c === 2 ? '400px' : '306px');
+v.lbOpen = !!_set && _n > 0;
+v.lbTitle = _set === 'sect' ? 'Sections and elevations' : 'Main plan';
+v.lbCount = _pad(_i + 1) + ' / ' + _pad(_n);
+v.lbZ = String(_z);
+v.lbTapPE = _z > 1 ? 'none' : 'auto';
+v.lbZoom = () => this.setState({ lbZ: _z >= 4 ? 1 : _z + 1 });
+v.pBlock = 'block';
+v.pEmpty = _pc === 0 ? 'block' : 'none';
+v.sEmpty = _sc === 0 ? 'block' : 'none';
+v.pGrid = _pc === 0 ? 'none' : 'grid';
+v.sGrid = _sc === 0 ? 'none' : 'grid';
+v.sBlock = 'block';
+v.pCols = _cols(_pc); v.sCols = _cols(_sc);
+v.pH = _h(_pc); v.sH = _h(_sc);
+v.pTop = _pc <= 1 ? '64px' : '58px'; v.sTop = _sc <= 1 ? '64px' : '58px';
+v.sheetCount = (_pc + _sc) === 0 ? 'Awaiting drawings' : ((_pc + _sc) + ' drawings');
+v.sheetKinds = true ? 'Plans / sections' : 'Plans';
+v.paper = this.props.paper ?? '#FBF6E6';
+v.border = this.props.border ?? '2px';
+v.pad = this.props.pad ?? '54px 46px 46px 58px';
+v.gridOp = this.props.gridOp ?? '0.17';
+v.gridStep = this.props.gridStep ?? '17px';
+v.bigSize = this.props.bigSize ?? '134px';
+v.quote = this.props.quote ?? 'Even a brick wants to be something';
+v.quoteBy = this.props.quoteBy ?? 'Louis Kahn';
+v.quoteShow = (this.props.quoteShow ?? 'show') === 'hide' ? 'none' : 'block';
+v.qSize = this.props.qSize ?? '30px';
+v.qWeight = this.props.qWeight ?? '300';
+v.qLead = this.props.qLead ?? '1.3';
+v.qTrack = this.props.qTrack ?? '-0.01em';
+v.qAlign = this.props.qAlign ?? 'left';
+v.qColor = this.props.qColor ?? '#0B0B0B';
+for (let k = 0; k < 6; k++) {
+const onP = _set === 'plan' && k === _i, onS = _set === 'sect' && k === _i;
+v['pO' + k] = onP ? 1 : 0; v['pZ' + k] = onP ? 2 : 1; v['pP' + k] = onP ? 'auto' : 'none';
+v['sO' + k] = onS ? 1 : 0; v['sZ' + k] = onS ? 2 : 1; v['sP' + k] = onS ? 'auto' : 'none';
+v['pD' + k] = k < _pc ? 'block' : 'none';
+v['sD' + k] = k < _sc ? 'block' : 'none';
+v['openPlan' + k] = () => { if (_pc > 0) this.setState({ lbSet: 'plan', lbI: k, lbZ: 1 }); };
+v['openSect' + k] = () => { if (_sc > 0) this.setState({ lbSet: 'sect', lbI: k, lbZ: 1 }); };
+}
+v.lbClose = () => this.setState({ lbSet: '', lbI: 0, lbZ: 1 });
+v.lbNext = () => this.setState({ lbI: (_i + 1) % (_n || 1), lbZ: 1 });
+v.lbPrev = () => this.setState({ lbI: (_i + (_n || 1) - 1) % (_n || 1), lbZ: 1 });
+this._lbActs = { close: v.lbClose, next: v.lbNext, prev: v.lbPrev };
+if (!this._lbPend) {
+this._lbPend = true;
+try { setTimeout(() => { this._lbPend = false; this.lbKeyBind(); this.tsBind(); this.cpFit(); this.tsFit(); }, 0); }
+catch (e) { this._lbPend = false; }
+}
+
+v.ig = this.props.ig ?? 'shansivakumar';
+v.mail = this.props.mail ?? 'shanmathisivakumar30@gmail.com';
+v.prevLabel = this.props.prevLabel ?? 'previous project';
+v.nextLabel = this.props.nextLabel ?? 'next project';
+const _cn = Math.max(1, Math.min(4, parseInt(this.props.cpCount ?? '4', 10) || 1));
+v.cpLabel = '01 / ' + (_cn < 10 ? '0' : '') + _cn;
+for (let k = 0; k < 4; k++) { v['cpD' + k] = k < _cn ? 'block' : 'none'; }
+const _cph = String(this.props.cpH ?? '460px').trim();
+v.cpH = _cph;
+v.cpView = ((parseFloat(_cph) || 460) + 26) + 'px';
+v.cpPrev = () => this.cpGo(-1);
+v.cpNext = () => this.cpGo(1);
+return v;}
+}
+</script>
+</body>
+</html>

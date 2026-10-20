@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dreaming footer</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#241910;background:#FEF9ED}
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+.pf-dream{position:relative;display:flex;align-items:center;justify-content:center;width:100%;
+background-color:#FEF9ED;
+background-image:linear-gradient(to right, rgba(36,25,16,0.055) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(36,25,16,0.055) 1px, transparent 1px);
+background-size:26px 26px}
+.pf-dreambox{position:relative;display:flex;flex-direction:column;align-items:center;
+transform-origin:center center}
+.pf-shapes{position:relative;width:380px;height:380px}
+.pf-shape{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;
+transition:opacity 90ms linear}
+.pf-shape.on{opacity:1}
+.pf-figure{display:block;width:380px;height:auto;margin-top:-6px}
+.pf-cloudtitle{position:absolute;display:flex;align-items:center;justify-content:center;
+width:46%;transform:translate(-50%,-50%);margin:0;text-align:center;text-wrap:balance;
+font-family:'Penpoint','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;color:#241910;
+opacity:0;transition:opacity 180ms ease;pointer-events:none}
+.pf-cloudtitle.on{opacity:1}
+@media (prefers-reduced-motion:reduce){
+.pf-shape{transition:none}
+.pf-cloudtitle{transition:none}
+}
+</style>
+</helmet>
+<div class="pf-dream" style="min-height: {{band}}; padding: 46px 0;">
+<div class="pf-dreambox" style="transform: scale({{scale}}); margin-top: {{offY}};">
+<div class="pf-shapes">
+<img class="pf-shape" data-f="0" src="./assets/7d80cd718aebf9ff48f22b84c0c6e561.svg" alt="Dream shape: scribble">
+<img class="pf-shape" data-f="1" src="./assets/e8d1e1c5e1b057619d59a055a6a0a243.svg" alt="Dream shape: sun wheel">
+<img class="pf-shape" data-f="2" src="./assets/ee809875ead709e648cfdb13c2235da3.svg" alt="Dream shape: lattice">
+<img class="pf-shape" data-f="3" src="./assets/5bb147615938ce8f5aee17de45cc7a65.svg" alt="Dream shape: network">
+<img class="pf-shape" data-f="4" src="./assets/78b92e87237a2b5323fc89d1fc8c7416.svg" alt="Dream shape: swirl">
+<img class="pf-shape" data-f="5" src="./assets/d811f97fdaa6cebdc5e4f6da4aac5aac.svg" alt="">
+<img class="pf-shape" data-f="6" src="./assets/2696a95bf0c75de306609bdad6a40e51.svg" alt="Dream shape: stars">
+<img class="pf-shape" data-f="7" src="./assets/8feb59bc8dbef76ef9ef245942009680.svg" alt="Dream shape: rings">
+<img class="pf-shape" data-f="8" src="./assets/10b131cddd2ff5f07facf4786dd4761d.svg" alt="Dream shape: flower">
+<img class="pf-shape" data-f="9" src="./assets/1e1b6966719b1290595cac5b4e1864e1.svg" alt="Dream shape: seed burst">
+<p class="pf-cloudtitle" data-pf-title="1" style="left: {{tX}}; top: {{tY}}; font-size: {{tSize}}; line-height: {{tLead}};">{{title}}</p>
+</div>
+<img class="pf-figure" src="./assets/640abcb4debf52dfb8fe1aced6d82e7e.svg" alt="A figure lying down, dreaming">
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"title": {"editor": "text", "default": "Light, within!"}, "speed": {"editor": "text", "default": "150"}, "hold": {"editor": "text", "default": "1700"}, "tSize": {"editor": "text", "default": "30px"}, "tLead": {"editor": "text", "default": "1.05"}, "tX": {"editor": "text", "default": "50%"}, "tY": {"editor": "text", "default": "49%"}, "scale": {"editor": "text", "default": "1"}, "offY": {"editor": "text", "default": "0px"}, "band": {"editor": "text", "default": "620px"}, "$preview": {"width": 1440, "height": 620}}'>
+class Component extends DCLogic {
+componentDidMount() {
+this.frame = 0;
+this.shapes = Array.prototype.slice.call(document.querySelectorAll('.pf-shape'));
+this.titleEl = document.querySelector('[data-pf-title]');
+this.reduced = false;
+try { this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+this.paint(this.reduced ? 5 : 0);
+if (this.reduced) return;
+this.visible = false;
+try {
+const host = document.querySelector('.pf-dream');
+if (host && typeof IntersectionObserver !== 'undefined') {
+this.io = new IntersectionObserver((es) => {
+es.forEach((en) => {
+this.visible = en.isIntersecting;
+if (this.visible) this.schedule(); else this.stop();
+});
+}, { threshold: 0.15 });
+this.io.observe(host);
+} else { this.visible = true; this.schedule(); }
+} catch (e) { this.visible = true; this.schedule(); }
+}
+componentWillUnmount() { this.stop(); try { if (this.io) this.io.disconnect(); } catch (e) {} }
+stop() { try { clearTimeout(this.timer); } catch (e) {} }
+paint(i) {
+this.frame = i;
+for (let k = 0; k < this.shapes.length; k++) {
+if (k === i) this.shapes[k].classList.add('on'); else this.shapes[k].classList.remove('on');
+}
+if (this.titleEl) {
+if (i === 5) this.titleEl.classList.add('on'); else this.titleEl.classList.remove('on');
+}
+}
+schedule() {
+this.stop();
+if (!this.visible) return;
+const step = Math.max(60, parseInt(this.props.speed ?? '150', 10) || 150);
+const hold = Math.max(600, parseInt(this.props.hold ?? '1700', 10) || 1700);
+const wait = (this.frame === 5) ? hold : step;
+this.timer = setTimeout(() => {
+this.paint((this.frame + 1) % this.shapes.length);
+this.schedule();
+}, wait);
+}
+renderVals() {
+const p = this.props;
+const t = (p.title ?? 'Light, within!').toString();
+// longer names step down a size and wrap to two balanced lines
+let size = p.tSize ?? '30px';
+if (!p.tSize) {
+if (t.length > 26) size = '21px';
+else if (t.length > 18) size = '25px';
+}
+return {
+title: t, tSize: size,
+tLead: p.tLead ?? '1.05', tX: p.tX ?? '50%', tY: p.tY ?? '49%',
+scale: p.scale ?? '1', offY: p.offY ?? '0px', band: p.band ?? '620px'
+};
+}
+}
+</script>
+</body>
+</html>

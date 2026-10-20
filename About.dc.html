@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>About</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#241910;background:#FBEDE9}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Bebas Neue';src:url('./assets/52846e07bbe4848363c5a3aad3642df9.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+
+/* --- navigation, identical to the studio homepage --- */
+.pf-nav{position:relative;display:inline-flex;align-items:center;padding:15px 24px}
+.pf-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.pf-ring path{fill:none;stroke:#C8432B;stroke-linecap:round;stroke-linejoin:round;
+stroke-dasharray:1200;stroke-dashoffset:1200;vector-effect:non-scaling-stroke}
+.pf-ring .r1{stroke-width:3}
+.pf-ring .r2{stroke-width:2.4;opacity:.6}
+.pf-nav:hover .r1,.pf-nav:focus-visible .r1{animation:pf-circle 400ms cubic-bezier(.35,.75,.4,1) forwards}
+.pf-nav:hover .r2,.pf-nav:focus-visible .r2{animation:pf-circle 280ms cubic-bezier(.35,.75,.4,1) 180ms forwards}
+@keyframes pf-circle{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+.pf-nav:focus,.pf-nav:focus-visible{outline:none}
+.pf-nav:hover img,.pf-nav:focus-visible img{animation:pf-nudge 460ms ease-in-out}
+@keyframes pf-nudge{0%,100%{transform:translate(0,0) rotate(0deg)}
+22%{transform:translate(-1.6px,0.8px) rotate(-0.7deg)}
+46%{transform:translate(1.6px,-0.8px) rotate(0.8deg)}
+72%{transform:translate(-0.9px,0.4px) rotate(-0.4deg)}}
+
+/* --- paper notes ------------------------------------------------------
+   three nested layers on purpose:
+   .pf-note  position + rotation  (what the properties panel edits)
+   .pf-rock  hover rocking only
+   .pf-in    entrance only
+   keeping them apart means neither animation can overwrite a saved angle. */
+.pf-note{position:absolute}
+.pf-rock{transition:transform 240ms ease}
+.pf-note:hover .pf-rock,.pf-note:focus-within .pf-rock{animation:pf-rock 1150ms ease-in-out infinite}
+@keyframes pf-rock{0%,100%{transform:rotate(0deg)}
+25%{transform:rotate(-1.15deg)}
+75%{transform:rotate(1.15deg)}}
+.pf-in{animation:pf-in 760ms cubic-bezier(.2,.8,.25,1) both}
+@keyframes pf-in{from{opacity:0;transform:translateY(-16px) scale(.975)}to{opacity:1;transform:none}}
+
+.pf-paper{box-sizing:border-box;background-color:#FDF7EA;
+box-shadow:0 1px 0 rgba(36,25,16,.10),0 10px 22px -16px rgba(36,25,16,.42)}
+.pf-punch{display:flex;gap:16px;padding:9px 16px 0}
+.pf-punch i{display:block;width:17px;height:9px;border-radius:2px;background-color:#F3E3DE}
+.pf-tape{position:absolute;width:74px;height:21px;background-color:rgba(214,196,170,.55);
+border-left:1px solid rgba(36,25,16,.12);border-right:1px solid rgba(36,25,16,.12)}
+
+/* --- handwriting --------------------------------------------------- */
+.pf-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+.pf-ul{display:block;width:100%;height:9px;overflow:visible}
+.pf-ul path{fill:none;stroke:#C62B23;stroke-width:3;stroke-linecap:round}
+
+/* --- the string that ties the notes together ----------------------- */
+.pf-strings{position:absolute;left:0;top:0;width:1440px;height:100%;pointer-events:none;z-index:2}
+.pf-strings path{fill:none;stroke:#CBA27C;stroke-width:2.4;stroke-linecap:round}
+
+/* --- software chips ------------------------------------------------ */
+.pf-chip{display:inline-flex;align-items:center;gap:7px;box-sizing:border-box;
+margin:0 7px 7px 0;padding:5px 10px 5px 7px;border:1px solid rgba(198,43,35,.38);border-radius:5px;
+background-color:#FFFBF2;white-space:nowrap}
+.pf-chip b{display:block;width:14px;height:14px;border:1.5px solid #C62B23;border-radius:3px}
+
+@media (prefers-reduced-motion:reduce){
+.pf-in{animation:none;opacity:1}
+.pf-note:hover .pf-rock,.pf-note:focus-within .pf-rock{animation:none}
+.pf-ring path{stroke-dashoffset:0}
+.pf-nav .r1,.pf-nav .r2{opacity:0}
+.pf-nav:hover .r1,.pf-nav:focus-visible .r1{animation:none;opacity:1}
+.pf-nav:hover .r2,.pf-nav:focus-visible .r2{animation:none;opacity:.6}
+.pf-nav:hover img{animation:none}
+}
+
+/* pf-fit-pass — one fixed layout, scaled to fit any window */
+html,body{overflow-x:hidden}
+.pf-stage{width:100%;overflow:hidden}
+.pf-fit{width:1440px;transform-origin:top left;will-change:transform}
+
+/* --- below 760px the scrapbook stacks instead of shrinking --------- */
+.pf-fit.pf-mob{width:100% !important;transform:none !important;margin-left:0 !important}
+.pf-mob .pf-page{min-height:0 !important;padding-bottom:56px}
+.pf-mob .pf-strings,.pf-mob .pf-bg{display:none}
+.pf-mob .pf-notes{display:flex;flex-direction:column;gap:26px;padding:0 18px}
+.pf-mob .pf-note{position:static !important;width:auto !important;transform:none !important}
+.pf-mob .pf-note:nth-child(odd) .pf-rock{transform:rotate(-1.2deg)}
+.pf-mob .pf-note:nth-child(even) .pf-rock{transform:rotate(1.2deg)}
+</style>
+</helmet>
+<div class="pf-stage" id="pf-stage-About" style="height: 1137px">
+<div class="pf-fit" id="pf-fit-About" style="height: 1172px">
+<div class="pf-page" style="position: relative; width: 100%; min-height: 1180px; box-sizing: border-box; overflow: hidden; background-color: #FBEDE9; background-image: linear-gradient(to right, rgba(198, 43, 35, 0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(198, 43, 35, 0.10) 1px, transparent 1px); background-size: 26px 26px; color: #241910; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300; opacity: 1; height: 1145px">
+<div class="pf-bg" aria-hidden="true" style="position: absolute; left: 130px; top: 268px; width: 1180px; z-index: 0; opacity: {{sketch}}; pointer-events: none;">
+<img src="./assets/415248465336bcb713bb791855b91c49.svg" alt="" style="display: block; width: 100%; height: auto;">
+<img src="./assets/5a8f36b20e80b66ab4cf69a9a253e484.svg" alt="" style="position: absolute; left: 0px; top: 0px; display: block; width: 100%; height: auto;">
+</div>
+<div class="pf-tint" aria-hidden="true" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; z-index: 1; background-color: {{tintColor}}; opacity: {{tint}}; pointer-events: none;"></div>
+
+
+<header class="pf-navbar" aria-label="Main navigation" style="position: relative; z-index: 20; display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 26px 44px 0;">
+<a class="pf-nav" href="About.dc.html" aria-current="page">
+<img src="./assets/dd23c601f5e5efbe7428059e7df3295e.svg" alt="About" style="display: block; height: 27px; width: auto;">
+<svg class="pf-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path class="r1" d="M15.3 55.5 Q13.3 47.8 14.0 44.1 Q14.8 40.5 16.2 37.6 Q17.6 34.7 20.3 32.3 Q23.0 30.0 26.8 27.5 Q30.6 25.0 35.6 22.9 Q40.6 20.7 46.9 19.2 Q53.2 17.7 59.8 16.9 Q66.4 16.2 73.5 15.6 Q80.7 15.0 89.1 14.3 Q97.5 13.7 106.1 13.6 Q114.7 13.5 123.0 13.6 Q131.2 13.8 138.6 14.2 Q146.0 14.7 152.4 15.7 Q158.8 16.7 165.4 18.6 Q171.9 20.6 176.6 23.5 Q181.3 26.4 184.9 29.9 Q188.5 33.3 190.3 36.2 Q192.2 39.2 193.3 42.4 Q194.4 45.7 193.8 49.5 Q193.3 53.3 191.6 57.3 Q189.9 61.2 186.7 63.8 Q183.4 66.4 178.6 69.1 Q173.7 71.8 169.0 73.6 Q164.3 75.4 158.4 76.8 Q152.5 78.3 146.0 79.3 Q139.5 80.3 132.7 81.6 Q125.9 82.8 118.7 84.0 Q111.5 85.1 104.0 85.3 Q96.6 85.4 89.4 85.5 Q82.1 85.6 75.5 85.3 Q68.8 84.9 62.2 84.6 Q55.6 84.4 48.7 83.3 Q41.9 82.3 36.2 80.4 Q30.5 78.5 25.5 75.6 Q20.6 72.8 16.1 69.2 Q11.5 65.6 8.4 61.9 Q5.3 58.1 3.5 54.2 Q1.8 50.4 2.0 47.2 Q2.2 44.0 4.0 41.0 L5.9 38.0"></path>
+<path class="r2" d="M20.2 63.8 Q14.7 57.8 12.9 55.5 Q11.1 53.2 9.9 50.3 Q8.6 47.3 9.0 45.2 Q9.4 43.1 10.7 40.3 Q12.1 37.5 14.4 34.3 Q16.7 31.2 20.8 29.5 Q24.9 27.8 29.4 25.4 Q34.0 23.0 39.0 20.9 Q43.9 18.7 49.8 17.5 Q55.8 16.2 61.6 15.7 Q67.4 15.1 74.2 13.9 Q80.9 12.7 87.8 12.7 Q94.6 12.8 100.3 12.7 Q106.1 12.6 112.4 12.8 Q118.7 12.9 124.0 14.9 Q129.3 16.8 133.9 18.2 Q138.5 19.5 143.6 21.7 Q148.7 23.9 152.9 25.7 Q157.0 27.5 160.7 29.1 L164.4 30.7"></path>
+</svg>
+</a>
+<a class="pf-nav" href="Main.dc.html">
+<img src="./assets/a8449acaf34bface2c4af60a977183a2.svg" alt="Projects" style="display: block; height: 26px; width: auto;">
+<svg class="pf-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path class="r1" d="M15.3 55.5 Q13.3 47.8 14.0 44.1 Q14.8 40.5 16.2 37.6 Q17.6 34.7 20.3 32.3 Q23.0 30.0 26.8 27.5 Q30.6 25.0 35.6 22.9 Q40.6 20.7 46.9 19.2 Q53.2 17.7 59.8 16.9 Q66.4 16.2 73.5 15.6 Q80.7 15.0 89.1 14.3 Q97.5 13.7 106.1 13.6 Q114.7 13.5 123.0 13.6 Q131.2 13.8 138.6 14.2 Q146.0 14.7 152.4 15.7 Q158.8 16.7 165.4 18.6 Q171.9 20.6 176.6 23.5 Q181.3 26.4 184.9 29.9 Q188.5 33.3 190.3 36.2 Q192.2 39.2 193.3 42.4 Q194.4 45.7 193.8 49.5 Q193.3 53.3 191.6 57.3 Q189.9 61.2 186.7 63.8 Q183.4 66.4 178.6 69.1 Q173.7 71.8 169.0 73.6 Q164.3 75.4 158.4 76.8 Q152.5 78.3 146.0 79.3 Q139.5 80.3 132.7 81.6 Q125.9 82.8 118.7 84.0 Q111.5 85.1 104.0 85.3 Q96.6 85.4 89.4 85.5 Q82.1 85.6 75.5 85.3 Q68.8 84.9 62.2 84.6 Q55.6 84.4 48.7 83.3 Q41.9 82.3 36.2 80.4 Q30.5 78.5 25.5 75.6 Q20.6 72.8 16.1 69.2 Q11.5 65.6 8.4 61.9 Q5.3 58.1 3.5 54.2 Q1.8 50.4 2.0 47.2 Q2.2 44.0 4.0 41.0 L5.9 38.0"></path>
+<path class="r2" d="M20.2 63.8 Q14.7 57.8 12.9 55.5 Q11.1 53.2 9.9 50.3 Q8.6 47.3 9.0 45.2 Q9.4 43.1 10.7 40.3 Q12.1 37.5 14.4 34.3 Q16.7 31.2 20.8 29.5 Q24.9 27.8 29.4 25.4 Q34.0 23.0 39.0 20.9 Q43.9 18.7 49.8 17.5 Q55.8 16.2 61.6 15.7 Q67.4 15.1 74.2 13.9 Q80.9 12.7 87.8 12.7 Q94.6 12.8 100.3 12.7 Q106.1 12.6 112.4 12.8 Q118.7 12.9 124.0 14.9 Q129.3 16.8 133.9 18.2 Q138.5 19.5 143.6 21.7 Q148.7 23.9 152.9 25.7 Q157.0 27.5 160.7 29.1 L164.4 30.7"></path>
+</svg>
+</a>
+</header><div class="pf-notes">
+
+<div class="pf-note" style="left: 72px; top: 104px; width: 400px; z-index: 12;">
+<div class="pf-rock">
+<div class="pf-in" style="animation-delay: 60ms;">
+<h1 class="pf-hand" style="margin: 0; color: {{ink}}; font-size: 54px; line-height: 1.02; letter-spacing: 0.01em;">Shanmathi Sivakumar</h1>
+<p style="margin: 12px 0 0; color: {{ink}}; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 400">Interior Designer | Architect</p>
+</div>
+</div>
+</div>
+
+<div class="pf-note" style="left: 72px; top: 246px; width: 300px; z-index: 12;">
+<div class="pf-rock">
+<div class="pf-in" style="animation-delay: 180ms; width: 284px; height: 35px; padding-top: 7px">
+<a href="./assets/c5290c6de29203925fb86e1ad32ef519.pdf" download="Shanmathi-Sivakumar-CV.pdf" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; box-sizing: border-box; padding: 15px 26px; border: 1px solid {{accent}}; border-radius: 999px; background-color: {{accent}}; color: #FFF8F2; font-size: 10px; letter-spacing: 0.17em; text-transform: uppercase; font-weight: 500;">Download detailed CV (PDF) ↓</a>
+</div>
+</div>
+</div>
+
+<div class="pf-note" style="left: 470px; top: 118px; width: 462px; transform: rotate(1.4deg); z-index: 7;">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 300ms; padding: 0 0 22px;">
+<div class="pf-punch" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div style="padding: 14px 30px 0;">
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">The technical bit</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.4 C 46 2.6 92 7.4 136 3.6 C 166 1.4 194 5.8 217 3.2"></path></svg>
+<p style="margin: 16px 0 5px; color: {{ink}}; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;">Drafting</p>
+<div><span class="pf-chip"><b></b>AutoCAD</span><span class="pf-chip"><b></b>SketchUp</span><span class="pf-chip"><b></b>Revit</span></div>
+<p style="margin: 13px 0 5px; color: {{ink}}; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;">Visualisation and rendering</p>
+<div style="width: 442px"><span class="pf-chip"><b></b>V-Ray</span><span class="pf-chip"><b></b>Lumion</span><span class="pf-chip"><b></b>Enscape</span><span class="pf-chip"><b></b>D5 Render</span></div>
+<p style="margin: 13px 0 5px; color: {{ink}}; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;">Presentation and post-production</p>
+<div><span class="pf-chip"><b></b>Adobe Photoshop</span><span class="pf-chip"><b></b>Google flow</span></div>
+
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div class="pf-note" style="left: 85px; top: 595px; width: 356px; transform: rotate(2.2deg); z-index: 6; position: absolute">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 540ms; padding: 0 0 26px; transform: rotate(11deg)">
+<div class="pf-punch" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div style="padding: 14px 28px 0;">
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">The human bit</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.0 C 48 2.4 94 7.2 138 3.2 C 168 1.0 196 5.6 217 3.0"></path></svg>
+<div style="margin: 18px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="color: #241910; font-family: Helvetica, sans-serif">1. I speak design, detail, and site.</p></div>
+<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif">2. I turn concepts into visual stories that help clients understand the design and make informed decisions.</p></div>
+<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif">3. I connect the dots between drawings, disciplines, and site conditions, spotting gaps and resolving conflicting requirements.</p></div>
+<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif">I keep teams, material decisions, and documentation moving together, even when coordinating projects remotely.</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="pf-note" style="left: 983px; top: 190px; width: 404px; transform: rotate(-12deg); z-index: 5; position: absolute">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 660ms; padding: 26px 30px 28px;">
+<span class="pf-tape" aria-hidden="true" style="left: -22px; top: 18px; transform: rotate(-38deg);"></span>
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">In practice</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 5.6 C 42 2.0 86 6.8 130 3.0 C 162 0.8 190 5.4 217 3.4"></path></svg>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 22px; margin-top: 18px; color: {{ink}}; font-size: 14px; line-height: 1.3; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">
+<span>Spatial planning</span><span>Mood boards</span>
+<span>Construction / as-built drawings</span><span>Site coordination</span>
+<span>Vendor coordination</span><span>Procurement coordination</span>
+<span>Client coordination</span><span>Construction detailing</span>
+<span>Material optimisation</span><span>Local sourcing</span>
+</div>
+</div>
+</div>
+</div>
+
+<div class="pf-note" style="left: 551px; top: 735px; width: 356px; transform: rotate(2.6deg); z-index: 9; position: absolute">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 780ms; padding: 26px 30px 30px;">
+<span class="pf-tape" aria-hidden="true" style="right: -20px; top: 22px; transform: rotate(36deg);"></span>
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">education</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.2 C 45 2.8 90 7.0 134 3.4 C 165 1.4 193 5.8 217 3.2"></path></svg>
+<p style="margin: 18px 0 0; color: {{ink}}; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">Bachelor of Architecture, Anna University</p>
+<p style="margin: 7px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2014 – 2019 · Chennai, India</p>
+</div>
+</div>
+</div>
+
+<div class="pf-note" style="left: 107px; top: 320px; width: 318px; transform: rotate(-2.8deg); z-index: 10; position: absolute">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 900ms; padding: 24px 28px 26px;">
+<span class="pf-tape" aria-hidden="true" style="left: 118px; top: -10px; transform: rotate(4deg);"></span>
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">contact me!!</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 5.8 C 47 2.2 92 7.0 137 3.6 C 167 1.6 195 6.0 217 3.0"></path></svg>
+<p style="margin: 16px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">Dallas, Texas</p>
+<p style="margin: 6px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">shanmathisivakumar30@gmail.com</p>
+<p style="margin: 6px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">LinkedIn · shanmathisivakumar30</p>
+<p style="margin: 10px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500;">Authorised to work in the United States</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<svg class="pf-strings" viewBox="0 0 1440 1180" preserveAspectRatio="none" aria-hidden="true" focusable="false" style="opacity: 1">
+<path d="M744 452 C 741 437 733 428 710 418"></path>
+<path d="M928 505 C 953 492 960 470 976 440"></path>
+<path d="M560 548 C 519 542 479 534 430 526"></path>
+<path d="M648 648 C 651 692 656 722 663 760"></path>
+<path d="M906 640 C 936 650 956 654 972 664"></path>
+<path d="M198 628 C 196 692 200 742 208 790"></path>
+</svg>
+
+
+
+<a href="Home.dc.html" style="position: absolute; left: 44px; bottom: 30px; z-index: 20; color: #8E6A62; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">← Back to the studio</a>
+<a href="Main.dc.html" style="position: absolute; right: 44px; bottom: 30px; z-index: 20; color: #8E6A62; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">Project index →</a>
+
+<div class="pf-note" style="left: 557px; top: 490px; width: 298px; transform: rotate(-1.2deg); z-index: 11; height: 185px; position: absolute">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 0ms; padding: 46px 34px 50px; text-align: center;">
+<span class="pf-tape" aria-hidden="true" style="left: 149px; top: -11px; transform: rotate(-3deg);"></span>
+<p class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{skillsSize}}; line-height: 0.92;">Skills</p>
+
+</div>
+</div>
+</div><div class="pf-note" style="left: 1057px; top: 532px; width: 310px; z-index: 8; position: absolute; font-weight: 300; height: 356px; transform: rotate(8deg)">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 420ms; padding: 0 0 26px; transform: rotate(-7deg)">
+<div class="pf-punch" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div style="padding: 14px 28px 0;">
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">My Experience</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 5.8 C 44 2.2 88 7.0 132 3.4 C 164 1.2 192 6.0 217 3.6"></path></svg>
+<p style="margin: 20px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2023 – 2025</p>
+<p style="margin: 5px 0 0; color: {{ink}}; font-size: 13px; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}}; font-family: Helvetica, sans-serif">Sr. Project Designer at DesignInk Interiors, India,&nbsp;</p>
+<p style="margin: 18px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2022 · 2023</p>
+<p style="margin: 5px 0 0; color: {{ink}}; font-size: 13px; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}}; font-family: Helvetica, sans-serif">Project designer at Auroma Architecture, Auroville, India.</p>
+<p style="margin: 18px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2019 – 2022&nbsp;</p>
+<p style="margin: 5px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}}; font-family: Helvetica, sans-serif">Architect at Taamaesek Engineering, Chennai, India.</p>
+<p style="margin: 18px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2018 · 2019</p>
+<p style="margin: 5px 0 0; color: {{ink}}; font-size: 13px; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}}; font-family: Helvetica, sans-serif">Intern Architect at Aturvya Architects, Chennai, India.</p>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"sketch": {"editor": "text", "default": "0.3"}, "tint": {"editor": "text", "default": "0.12"}, "tintColor": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#F01D1D", "#786653"]}, "skillsSize": {"editor": "text", "default": "104px"}, "headSize": {"editor": "text", "default": "40px"}, "bodySize": {"editor": "text", "default": "13px"}, "dateSize": {"editor": "text", "default": "10px"}, "lead": {"editor": "text", "default": "1.55"}, "track": {"editor": "text", "default": "0.01em"}, "align": {"editor": "enum", "options": ["left", "center", "right", "justify"], "default": "left"}, "ink": {"editor": "color", "default": "#241910"}, "accent": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#241910", "#786653"]}, "$preview": {"width": 1440, "height": 1180}}'>
+class Component extends DCLogic {
+pfFit() {
+try {
+const stage = document.getElementById('pf-stage-About');
+const fit = document.getElementById('pf-fit-About');
+if (!stage || !fit) return;
+const w = stage.clientWidth || document.documentElement.clientWidth || 1440;
+// under 760px the scrapbook stacks instead of scaling down to unreadable
+const mob = w > 0 && w < 760;
+fit.classList.toggle('pf-mob', mob);
+if (mob) {
+fit.style.transform = '';
+fit.style.marginLeft = '';
+stage.style.height = '';
+return;
+}
+const s = Math.min(1, w / 1440);
+fit.style.transform = 'scale(' + s + ')';
+fit.style.marginLeft = Math.max(0, (w - 1440 * s) / 2) + 'px';
+stage.style.height = Math.ceil(fit.offsetHeight * s) + 'px';
+} catch (e) {}
+}
+pfFitBind() {
+this._pfFit = () => this.pfFit();
+this.pfFit();
+try { window.addEventListener('resize', this._pfFit); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+this._pfRO = new ResizeObserver(this._pfFit);
+this._pfRO.observe(document.getElementById('pf-fit-About'));
+}
+} catch (e) {}
+try { setTimeout(this._pfFit, 120); setTimeout(this._pfFit, 700); } catch (e) {}
+}
+pfFitFree() {
+try { window.removeEventListener('resize', this._pfFit); } catch (e) {}
+try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e) {}
+}
+
+componentDidMount() {
+this.pfFitBind();
+try { window.scrollTo(0, 0); } catch (e) {}
+}
+componentWillUnmount() { this.pfFitFree(); }
+renderVals() {
+const p = this.props;
+return {
+sketch: p.sketch ?? '0.3',
+tint: p.tint ?? '0.12',
+tintColor: p.tintColor ?? '#C62B23',
+skillsSize: p.skillsSize ?? '104px',
+headSize: p.headSize ?? '40px',
+bodySize: p.bodySize ?? '13px',
+dateSize: p.dateSize ?? '10px',
+lead: p.lead ?? '1.55',
+track: p.track ?? '0.01em',
+align: p.align ?? 'left',
+ink: p.ink ?? '#241910',
+accent: p.accent ?? '#C62B23'
+};
+}
+}
+</script>
+</body>
+</html>

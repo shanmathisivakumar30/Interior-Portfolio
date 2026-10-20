@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Speech bubble</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+.pf-bub{position:relative;width:100%}
+.pf-bub img{display:block;width:100%;height:auto}
+.pf-bub.flip img{transform:scaleX(-1)}
+.pf-bubtext{position:absolute;left:50%;top:43%;width:72%;transform:translate(-50%,-50%);
+margin:0;font-family:'Penpoint','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:400;
+color:#241910;text-wrap:balance;word-break:break-word}
+</style>
+</helmet>
+<div class="pf-bub{{flip}}" style="transform: rotate({{rot}});">
+<img src="./assets/6ae6f22a4eab3812083f029596bd31f8.svg" alt="">
+<p class="pf-bubtext" style="font-size: {{tSize}}; line-height: {{tLead}}; text-align: {{align}};">{{text}}</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"text": {"editor": "text", "default": ""}, "tSize": {"editor": "text", "default": "17px"}, "tLead": {"editor": "text", "default": "1.2"}, "align": {"editor": "enum", "options": ["center", "left"], "default": "center"}, "tail": {"editor": "enum", "options": ["tail left", "tail right"], "default": "tail left"}, "rot": {"editor": "text", "default": "0deg"}, "$preview": {"width": 225, "height": 154}}'>
+class Component extends DCLogic {
+renderVals() {
+const p = this.props;
+return {
+text: (p.text ?? '').toString(),
+flip: (p.tail ?? 'tail left') === 'tail right' ? ' flip' : '',
+tSize: p.tSize ?? '17px', tLead: p.tLead ?? '1.2',
+align: p.align ?? 'center', rot: p.rot ?? '0deg'
+};
+}
+}
+</script>
+</body>
+</html>
