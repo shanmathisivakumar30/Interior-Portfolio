@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Studio homepage — phone</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Bebas Neue';src:url('./assets/52846e07bbe4848363c5a3aad3642df9.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+
+/* every class here is ph- prefixed: this artboard is mounted inside the
+   desktop page, so the two stylesheets share one document */
+.ph-home{position:relative;box-sizing:border-box;display:flex;flex-direction:column;
+width:100%;min-height:100vh;min-height:100dvh;padding:18px 18px 26px;
+background-color:#FEF9ED;
+background-image:linear-gradient(to right,rgba(36,25,16,0.055) 1px,transparent 1px),
+linear-gradient(to bottom,rgba(36,25,16,0.055) 1px,transparent 1px);
+background-size:26px 26px;color:#241910;
+font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
+.ph-wrap{display:flex;flex-direction:column;flex:1 1 auto;width:100%;max-width:430px;margin:0 auto}
+
+.ph-nav{display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 0 0}
+.ph-navlink{position:relative;display:inline-flex;align-items:center;padding:9px 16px;
+text-decoration:none;-webkit-tap-highlight-color:transparent}
+.ph-navlink img{display:block;height:24px;width:auto}
+.ph-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.ph-ring path{fill:none;stroke:#C8432B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200}
+.ph-navlink:active .ph-ring path,.ph-navlink:focus-visible .ph-ring path{
+animation:ph-circle 420ms cubic-bezier(.35,.75,.4,1) forwards}
+@keyframes ph-circle{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+.ph-navlink:focus{outline:none}
+
+/* the drawing and the greeting share the middle, centred together */
+.ph-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;
+flex:1 1 auto;gap:22px;padding:10px 0 4px}
+
+.ph-art{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;
+cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ph-art img{display:block;width:100%;height:auto}
+.ph-art .ph-plant,.ph-art .ph-beams{position:absolute;left:0;top:0;width:100%;height:100%}
+.ph-plant{transform-origin:8% 88%}
+.ph-beams{pointer-events:none;opacity:0;transition:opacity 420ms ease}
+.ph-art.ph-lit .ph-beams{opacity:1}
+.ph-art.ph-lit .ph-room{animation:ph-shake 640ms ease-in-out}
+.ph-art.ph-lit .ph-plant{animation:ph-leaf 820ms ease-in-out}
+@keyframes ph-shake{
+0%,100%{transform:translate(0,0) rotate(0deg)}
+18%{transform:translate(-2.5px,1px) rotate(-0.22deg)}
+38%{transform:translate(2.5px,-1.5px) rotate(0.28deg)}
+58%{transform:translate(-1.8px,-1px) rotate(-0.18deg)}
+80%{transform:translate(1.4px,1px) rotate(0.12deg)}}
+@keyframes ph-leaf{
+0%,100%{transform:rotate(0deg) translate(0,0)}
+14%{transform:rotate(-1.5deg) translate(-1.5px,0)}
+32%{transform:rotate(1.7deg) translate(1.5px,-1.5px)}
+52%{transform:rotate(-1.1deg) translate(-1px,1px)}
+74%{transform:rotate(0.8deg) translate(1px,0)}}
+
+.ph-greet{margin:0;font-family:'Bebas Neue','Helvetica Neue',Helvetica,Arial,sans-serif;
+font-weight:400;font-size:26px;letter-spacing:0.12em;text-indent:0.12em;line-height:1.25;
+text-align:center;text-transform:uppercase;color:#241910}
+
+.ph-hint{margin:0;padding-top:2px;text-align:center;color:#9C9795;font-size:9px;
+letter-spacing:0.2em;text-transform:uppercase;font-weight:500;
+transition:opacity 300ms ease}
+.ph-hint.ph-off{opacity:0}
+
+@media (prefers-reduced-motion:reduce){
+.ph-art.ph-lit .ph-room,.ph-art.ph-lit .ph-plant{animation:none}
+.ph-ring path{stroke-dashoffset:0}
+.ph-navlink:active .ph-ring path{animation:none}}
+</style>
+</helmet>
+<div class="ph-home">
+<div class="ph-wrap">
+
+<nav class="ph-nav" aria-label="Main navigation">
+<a class="ph-navlink" href="About.dc.html">
+<img src="./assets/dd23c601f5e5efbe7428059e7df3295e.svg" alt="About">
+<svg class="ph-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path d="M15.3 55.5 Q13.3 47.8 14.0 44.1 Q14.8 40.5 16.2 37.6 Q17.6 34.7 20.3 32.3 Q23.0 30.0 26.8 27.5 Q30.6 25.0 35.6 22.9 Q40.6 20.7 46.9 19.2 Q53.2 17.7 59.8 16.9 Q66.4 16.2 73.5 15.6 Q80.7 15.0 89.1 14.3 Q97.5 13.7 106.1 13.6 Q114.7 13.5 123.0 13.6 Q131.2 13.8 138.6 14.2 Q146.0 14.7 152.4 15.7 Q158.8 16.7 165.4 18.6 Q171.9 20.6 176.6 23.5 Q181.3 26.4 184.9 29.9 Q188.5 33.3 190.3 36.2 Q192.2 39.2 193.3 42.4 Q194.4 45.7 193.8 49.5 Q193.3 53.3 191.6 57.3 Q189.9 61.2 186.7 63.8 Q183.4 66.4 178.6 69.1 Q173.7 71.8 169.0 73.6 Q164.3 75.4 158.4 76.8 Q152.5 78.3 146.0 79.3 Q139.5 80.3 132.7 81.6 Q125.9 82.8 118.7 84.0 Q111.5 85.1 104.0 85.3 Q96.6 85.4 89.4 85.5 Q82.1 85.6 75.5 85.3 Q68.8 84.9 62.2 84.6 Q55.6 84.4 48.7 83.3 Q41.9 82.3 36.2 80.4 Q30.5 78.5 25.5 75.6 Q20.6 72.8 16.1 69.2 Q11.5 65.6 8.4 61.9 Q5.3 58.1 3.5 54.2 Q1.8 50.4 2.0 47.2 Q2.2 44.0 4.0 41.0 L5.9 38.0"></path>
+</svg>
+</a>
+<a class="ph-navlink" href="Main.dc.html">
+<img src="./assets/a8449acaf34bface2c4af60a977183a2.svg" alt="Projects">
+<svg class="ph-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path d="M15.3 55.5 Q13.3 47.8 14.0 44.1 Q14.8 40.5 16.2 37.6 Q17.6 34.7 20.3 32.3 Q23.0 30.0 26.8 27.5 Q30.6 25.0 35.6 22.9 Q40.6 20.7 46.9 19.2 Q53.2 17.7 59.8 16.9 Q66.4 16.2 73.5 15.6 Q80.7 15.0 89.1 14.3 Q97.5 13.7 106.1 13.6 Q114.7 13.5 123.0 13.6 Q131.2 13.8 138.6 14.2 Q146.0 14.7 152.4 15.7 Q158.8 16.7 165.4 18.6 Q171.9 20.6 176.6 23.5 Q181.3 26.4 184.9 29.9 Q188.5 33.3 190.3 36.2 Q192.2 39.2 193.3 42.4 Q194.4 45.7 193.8 49.5 Q193.3 53.3 191.6 57.3 Q189.9 61.2 186.7 63.8 Q183.4 66.4 178.6 69.1 Q173.7 71.8 169.0 73.6 Q164.3 75.4 158.4 76.8 Q152.5 78.3 146.0 79.3 Q139.5 80.3 132.7 81.6 Q125.9 82.8 118.7 84.0 Q111.5 85.1 104.0 85.3 Q96.6 85.4 89.4 85.5 Q82.1 85.6 75.5 85.3 Q68.8 84.9 62.2 84.6 Q55.6 84.4 48.7 83.3 Q41.9 82.3 36.2 80.4 Q30.5 78.5 25.5 75.6 Q20.6 72.8 16.1 69.2 Q11.5 65.6 8.4 61.9 Q5.3 58.1 3.5 54.2 Q1.8 50.4 2.0 47.2 Q2.2 44.0 4.0 41.0 L5.9 38.0"></path>
+</svg>
+</a>
+</nav>
+
+<div class="ph-mid">
+<button type="button" class="ph-art{{lit}}" onClick="{{light}}" aria-label="Light the studio lamps">
+<img class="ph-room" src="./assets/415248465336bcb713bb791855b91c49.svg" alt="Pen and ink drawing of my studio: a heavy wooden worktable spread with drawings, books and three task lamps, a chair at the right and drawings leaning against the table.">
+<img class="ph-plant" src="./assets/5a8f36b20e80b66ab4cf69a9a253e484.svg" alt="">
+<svg class="ph-beams" viewBox="0 246 1500 800" aria-hidden="true" focusable="false"><defs><linearGradient id="ph-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.62"></stop><stop offset="0.55" stop-color="#F4D45B" stop-opacity="0.28"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></linearGradient><radialGradient id="ph-pool"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.5"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></radialGradient></defs><path d="M456 446 L532 426 L650 582 L388 608 Z" fill="url(#ph-beam)"></path><ellipse cx="519" cy="595" rx="86" ry="17" fill="url(#ph-pool)"></ellipse><path d="M750 420 L826 400 L944 558 L682 582 Z" fill="url(#ph-beam)"></path><ellipse cx="813" cy="570" rx="86" ry="17" fill="url(#ph-pool)"></ellipse><path d="M858 386 L934 406 L1050 558 L798 582 Z" fill="url(#ph-beam)"></path><ellipse cx="924" cy="570" rx="86" ry="17" fill="url(#ph-pool)"></ellipse></svg>
+</button>
+<p class="ph-greet">Welcome to Shanmathi’s<br>design studio</p>
+</div>
+
+<p class="ph-hint{{hint}}">Tap the drawing</p>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+componentWillUnmount() {
+try { clearTimeout(this._lit); } catch (e) {}
+}
+renderVals() {
+const st = this.state || {};
+return {
+lit: st.lit ? ' ph-lit' : '',
+hint: st.touched ? ' ph-off' : '',
+light: () => {
+try { clearTimeout(this._lit); } catch (e) {}
+this.setState({ lit: true, touched: true });
+this._lit = setTimeout(() => this.setState({ lit: false }), 1600);
+}
+};
+}
+}
+</script>
+</body>
+</html>

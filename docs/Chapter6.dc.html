@@ -116,6 +116,11 @@ border-left:1px solid rgba(36,25,16,0.12);border-right:1px solid rgba(36,25,16,0
 .pf-mob .pf-fnav{position:static !important;transform:none !important;display:block;text-align:center;margin:6px 0}
 .pf-mob .pf-fnavrow{display:block !important;padding:10px 0 !important}
 
+/* --- phone layout lives in its own artboard; this picks between them --- */
+.pf-rt{width:100%}
+.pf-phoneslot{width:100%}
+.pf-phoneslot > *{width:100%}
+
 /* pf-fit-pass — one fixed layout, scaled to fit any window */
 html,body{overflow-x:hidden}
 .pf-stage{width:100%;overflow:hidden}
@@ -132,6 +137,11 @@ html,body{overflow-x:hidden}
 .pf-mob .pf-heropage{min-height:0 !important}
 </style>
 </helmet>
+<div class="pf-rt" id="pf-rt-Chapter6">
+<sc-if value="{{phone}}" hint-placeholder-val="{{ false }}">
+<div class="pf-phoneslot"><dc-import name="Chapter6-Phone" embedded="yes" hint-size="100%,844px"></dc-import></div>
+</sc-if>
+<sc-if value="{{desk}}" hint-placeholder-val="{{ true }}">
 <sc-if value="{{lbOpen}}" hint-placeholder-val="{{ false }}">
 <div class="pf-lb" id="pf-lb-Chapter6" tabindex="-1" role="dialog" aria-modal="true" aria-label="Mood board">
 <button type="button" class="pf-lbveil" onClick="{{lbClose}}" aria-label="Close mood board"></button>
@@ -217,6 +227,8 @@ html,body{overflow-x:hidden}
 </div>
 </div>
 </div>
+</sc-if>
+</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;ig&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shansivakumar&quot;}, &quot;mail&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shanmathisivakumar30@gmail.com&quot;}, &quot;prevLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;previous project&quot;}, &quot;nextLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;next project&quot;}, &quot;title&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;spatial fragments&quot;}, &quot;tagline&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A few things caught my eye. Then they started making a room.&quot;}, &quot;heroCount&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;], &quot;default&quot;: &quot;4&quot;}, &quot;imgFit&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;fit&quot;, &quot;fill&quot;], &quot;default&quot;: &quot;fit&quot;}, &quot;note&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;mood boards&quot;}, &quot;noteSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;40px&quot;}, &quot;noteColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#C62B23&quot;, &quot;options&quot;: [&quot;#C62B23&quot;, &quot;#C8432B&quot;, &quot;#241910&quot;, &quot;#786653&quot;]}, &quot;noteLead&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;1.02&quot;}, &quot;noteTrack&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;0.01em&quot;}, &quot;noteAlign&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;left&quot;, &quot;center&quot;, &quot;right&quot;], &quot;default&quot;: &quot;left&quot;}, &quot;notePaper&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FDF7EA&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FBF6E6&quot;}, &quot;gridOp&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;0.17&quot;}, &quot;gridStep&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;17px&quot;}, &quot;slogan&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A room is a verb. It keeps happening.&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#786653&quot;, &quot;options&quot;: [&quot;#786653&quot;, &quot;#241910&quot;, &quot;#9C9795&quot;]}, &quot;redColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#C62B23&quot;, &quot;options&quot;: [&quot;#C62B23&quot;, &quot;#C8432B&quot;, &quot;#241910&quot;, &quot;#0B0B0B&quot;]}, &quot;shuffle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;playing&quot;, &quot;paused&quot;], &quot;default&quot;: &quot;playing&quot;}, &quot;holdMs&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;600&quot;, &quot;800&quot;, &quot;1000&quot;, &quot;1200&quot;, &quot;1600&quot;, &quot;2000&quot;, &quot;2400&quot;, &quot;3000&quot;], &quot;default&quot;: &quot;1200&quot;}, &quot;moveMs&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;300&quot;, &quot;400&quot;, &quot;600&quot;, &quot;800&quot;, &quot;1000&quot;, &quot;1500&quot;, &quot;2000&quot;], &quot;default&quot;: &quot;800&quot;}, &quot;gap&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;10px&quot;}, &quot;boardSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;520px&quot;}, &quot;tileBg1&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFFFFF&quot;}, &quot;tileBg2&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFFFFF&quot;}, &quot;tileBg3&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFFFFF&quot;}, &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 900}}">
 class Component extends DCLogic {
@@ -247,8 +259,10 @@ this._pfRO.observe(document.getElementById('pf-fit-Chapter6'));
 } catch (e) {}
 try { setTimeout(this._pfFit, 120); setTimeout(this._pfFit, 700); } catch (e) {}
 }
-componentDidMount() { this.pfFitBind(); this.mbBind(); try { window.scrollTo(0, 0); } catch (e) {} }
+componentDidMount() {
+this.rtBind(); this.pfFitBind(); this.mbBind(); try { window.scrollTo(0, 0); } catch (e) {} }
 componentWillUnmount() {
+this.rtFree();
 this.mbFree();
 try { window.removeEventListener('resize', this._pfFit); } catch (e) {}
 try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e) {}
@@ -390,6 +404,37 @@ try { el.focus({ preventScroll: true }); } catch (err) {
 try { el.focus(); } catch (e2) {}
 }
 }
+rtWide() {
+try {
+const el = document.getElementById('pf-rt-Chapter6');
+const w = (el && el.clientWidth) || 0;
+// no box yet: keep the desktop arm, which is what this page has always shown
+if (!w) return true;
+return w > 760;
+} catch (e) { return true; }
+}
+rtSync() {
+const wide = this.rtWide();
+if (((this.state || {}).wide) === wide) return;
+this.setState({ wide: wide });
+// the scale-to-fit box is a different element on the other side of the switch
+try { setTimeout(() => { try { this.pfFit(); } catch (e) {} }, 0); } catch (e) {}
+}
+rtBind() {
+this.rtSync();
+this._rt = () => this.rtSync();
+try { window.addEventListener('resize', this._rt); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+const el = document.getElementById('pf-rt-Chapter6');
+if (el) { this._rtRO = new ResizeObserver(this._rt); this._rtRO.observe(el); }
+}
+} catch (e) {}
+}
+rtFree() {
+try { window.removeEventListener('resize', this._rt); } catch (e) {}
+try { if (this._rtRO) { this._rtRO.disconnect(); this._rtRO = null; } } catch (e) {}
+}
 renderVals() {
 const p = this.props;
 const a = p.accent ?? '#786653';
@@ -455,6 +500,9 @@ v.tileBg1 = p.tileBg1 ?? '#FFFFFF';
 v.tileBg2 = p.tileBg2 ?? '#FFFFFF';
 v.tileBg3 = p.tileBg3 ?? '#FFFFFF';
 if (!this._mbPend) { this._mbPend = true; try { setTimeout(() => this.mbSync(), 0); } catch (e) { this._mbPend = false; } }
+const _wide = ((this.state || {}).wide) !== false;
+v.desk = _wide;
+v.phone = !_wide;
 return v;
 }
 }

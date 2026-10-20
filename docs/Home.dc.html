@@ -92,12 +92,22 @@ text-align:center;color:#241910;text-transform:uppercase}
 .pf-main:active .pf-plant{animation:pf-leaf 820ms ease-in-out}
 }
 
+/* --- phone layout lives in its own artboard; this picks between them --- */
+.pf-rt{width:100%}
+.pf-phoneslot{width:100%}
+.pf-phoneslot > *{width:100%}
+
 /* pf-fit-pass — one fixed layout, scaled to fit any window */
 html,body{overflow-x:hidden}
 .pf-stage{width:100%;overflow:hidden}
 .pf-fit{width:1440px;transform-origin:top left;will-change:transform}
 </style>
 </helmet>
+<div class="pf-rt" id="pf-rt-Home">
+<sc-if value="{{phone}}" hint-placeholder-val="{{ false }}">
+<div class="pf-phoneslot"><dc-import name="Home-Phone" embedded="yes" hint-size="100%,844px"></dc-import></div>
+</sc-if>
+<sc-if value="{{desk}}" hint-placeholder-val="{{ true }}">
 <sc-if value="{{showIntro}}" hint-placeholder-val="{{ true }}">
 <div class="pf-veil" aria-label="Portfolio opening" style="position: fixed; inset: 0; z-index: 50; overflow: hidden; background-color: #0b0b0b;">
 <dc-import name="Opening" embedded="yes" hint-size="100%,100%"></dc-import>
@@ -139,6 +149,8 @@ html,body{overflow-x:hidden}
 </div>
 </div>
 </div>
+</sc-if>
+</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"intro": {"editor": "enum", "options": ["once per visit", "every time", "off"], "default": "once per visit"}, "$preview": {"width": 1440, "height": 900}}'>
 class Component extends DCLogic {
@@ -172,11 +184,13 @@ try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e
 }
 
 componentDidMount() {
+this.rtBind();
 this.pfFitBind();
 try { window.scrollTo(0, 0); } catch (e) {}
 if (!this.introSkipped()) this.startIntro();
 }
 componentWillUnmount() {
+this.rtFree();
 this.pfFitFree(); clearTimeout(this.introTimer); }
 introSkipped() {
 if (this._init === undefined) {
@@ -192,14 +206,49 @@ try { sessionStorage.setItem('pf-home-intro', '1'); } catch (e) {}
 clearTimeout(this.introTimer);
 this.introTimer = setTimeout(() => this.setState({ introDone: true }), 2650);
 }
+rtWide() {
+try {
+const el = document.getElementById('pf-rt-Home');
+const w = (el && el.clientWidth) || 0;
+// no box yet: keep the desktop arm, which is what this page has always shown
+if (!w) return true;
+return w > 760;
+} catch (e) { return true; }
+}
+rtSync() {
+const wide = this.rtWide();
+if (((this.state || {}).wide) === wide) return;
+this.setState({ wide: wide });
+// the scale-to-fit box is a different element on the other side of the switch
+try { setTimeout(() => { try { this.pfFit(); } catch (e) {} }, 0); } catch (e) {}
+}
+rtBind() {
+this.rtSync();
+this._rt = () => this.rtSync();
+try { window.addEventListener('resize', this._rt); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+const el = document.getElementById('pf-rt-Home');
+if (el) { this._rtRO = new ResizeObserver(this._rt); this._rtRO.observe(el); }
+}
+} catch (e) {}
+}
+rtFree() {
+try { window.removeEventListener('resize', this._rt); } catch (e) {}
+try { if (this._rtRO) { this._rtRO.disconnect(); this._rtRO = null; } } catch (e) {}
+}
 renderVals() {
 const st = this.state || {};
 const done = st.introDone ?? this.introSkipped();
-return {
+const v = {
 showIntro: !done,
 enter: done ? ' pf-enter' : '',
 skipIntro: () => { clearTimeout(this.introTimer); this.setState({ introDone: true }); }
 };
+const _wide = ((this.state || {}).wide) !== false;
+v.desk = _wide;
+v.phone = !_wide;
+return v;
 }
 }
 </script>

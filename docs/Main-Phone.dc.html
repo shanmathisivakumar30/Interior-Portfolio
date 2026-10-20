@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portfolio index — phone</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+
+.ph-idx{position:relative;box-sizing:border-box;width:100%;min-height:100vh;
+padding:18px 18px 40px;background-color:#FEF9ED;
+background-image:radial-gradient(circle at center,rgba(125,116,104,0.035) 0 1px,transparent 1.15px);
+background-size:5px 5px;color:#262525;
+font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
+.ph-wrap{width:100%;max-width:430px;margin:0 auto}
+
+.ph-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+padding-bottom:26px}
+.ph-head a{color:#262525;text-decoration:none;font-size:9px;letter-spacing:0.22em;
+text-transform:uppercase;font-weight:500;-webkit-tap-highlight-color:transparent}
+.ph-head a:active{color:#C62B23}
+
+.ph-intro{margin:0 0 30px;font-size:16px;line-height:1.45;font-style:italic;color:#262525}
+
+.ph-list{border-top:1px solid #9C9795}
+
+/* the category sits above the title, both hard against the left edge */
+.ph-row{display:block;padding:15px 0 17px;border-bottom:1px solid #9C9795;
+color:#262525;text-decoration:none;-webkit-tap-highlight-color:transparent;
+transition:background-color 200ms ease,padding-left 200ms ease}
+/* the same angled file tab as the desktop index, moved above the title */
+.ph-cat{position:relative;display:inline-flex;align-items:center;justify-content:center;
+box-sizing:border-box;height:26px;padding:0 16px;margin:0 0 9px;background-color:#262525;
+clip-path:polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400;
+font-size:11px;letter-spacing:0.03em;text-transform:uppercase;white-space:nowrap;
+transition:background-color 200ms ease}
+.ph-cat::before{content:"";position:absolute;left:1px;top:1px;right:1px;bottom:0;
+background-color:#FEF9ED;clip-path:polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+transition:background-color 200ms ease}
+.ph-cat i{position:relative;z-index:1;font-style:normal;color:#262525}
+.ph-ttl{margin:0;font-size:34px;line-height:0.96;letter-spacing:-0.035em;font-weight:300;
+text-transform:uppercase;
+/* two lines, and never a clipped one: wrap rather than overflow */
+overflow-wrap:break-word;word-break:normal;hyphens:none}
+
+.ph-row:active,.ph-row:focus-visible{background-color:#C62B23;color:#FEF9ED;
+padding-left:10px;outline:none}
+.ph-row:active .ph-cat,.ph-row:focus-visible .ph-cat{background-color:#C62B23}
+.ph-row:active .ph-cat::before,.ph-row:focus-visible .ph-cat::before{background-color:#C62B23}
+
+@media (prefers-reduced-motion:reduce){.ph-row{transition:none}}
+</style>
+</helmet>
+<div class="ph-idx">
+<div class="ph-wrap">
+
+<header class="ph-head">
+<a href="Home.dc.html">Shanmathi Sivakumar</a>
+<a href="About.dc.html">About</a>
+</header>
+
+<p class="ph-intro">Every file holds the possibility of a life. These are stories of spaces imagined through light and time</p>
+
+<nav class="ph-list" aria-label="Projects">
+
+<a class="ph-row" href="Chapter1.dc.html">
+<span class="ph-cat"><i>Residential interior</i></span>
+<h2 class="ph-ttl">Light, within!</h2>
+</a>
+
+<a class="ph-row" href="Chapter3.dc.html">
+<span class="ph-cat"><i>Residential interior</i></span>
+<h2 class="ph-ttl">A house that listens</h2>
+</a>
+
+<a class="ph-row" href="Chapter4.dc.html">
+<span class="ph-cat"><i>Glamping project</i></span>
+<h2 class="ph-ttl">A little unbuttoned</h2>
+</a>
+
+<a class="ph-row" href="Chapter2.dc.html">
+<span class="ph-cat"><i>Hospitality interior</i></span>
+<h2 class="ph-ttl">The breakfast club</h2>
+</a>
+
+<a class="ph-row" href="Chapter5.dc.html">
+<span class="ph-cat"><i>Healthcare interior</i></span>
+<h2 class="ph-ttl">A softer landing</h2>
+</a>
+
+<a class="ph-row" href="Chapter6.dc.html">
+<span class="ph-cat"><i>Moodboard compilations</i></span>
+<h2 class="ph-ttl">Spatial fragments</h2>
+</a>
+
+</nav>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

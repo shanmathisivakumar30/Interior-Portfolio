@@ -34,6 +34,11 @@ button{font:inherit;color:inherit}
 .pf-card:hover h3{color:#786653 !important}
 .pf-dot:hover{border-color:#786653 !important;background-color:#786653 !important;transform:scale(1.15)}
 .pf-ttab:hover{border-bottom-color:#786653 !important;color:#786653 !important}
+/* --- phone layout lives in its own artboard; this picks between them --- */
+.pf-rt{width:100%}
+.pf-phoneslot{width:100%}
+.pf-phoneslot > *{width:100%}
+
 /* pf-fit-pass — one fixed layout, scaled to fit any window */
 html,body{overflow-x:hidden}
 img{max-width:100%}
@@ -41,6 +46,11 @@ img{max-width:100%}
 .pf-fit{width:1440px;transform-origin:top left;will-change:transform}
 </style>
 </helmet>
+<div class="pf-rt" id="pf-rt-Main">
+<sc-if value="{{phone}}" hint-placeholder-val="{{ false }}">
+<div class="pf-phoneslot"><dc-import name="Main-Phone" embedded="yes" hint-size="100%,844px"></dc-import></div>
+</sc-if>
+<sc-if value="{{desk}}" hint-placeholder-val="{{ true }}">
 <div class="pf-stage" id="pf-stage-Main">
 <div class="pf-fit" id="pf-fit-Main">
 <div style="position: relative; width: 100%; min-height: 900px; box-sizing: border-box; overflow: hidden; background-color: #FEF9ED; background-image: radial-gradient(circle at center, rgba(125, 116, 104, 0.035) 0 1px, transparent 1.15px); background-size: 5px 5px; color: #262525; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300;">
@@ -99,6 +109,8 @@ img{max-width:100%}
 </div>
 </div>
 </div>
+</sc-if>
+</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;ty1&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Residential interior&quot;},&quot;ty2&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Hospitality interior&quot;},&quot;ty3&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;residential interior&quot;},&quot;ty4&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;GLAMPING PROJECT&quot;},&quot;ty5&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;h althcare interior&quot;},&quot;ty7&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Moodboard compilations&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#786653&quot;,&quot;options&quot;:[&quot;#786653&quot;,&quot;#241910&quot;,&quot;#9C9795&quot;]},&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
 class Component extends DCLogic {
@@ -132,10 +144,47 @@ try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e
 }
 
 componentDidMount() {
+this.rtBind();
 this.pfFitBind(); try { window.scrollTo(0, 0); } catch (e) {} }
-componentWillUnmount() { this.pfFitFree(); }
+componentWillUnmount() {
+this.rtFree(); this.pfFitFree(); }
+rtWide() {
+try {
+const el = document.getElementById('pf-rt-Main');
+const w = (el && el.clientWidth) || 0;
+// no box yet: keep the desktop arm, which is what this page has always shown
+if (!w) return true;
+return w > 760;
+} catch (e) { return true; }
+}
+rtSync() {
+const wide = this.rtWide();
+if (((this.state || {}).wide) === wide) return;
+this.setState({ wide: wide });
+// the scale-to-fit box is a different element on the other side of the switch
+try { setTimeout(() => { try { this.pfFit(); } catch (e) {} }, 0); } catch (e) {}
+}
+rtBind() {
+this.rtSync();
+this._rt = () => this.rtSync();
+try { window.addEventListener('resize', this._rt); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+const el = document.getElementById('pf-rt-Main');
+if (el) { this._rtRO = new ResizeObserver(this._rt); this._rtRO.observe(el); }
+}
+} catch (e) {}
+}
+rtFree() {
+try { window.removeEventListener('resize', this._rt); } catch (e) {}
+try { if (this._rtRO) { this._rtRO.disconnect(); this._rtRO = null; } } catch (e) {}
+}
 renderVals() {
-return { accent: this.props.accent ?? '#786653', ty1: this.props.ty1 ?? 'Residential interior', ty2: this.props.ty2 ?? 'Hospitality interior', ty3: this.props.ty3 ?? 'Apartment residence', ty4: this.props.ty4 ?? 'GLAMPING PROJECT', ty5: this.props.ty5 ?? 'CLINIC INTERIORS', ty7: this.props.ty7 ?? 'Moodboard comp' };
+const v = { accent: this.props.accent ?? '#786653', ty1: this.props.ty1 ?? 'Residential interior', ty2: this.props.ty2 ?? 'Hospitality interior', ty3: this.props.ty3 ?? 'Apartment residence', ty4: this.props.ty4 ?? 'GLAMPING PROJECT', ty5: this.props.ty5 ?? 'CLINIC INTERIORS', ty7: this.props.ty7 ?? 'Moodboard comp' };
+const _wide = ((this.state || {}).wide) !== false;
+v.desk = _wide;
+v.phone = !_wide;
+return v;
 }
 }
 </script>

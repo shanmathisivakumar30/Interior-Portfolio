@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>About — phone</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+
+.ph-ab{position:relative;box-sizing:border-box;width:100%;min-height:100vh;
+padding:20px 0 34px;background-color:#FBEDE9;
+background-image:linear-gradient(to right,rgba(198,43,35,0.10) 1px,transparent 1px),
+linear-gradient(to bottom,rgba(198,43,35,0.10) 1px,transparent 1px);
+background-size:26px 26px;color:#241910;
+font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
+.ph-wrap{position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;
+padding:0 18px;box-sizing:border-box}
+
+.ph-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+
+/* one column of notes, alternating a slight tilt, no tape */
+.ph-note{position:relative;box-sizing:border-box;width:100%;margin:0 0 16px;
+padding:0 18px 20px;background-color:#FDF7EA;
+box-shadow:0 1px 0 rgba(36,25,16,.10),0 10px 22px -16px rgba(36,25,16,.42);
+transform:rotate(-0.8deg)}
+.ph-punch{display:flex;gap:16px;padding:9px 0 14px}
+.ph-punch i{display:block;width:17px;height:9px;border-radius:2px;background-color:#F3E3DE}
+.ph-note:nth-of-type(even){transform:rotate(0.8deg)}
+.ph-note h2{margin:0 0 12px;font-size:26px;line-height:1.05;color:#C62B23;
+font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+.ph-note p{margin:0;font-size:14px;line-height:1.55}
+
+.ph-name{margin:0;font-size:34px;line-height:1.05;color:#241910}
+.ph-role{margin:8px 0 0;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;
+font-weight:500;color:#786653}
+
+.ph-cv{display:block;margin:0 0 16px;padding:15px 18px;border:1px solid #241910;
+background-color:#C62B23;color:#FEF9ED;text-align:center;text-decoration:none;
+font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;
+-webkit-tap-highlight-color:transparent}
+.ph-cv:active{background-color:#241910}
+
+.ph-con{margin:0;padding:0;list-style:none}
+.ph-con li{padding:7px 0;border-bottom:1px solid rgba(36,25,16,0.12);
+font-size:14px;line-height:1.5;word-break:break-word}
+.ph-con li:last-child{border-bottom:0}
+.ph-con a{color:#241910;text-decoration:none;border-bottom:1px solid rgba(36,25,16,0.35)}
+
+.ph-sub{margin:14px 0 7px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+font-weight:500;color:#786653}
+.ph-sub:first-of-type{margin-top:0}
+.ph-chips{display:flex;flex-wrap:wrap;gap:7px;margin:0}
+.ph-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;box-sizing:border-box;
+padding:5px 10px 5px 7px;border:1px solid rgba(198,43,35,.38);border-radius:5px;
+background-color:#FFFBF2;font-size:12px;line-height:1.2;overflow-wrap:break-word}
+.ph-chip b{flex:0 0 auto;display:block;width:14px;height:14px;border:1.5px solid #C62B23;
+border-radius:3px}
+
+/* In practice: a neat two-column list, nothing at an angle */
+.ph-prac{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px;
+margin:0;padding:0;list-style:none}
+.ph-prac li{font-size:15px;line-height:1.35;overflow-wrap:break-word}
+.ph-prac li::before{content:"○ ";color:#C62B23}
+
+.ph-job{padding:11px 0;border-bottom:1px solid rgba(36,25,16,0.12)}
+.ph-job:last-child{border-bottom:0;padding-bottom:0}
+.ph-when{margin:0 0 3px;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
+font-weight:500;color:#C62B23}
+.ph-what{margin:0;font-size:14px;line-height:1.45}
+
+.ph-num{margin:0 0 10px;font-size:14px;line-height:1.55}
+.ph-num:last-child{margin-bottom:0}
+
+.ph-foot{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:14px}
+.ph-foot a{color:#241910;text-decoration:none;font-size:17px;
+-webkit-tap-highlight-color:transparent}
+.ph-foot a:active{color:#C62B23}
+</style>
+</helmet>
+<div class="ph-ab">
+<div class="ph-wrap">
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h1 class="ph-name ph-hand">Shanmathi Sivakumar</h1>
+<p class="ph-role">Interior Designer | Architect</p>
+</section>
+
+<a class="ph-cv" href="./assets/c5290c6de29203925fb86e1ad32ef519.pdf" target="_blank" rel="noopener">Download detailed CV (PDF) ↓</a>
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>contact me!!</h2>
+<ul class="ph-con">
+<li>Dallas, Texas</li>
+<li><a href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a></li>
+<li><a href="https://www.linkedin.com/in/shanmathisivakumar30" target="_blank" rel="noopener">LinkedIn · shanmathisivakumar30</a></li>
+<li>Authorised to work in the United States</li>
+</ul>
+</section>
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>The technical bit</h2>
+<p class="ph-sub">Drafting</p>
+<div class="ph-chips">
+<span class="ph-chip"><b></b>AutoCAD</span>
+<span class="ph-chip"><b></b>SketchUp</span>
+<span class="ph-chip"><b></b>Revit</span>
+</div>
+<p class="ph-sub">Visualisation and rendering</p>
+<div class="ph-chips">
+<span class="ph-chip"><b></b>V-Ray</span>
+<span class="ph-chip"><b></b>Lumion</span>
+<span class="ph-chip"><b></b>Enscape</span>
+<span class="ph-chip"><b></b>D5 Render</span>
+</div>
+<p class="ph-sub">Presentation and post-production</p>
+<div class="ph-chips">
+<span class="ph-chip"><b></b>Adobe Photoshop</span>
+<span class="ph-chip"><b></b>Google flow</span>
+</div>
+</section>
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>In practice</h2>
+<ul class="ph-prac">
+<li>Spatial planning</li>
+<li>Mood boards</li>
+<li>Construction / as-built drawings</li>
+<li>Site coordination</li>
+<li>Vendor coordination</li>
+<li>Procurement coordination</li>
+<li>Client coordination</li>
+<li>Construction detailing</li>
+<li>Material optimisation</li>
+<li>Local sourcing</li>
+</ul>
+</section>
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>My Experience</h2>
+<div class="ph-job">
+<p class="ph-when">2023 – 2025</p>
+<p class="ph-what">Sr. Project Designer at DesignInk Interiors, India</p>
+</div>
+<div class="ph-job">
+<p class="ph-when">2022 · 2023</p>
+<p class="ph-what">Project designer at Auroma Architecture, Auroville, India</p>
+</div>
+<div class="ph-job">
+<p class="ph-when">2019 – 2022</p>
+<p class="ph-what">Architect at Taamaesek Engineering, Chennai, India</p>
+</div>
+<div class="ph-job">
+<p class="ph-when">2018 · 2019</p>
+<p class="ph-what">Intern Architect at Aturvya Architects, Chennai, India</p>
+</div>
+</section>
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>education</h2>
+<p class="ph-when">2014 – 2019 · Chennai, India</p>
+<p class="ph-what">Bachelor of Architecture, Anna University</p>
+</section>
+
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>The human bit</h2>
+<p class="ph-num">1. I speak design, detail, and site.</p>
+<p class="ph-num">2. I turn concepts into visual stories that help clients understand the design and make informed decisions.</p>
+<p class="ph-num">3. I connect the dots between drawings, disciplines, and site conditions, spotting gaps and resolving conflicting requirements.</p>
+<p class="ph-num">I keep teams, material decisions, and documentation moving together, even when coordinating projects remotely.</p>
+</section>
+
+<nav class="ph-foot ph-hand" aria-label="More of the site">
+<a href="Home.dc.html">← Back to the studio</a>
+<a href="Main.dc.html">Project index →</a>
+</nav>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

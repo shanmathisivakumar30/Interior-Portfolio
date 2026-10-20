@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A little unbuttoned — phone</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+
+.mp-pg{position:relative;box-sizing:border-box;width:100%;background-color:#FEF9ED;
+background-image:radial-gradient(circle at center,rgba(125,116,104,0.035) 0 1px,transparent 1.15px);
+background-size:5px 5px;color:#262525;
+font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
+/* the warm band the hero and the story sit on, as on the desktop board */
+.mp-band{position:relative;background-color:#F1EADE;color:#000000}
+.mp-backdrop{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;overflow:hidden;
+opacity:0.5;pointer-events:none}
+.mp-backdrop img{width:100%!important;height:100%!important;object-fit:cover!important}
+.mp-band > .mp-in{position:relative;z-index:1}
+.mp-in{width:100%;max-width:430px;margin:0 auto;padding:0 16px;box-sizing:border-box}
+.mp-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+
+.mp-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+padding:16px 16px 14px;border-bottom:1px solid rgba(156,151,149,0.45)}
+.mp-top a{color:#262525;text-decoration:none;font-size:9px;letter-spacing:0.18em;
+text-transform:uppercase;font-weight:500;-webkit-tap-highlight-color:transparent}
+.mp-top nav{display:flex;gap:14px}
+.mp-top a:active{color:#C62B23}
+
+/* the title keeps rolling, just smaller */
+.mp-marq{overflow:hidden;padding:12px 0;border-bottom:1px solid rgba(38,37,37,0.5)}
+.mp-track{display:flex;width:max-content;animation:mp-roll 22s linear infinite}
+.mp-track span{flex:0 0 auto;padding-right:40px;font-size:54px;line-height:1;font-weight:300;
+letter-spacing:-0.06em;text-transform:uppercase;white-space:nowrap}
+@keyframes mp-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.mp-sec{padding:22px 0}
+.mp-h{margin:0;font-size:28px;line-height:1.05;font-weight:300}
+.mp-lab{margin:0 0 6px;font-size:9px;letter-spacing:0.26em;text-transform:uppercase;
+font-weight:500;color:#786653}
+
+/* hero: a 1076:549 frame with a thin border, tap to switch day and night */
+.mp-hero{position:relative;display:block;width:100%;aspect-ratio:1076 / 549;padding:5px;
+box-sizing:border-box;border:1px solid rgba(38,37,37,0.42);background-color:rgba(255,255,255,0.4);
+box-shadow:0.35rem 0.35rem 0 -0.22rem #E3DCCE,0.4rem 0.4rem 0 -0.2rem rgba(38,37,37,0.45);
+cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mp-lay{position:absolute;left:5px;top:5px;right:5px;bottom:5px;overflow:hidden;
+background-color:#FFFFFF;transition:opacity 260ms ease}
+.mp-lay img{width:100%!important;height:100%!important;object-fit:cover!important}
+.mp-cap{margin:8px 0 0;text-align:right;color:#9C9795;font-size:9px;letter-spacing:0.14em;
+text-transform:uppercase;font-weight:500}
+.mp-q{margin:16px 0 0;font-size:17px;line-height:1.4;text-align:center;
+font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400;
+color:#000000}
+
+.mp-facts{display:flex;flex-wrap:wrap;gap:6px 12px;margin:16px 0 0;padding:0;list-style:none}
+.mp-facts li{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
+color:#262525}
+.mp-facts li::before{content:"○ ";color:#9C9795}
+
+/* threshold: full bleed, nothing underneath it */
+.mp-thr{position:relative;width:100%;aspect-ratio:1280 / 707;overflow:hidden;
+background-color:#FFFFFF}
+.mp-thr img{width:100%!important;height:100%!important;object-fit:cover!important}
+.mp-thrcap{margin:10px 0 0;color:#9C9795;font-size:9px;letter-spacing:0.15em;
+text-transform:uppercase;font-weight:500}
+
+.mp-lead{margin:0 0 14px;font-size:24px;line-height:1.15;font-weight:300}
+.mp-p{margin:0 0 12px;font-size:16px;line-height:1.45}
+.mp-end{margin:18px 0 0;font-size:28px;line-height:1.15;font-weight:300;color:#C62B23}
+
+/* checkpoints: one picture at a time, swipe or arrows */
+.mp-strip{display:flex;gap:12px;margin-top:14px;padding-bottom:4px;overflow-x:auto;
+scroll-snap-type:x mandatory;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+scrollbar-width:none}
+.mp-strip::-webkit-scrollbar{display:none}
+.mp-shot{flex:0 0 auto;scroll-snap-align:center}
+.mp-shot img{display:block;height:250px;width:auto;max-width:none}
+.mp-arrows{display:flex;gap:10px;margin-top:12px}
+.mp-rnd{display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0 0 3px;
+border:1px solid rgba(36,25,16,0.55);border-radius:50%;background:transparent;color:#241910;
+font-size:17px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mp-rnd:active{background-color:#241910;color:#FBF6E6}
+
+/* a day in the life */
+.mp-day{position:relative;width:100%;aspect-ratio:1150 / 642;overflow:hidden;
+background-color:#FFFFFF}
+.mp-day .mp-dl{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;
+transition:opacity 300ms ease}
+.mp-day .mp-dl img{width:100%!important;height:100%!important;object-fit:cover!important}
+.mp-dtap{position:absolute;left:0;top:0;right:0;bottom:0;z-index:3;border:0;padding:0;
+background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mp-bar{position:absolute;right:8px;top:50%;z-index:5;display:flex;flex-direction:column;
+align-items:center;gap:4px;padding:7px 5px;box-sizing:border-box;
+border:1px solid rgba(255,255,255,0.75);border-radius:999px;background:rgba(254,249,237,0.56);
+backdrop-filter:blur(14px) saturate(1.8);-webkit-backdrop-filter:blur(14px) saturate(1.8);
+box-shadow:0 10px 26px -10px rgba(36,25,16,0.5),inset 0 1px 0 rgba(255,255,255,0.9);
+transform:translateY(-50%) scale(0.78);transform-origin:right center}
+.mp-tb{display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;
+border:0;border-radius:11px;background:transparent;cursor:pointer;
+transition:background-color 220ms ease,color 220ms ease}
+.mp-tb svg{display:block;width:19px;height:19px}
+.mp-tb svg .mp-f{fill:currentColor}
+.mp-tb svg .mp-s{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+.mp-sub{margin:8px 0 0;font-size:14px;line-height:1.45;color:#000000;
+font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+.mp-tabs{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.mp-tt{padding:0 0 4px;border:0;border-bottom:1px solid transparent;background:transparent;
+color:#262525;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;
+cursor:pointer}
+
+/* the drawing sheet, without the side strip or the giant words */
+.mp-sheet{box-sizing:border-box;margin:22px 0;padding:26px 16px;border:2px solid #241910;
+background-color:#FBF6E6;position:relative;overflow:hidden}
+.mp-sheetgrid{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;pointer-events:none;
+opacity:0.17;background-image:linear-gradient(to right,#2A4A86 1px,transparent 1px),
+linear-gradient(to bottom,#2A4A86 1px,transparent 1px);background-size:17px 17px}
+.mp-sheet > *{position:relative;z-index:2}
+.mp-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+gap:14px;margin:10px 0 0}
+.mp-dw{display:block;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;
+-webkit-tap-highlight-color:transparent}
+.mp-dwimg{position:relative;display:block;width:100%;aspect-ratio:4 / 3;overflow:hidden;
+border:1px solid #241910;background-color:#FFFFFF}
+.mp-dwimg img{width:100%!important;height:100%!important;object-fit:contain!important}
+.mp-dwcap{display:block;margin-top:5px;color:#241910;font-size:9px;line-height:1.4;
+letter-spacing:0.06em}
+.mp-sublab{position:relative;z-index:2;margin:18px 0 0;font-size:10px;letter-spacing:0.22em;
+text-transform:uppercase;font-weight:700}
+.mp-quote{position:relative;z-index:2;margin:22px 0 0;font-size:21px;line-height:1.3;
+font-weight:300;color:#0B0B0B}
+.mp-by{position:relative;z-index:2;margin:8px 0 0;font-size:9px;letter-spacing:0.2em;
+text-transform:uppercase;font-weight:500;color:#786653}
+.mp-tbl{position:relative;z-index:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px 14px;margin:22px 0 0;padding-top:14px;border-top:1px solid rgba(36,25,16,0.35)}
+.mp-tbl dt{margin:0;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;
+font-weight:500;color:#786653}
+.mp-tbl dd{margin:3px 0 0;font-size:11px;line-height:1.35}
+
+/* footer */
+.mp-dream{width:100%;overflow:hidden}
+.mp-fnav{display:flex;align-items:center;justify-content:space-between;gap:12px;
+padding:14px 16px}
+.mp-fnav a{color:#241910;text-decoration:none;font-size:16px;
+-webkit-tap-highlight-color:transparent}
+.mp-fnav span{opacity:0}
+.mp-contact{display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px;
+border-top:1px solid rgba(36,25,16,0.25);background-color:#FEF9ED}
+.mp-contact a{color:#241910;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.mp-contact .mp-mid{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500}
+.mp-contact .mp-hand{font-size:16px}
+
+/* the full-size drawing viewer */
+.mp-lb{position:fixed;left:0;top:0;right:0;bottom:0;z-index:95;display:flex;align-items:center;
+justify-content:center;padding:14px;background:rgba(11,11,11,0.86);
+-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.mp-lbveil{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;border:0;padding:0;
+background:transparent}
+.mp-lbframe{position:relative;z-index:2;box-sizing:border-box;width:100%;height:72vh;padding:8px;
+background:#FEF9ED}
+.mp-lbslide{position:absolute;left:8px;top:8px;right:8px;bottom:8px;overflow:hidden}
+.mp-lbslide img{width:100%!important;height:100%!important;object-fit:contain!important}
+.mp-lbbtn{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;
+width:40px;height:40px;padding:0 0 2px;border:1px solid rgba(36,25,16,0.5);border-radius:50%;
+background:rgba(254,249,237,0.94);color:#241910;font-size:21px;line-height:1;cursor:pointer}
+.mp-lbprev{left:14px;bottom:14px}
+.mp-lbnext{right:14px;bottom:14px}
+.mp-lbx{right:12px;top:12px;width:36px;height:36px;font-size:18px}
+.mp-lbn{position:absolute;left:50%;bottom:24px;z-index:4;transform:translateX(-50%);
+color:rgba(254,249,237,0.8);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;
+font-weight:500}
+
+@media (prefers-reduced-motion:reduce){
+.mp-track{animation:none}
+.mp-lay,.mp-dl{transition:none}}
+</style>
+</helmet>
+<sc-if value="{{lbOpen}}" hint-placeholder-val="{{ false }}">
+<div class="mp-lb" role="dialog" aria-modal="true" aria-label="Drawing">
+<button type="button" class="mp-lbveil" onClick="{{lbClose}}" aria-label="Close"></button>
+<div class="mp-lbframe">
+<div class="mp-lbslide" style="display: {{lbD0}};"><dc-import name="Slot-C4-DrawMainPlan" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD1}};"><dc-import name="Slot-C4-DrawMainPlan3" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD2}};"><dc-import name="Slot-C4-DrawMainPlan4" hint-size="100%,100%"></dc-import></div>
+</div>
+<button type="button" class="mp-lbbtn mp-lbprev" onClick="{{lbPrev}}" aria-label="Previous drawing">‹</button>
+<button type="button" class="mp-lbbtn mp-lbnext" onClick="{{lbNext}}" aria-label="Next drawing">›</button>
+<button type="button" class="mp-lbbtn mp-lbx" onClick="{{lbClose}}" aria-label="Close">×</button>
+<span class="mp-lbn">{{lbLabel}}</span>
+</div></sc-if>
+<div class="mp-pg" id="mp-pg-Chapter4">
+<header class="mp-top"><a href="Home.dc.html">Shanmathi Sivakumar</a><nav><a href="About.dc.html">About</a><a href="Main.dc.html">Projects</a></nav></header>
+<div class="mp-marq" aria-label="A little unbuttoned"><div class="mp-track"><span aria-hidden="true">A little unbuttoned</span><span aria-hidden="true">A little unbuttoned</span><span aria-hidden="true">A little unbuttoned</span><span aria-hidden="true">A little unbuttoned</span><span aria-hidden="true">A little unbuttoned</span><span aria-hidden="true">A little unbuttoned</span></div></div>
+<div class="mp-band"><div class="mp-in"><section class="mp-sec">
+<button type="button" class="mp-hero" onClick="{{flip}}" aria-label="Switch between the day and night view"><span class="mp-lay" style="opacity: {{dayO}};"><dc-import name="Slot-C4-HeroDay" hint-size="100%,100%"></dc-import></span><span class="mp-lay" style="opacity: {{nightO}};"><dc-import name="Slot-C4-HeroNight" hint-size="100%,100%"></dc-import></span></button>
+<p class="mp-cap">{{heroCap}}</p>
+<p class="mp-q">‘What if staying put was the whole plan?’</p>
+<ul class="mp-facts"><li>Credits</li><li>Credits ○ Summary</li><li>WELLNESS GLAMPING</li><li>ECR, INDIA</li><li>2024</li><li>12000 SQ.FT</li></ul>
+</section></div></div>
+<div class="mp-thr"><dc-import name="Slot-C4-Threshold" hint-size="100%,100%"></dc-import></div>
+<div class="mp-in"><p class="mp-thrcap">● A threshold into the chapter</p></div>
+<div class="mp-band">
+<div class="mp-backdrop" aria-hidden="true"><dc-import name="Slot-C4-Backdrop" hint-size="100%,100%"></dc-import></div>
+<div class="mp-in"><section class="mp-sec">
+<p class="mp-lab">01 / The quiet practice</p>
+<h2 class="mp-lead">Very little here insists that you move on.</h2>
+<p class="mp-p">A room can hold you without enclosing everything.</p>
+<p class="mp-p">Canvas shelters the rooms, linen softens their edges, and private decks extend the interior into the coastal air. Bamboo and planted terracotta establish boundaries with small interruptions, offering privacy without closing the landscape out. Around the pool, stepped stone seating gives the shared spaces a generous centre.</p>
+<p class="mp-end">Add a closing line from the project&#x27;s actual design story.</p>
+</section></div></div>
+<div class="mp-in"><section class="mp-sec">
+<h2 class="mp-h">Checkpoints</h2>
+<p class="mp-lab" style="margin-top: 6px;">{{cpLabel}}</p>
+<div class="mp-strip" id="mp-strip-Chapter4" role="group" aria-label="Checkpoint images">
+<div class="mp-shot"><img src="./assets/bdde45b3dedff56f59840e91316583ac.webp" alt="Supporting view slot — replace with project evidence"></div>
+<div class="mp-shot"><img src="./shot_-_-_zoom_in_20261008181215-mv05izuy-2ckf.webp" alt="Supporting view slot — replace with project evidence"></div>
+<div class="mp-shot"><img src="./assets/62a88608580ec5c489ebcffde1d5e7c5.webp" alt="Checkpoint image 3 pending"></div>
+<div class="mp-shot"><img src="./assets/9148c36cae3fb8b7744a43e1096ce6d7.jpg" alt="Checkpoint image 4 pending"></div>
+</div>
+<div class="mp-arrows"><button type="button" class="mp-rnd" onClick="{{cpPrev}}" aria-label="Previous image">‹</button><button type="button" class="mp-rnd" onClick="{{cpNext}}" aria-label="Next image">›</button></div>
+</section></div>
+<div class="mp-in"><section class="mp-sec">
+<div class="mp-day">
+<span class="mp-dl" style="opacity: {{tO0}}; z-index: {{tZ0}};"><dc-import name="Slot-C4-Morning" hint-size="100%,100%"></dc-import></span>
+<span class="mp-dl" style="opacity: {{tO1}}; z-index: {{tZ1}};"><dc-import name="Slot-C4-Midday" hint-size="100%,100%"></dc-import></span>
+<span class="mp-dl" style="opacity: {{tO2}}; z-index: {{tZ2}};"><dc-import name="Slot-C4-Evening" hint-size="100%,100%"></dc-import></span>
+<span class="mp-dl" style="opacity: {{tO3}}; z-index: {{tZ3}};"><dc-import name="Slot-C4-AfterHours" hint-size="100%,100%"></dc-import></span>
+<button type="button" class="mp-dtap" onClick="{{tNext}}" aria-label="Show the next time of day"></button>
+<div class="mp-bar" role="group" aria-label="Time of day">
+<button type="button" class="mp-tb" onClick="{{pickT0}}" aria-label="Morning" aria-pressed="{{tSel0}}" style="background-color: {{tBg0}}; color: {{tC0}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="mp-f" cx="12" cy="13" r="3.9"></circle><g class="mp-s"><path d="M12 4.7v2.2"></path><path d="M3.5 13h2.2"></path><path d="M18.3 13h2.2"></path><path d="M6.4 7.4 7.9 8.9"></path><path d="M17.6 7.4 16.1 8.9"></path><path d="M3.2 19.4h17.6"></path></g></svg></button>
+<button type="button" class="mp-tb" onClick="{{pickT1}}" aria-label="Midday" aria-pressed="{{tSel1}}" style="background-color: {{tBg1}}; color: {{tC1}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="mp-f" cx="12" cy="12" r="4.4"></circle><g class="mp-s"><path d="M12 2.4v2.2"></path><path d="M12 19.4v2.2"></path><path d="M2.4 12h2.2"></path><path d="M19.4 12h2.2"></path><path d="M5.4 5.4 6.9 6.9"></path><path d="M17.1 17.1 18.6 18.6"></path><path d="M18.6 5.4 17.1 6.9"></path><path d="M6.9 17.1 5.4 18.6"></path></g></svg></button>
+<button type="button" class="mp-tb" onClick="{{pickT2}}" aria-label="Evening" aria-pressed="{{tSel2}}" style="background-color: {{tBg2}}; color: {{tC2}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="mp-f" d="M5.7 15.3a6.3 6.3 0 0 1 12.6 0z"></path><g class="mp-s"><path d="M3.2 18.9h17.6"></path><path d="M12 3.2v2.3"></path><path d="M4.9 6.9 6.5 8.5"></path><path d="M19.1 6.9 17.5 8.5"></path></g></svg></button>
+<button type="button" class="mp-tb" onClick="{{pickT3}}" aria-label="After hours" aria-pressed="{{tSel3}}" style="background-color: {{tBg3}}; color: {{tC3}};"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="mp-f" d="M20.3 14.8A8.7 8.7 0 0 1 9.2 3.7 8.9 8.9 0 1 0 20.3 14.8z"></path></svg></button>
+</div></div>
+<h2 class="mp-h" style="margin-top: 16px;">A day in the life of a space</h2>
+<p class="mp-sub">Same place, different hours. Watch the light shift and everyday life unfold.</p>
+<div class="mp-tabs" role="tablist"><button type="button" class="mp-tt" role="tab" aria-selected="{{tSel0}}" onClick="{{pickT0}}" style="border-bottom-color: {{tB0}}; color: {{tTc0}};">Morning</button><button type="button" class="mp-tt" role="tab" aria-selected="{{tSel1}}" onClick="{{pickT1}}" style="border-bottom-color: {{tB1}}; color: {{tTc1}};">Midday</button><button type="button" class="mp-tt" role="tab" aria-selected="{{tSel2}}" onClick="{{pickT2}}" style="border-bottom-color: {{tB2}}; color: {{tTc2}};">Evening</button><button type="button" class="mp-tt" role="tab" aria-selected="{{tSel3}}" onClick="{{pickT3}}" style="border-bottom-color: {{tB3}}; color: {{tTc3}};">After hours</button></div>
+</section></div>
+<div class="mp-in"><section class="mp-sheet">
+<div class="mp-sheetgrid" aria-hidden="true"></div>
+<p class="mp-lab">02 &nbsp;/&nbsp; Thinking in lines</p>
+<h2 class="mp-h">Drawings</h2>
+<p class="mp-sublab">Plans</p><div class="mp-grid">
+<button type="button" class="mp-dw" onClick="{{openP0}}" aria-label="Open P-01 at full size"><span class="mp-dwimg"><dc-import name="Slot-C4-DrawMainPlan" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-01</b>&nbsp;Main plan</span></button>
+<button type="button" class="mp-dw" onClick="{{openP1}}" aria-label="Open P-03 at full size"><span class="mp-dwimg"><dc-import name="Slot-C4-DrawMainPlan3" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-03</b>&nbsp;Main plan</span></button>
+<button type="button" class="mp-dw" onClick="{{openP2}}" aria-label="Open P-04 at full size"><span class="mp-dwimg"><dc-import name="Slot-C4-DrawMainPlan4" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-04</b>&nbsp;Main plan</span></button>
+</div>
+<blockquote class="mp-quote">"Light, God&#x27;s eldest daughter,"</blockquote>
+<p class="mp-by">thomas fuller</p>
+<dl class="mp-tbl"><div><dt>Project</dt><dd>A little unbuttoned</dd></div><div><dt>Category</dt><dd>Healthcare interior</dd></div><div><dt>Drawing</dt><dd>Plans</dd></div><div><dt>Drawn by</dt><dd>Shanmathi Sivakumar</dd></div></dl>
+</section></div>
+<div class="mp-dream"><dc-import name="DreamFooter" title="A little unbuttoned" scale="0.62" band="300px" hint-size="100%,300px"></dc-import></div>
+<nav class="mp-fnav mp-hand" aria-label="Other projects">
+<a href="Chapter3.dc.html">previous project</a>
+<a href="Chapter2.dc.html">next project</a>
+</nav>
+<div class="mp-contact"><a class="mp-hand" href="https://www.instagram.com/shansivakumar" target="_blank" rel="noopener">shansivakumar</a><a class="mp-mid" href="Main.dc.html">Return to index ↗</a><a class="mp-hand" href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+cpEl() { try { return document.getElementById('mp-strip-Chapter4'); } catch (e) { return null; } }
+cpGo(dir) {
+const el = this.cpEl();
+if (!el) return;
+const tiles = Array.prototype.slice.call(el.children);
+if (!tiles.length) return;
+const x = el.scrollLeft;
+let i = 0;
+for (let k = 0; k < tiles.length; k++) { if (tiles[k].offsetLeft - el.offsetLeft <= x + 4) i = k; }
+const j = Math.max(0, Math.min(tiles.length - 1, i + dir));
+el.scrollTo({ left: Math.max(0, tiles[j].offsetLeft - el.offsetLeft), behavior: 'smooth' });
+this.setState({ cp: j });
+}
+cpBind() {
+const el = this.cpEl();
+if (!el) return;
+this._cpOn = () => {
+const tiles = Array.prototype.slice.call(el.children);
+if (!tiles.length) return;
+const x = el.scrollLeft;
+let i = 0;
+for (let k = 0; k < tiles.length; k++) { if (tiles[k].offsetLeft - el.offsetLeft <= x + 4) i = k; }
+if (((this.state || {}).cp || 0) !== i) this.setState({ cp: i });
+};
+try { el.addEventListener('scroll', this._cpOn, { passive: true }); } catch (e) {}
+}
+cpFree() {
+try { const el = this.cpEl(); if (el && this._cpOn) el.removeEventListener('scroll', this._cpOn); }
+catch (e) {}
+}
+componentDidMount() { this.cpBind(); }
+componentWillUnmount() { this.cpFree(); }
+renderVals() {
+const st = this.state || {};
+const pad = (k) => (k < 10 ? '0' : '') + k;
+const v = {};
+
+// hero: day until tapped, then night, then back
+const night = st.night === true;
+v.dayO = night ? 0 : 1;
+v.nightO = night ? 1 : 0;
+v.heroCap = night ? 'Night view · tap to return' : 'Tap for the night view';
+v.flip = () => this.setState({ night: !night });
+
+// checkpoints
+const cpN = 4;
+const cpI = Math.max(0, Math.min(cpN - 1, st.cp || 0));
+v.cpLabel = pad(cpI + 1) + ' / ' + pad(cpN);
+v.cpPrev = () => this.cpGo(-1);
+v.cpNext = () => this.cpGo(1);
+
+// a day in the life
+if (true) {
+const t = Math.max(0, Math.min(3, st.t || 0));
+for (let k = 0; k < 4; k++) {
+const on = k === t;
+v['tO' + k] = on ? 1 : 0;
+v['tZ' + k] = on ? 2 : 1;
+v['tSel' + k] = on ? 'true' : 'false';
+v['tBg' + k] = on ? '#0B0B0B' : 'transparent';
+v['tC' + k] = on ? '#FEF9ED' : '#1A1208';
+v['tB' + k] = on ? '#786653' : 'transparent';
+v['tTc' + k] = on ? '#786653' : '#262525';
+v['pickT' + k] = () => this.setState({ t: k });
+}
+v.tNext = () => this.setState({ t: (t + 1) % 4 });
+}
+
+// the drawing viewer
+const tiles = 3;
+const lb = typeof st.lb === 'number' ? st.lb : -1;
+v.lbOpen = lb >= 0 && tiles > 0;
+v.lbLabel = (lb >= 0 ? pad(lb + 1) : '00') + ' / ' + pad(tiles);
+v.lbClose = () => this.setState({ lb: -1 });
+v.lbNext = () => this.setState({ lb: tiles ? (lb + 1) % tiles : -1 });
+v.lbPrev = () => this.setState({ lb: tiles ? (lb + tiles - 1) % tiles : -1 });
+for (let k = 0; k < tiles; k++) { v['lbD' + k] = k === lb ? 'block' : 'none'; }
+for (let k = 0; k < 3; k++) { v['openP' + k] = ((i) => () => this.setState({ lb: i }))(k); }
+for (let k = 0; k < tiles - 3; k++) {
+v['openS' + k] = ((i) => () => this.setState({ lb: i }))(3 + k);
+}
+return v;
+}
+}
+</script>
+</body>
+</html>

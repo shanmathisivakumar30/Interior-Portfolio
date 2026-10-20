@@ -84,6 +84,11 @@ background-color:#FFFBF2;white-space:nowrap}
 .pf-nav:hover img{animation:none}
 }
 
+/* --- phone layout lives in its own artboard; this picks between them --- */
+.pf-rt{width:100%}
+.pf-phoneslot{width:100%}
+.pf-phoneslot > *{width:100%}
+
 /* pf-fit-pass — one fixed layout, scaled to fit any window */
 html,body{overflow-x:hidden}
 .pf-stage{width:100%;overflow:hidden}
@@ -99,6 +104,11 @@ html,body{overflow-x:hidden}
 .pf-mob .pf-note:nth-child(even) .pf-rock{transform:rotate(1.2deg)}
 </style>
 </helmet>
+<div class="pf-rt" id="pf-rt-About">
+<sc-if value="{{phone}}" hint-placeholder-val="{{ false }}">
+<div class="pf-phoneslot"><dc-import name="About-Phone" embedded="yes" hint-size="100%,844px"></dc-import></div>
+</sc-if>
+<sc-if value="{{desk}}" hint-placeholder-val="{{ true }}">
 <div class="pf-stage" id="pf-stage-About" style="height: 1137px">
 <div class="pf-fit" id="pf-fit-About" style="height: 1172px">
 <div class="pf-page" style="position: relative; width: 100%; min-height: 1180px; box-sizing: border-box; overflow: hidden; background-color: #FBEDE9; background-image: linear-gradient(to right, rgba(198, 43, 35, 0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(198, 43, 35, 0.10) 1px, transparent 1px); background-size: 26px 26px; color: #241910; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300; opacity: 1; height: 1145px">
@@ -271,6 +281,8 @@ html,body{overflow-x:hidden}
 </div></div>
 </div>
 </div>
+</sc-if>
+</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"sketch": {"editor": "text", "default": "0.3"}, "tint": {"editor": "text", "default": "0.12"}, "tintColor": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#F01D1D", "#786653"]}, "skillsSize": {"editor": "text", "default": "104px"}, "headSize": {"editor": "text", "default": "40px"}, "bodySize": {"editor": "text", "default": "13px"}, "dateSize": {"editor": "text", "default": "10px"}, "lead": {"editor": "text", "default": "1.55"}, "track": {"editor": "text", "default": "0.01em"}, "align": {"editor": "enum", "options": ["left", "center", "right", "justify"], "default": "left"}, "ink": {"editor": "color", "default": "#241910"}, "accent": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#241910", "#786653"]}, "$preview": {"width": 1440, "height": 1180}}'>
 class Component extends DCLogic {
@@ -313,13 +325,46 @@ try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e
 }
 
 componentDidMount() {
+this.rtBind();
 this.pfFitBind();
 try { window.scrollTo(0, 0); } catch (e) {}
 }
-componentWillUnmount() { this.pfFitFree(); }
+componentWillUnmount() {
+this.rtFree(); this.pfFitFree(); }
+rtWide() {
+try {
+const el = document.getElementById('pf-rt-About');
+const w = (el && el.clientWidth) || 0;
+// no box yet: keep the desktop arm, which is what this page has always shown
+if (!w) return true;
+return w > 760;
+} catch (e) { return true; }
+}
+rtSync() {
+const wide = this.rtWide();
+if (((this.state || {}).wide) === wide) return;
+this.setState({ wide: wide });
+// the scale-to-fit box is a different element on the other side of the switch
+try { setTimeout(() => { try { this.pfFit(); } catch (e) {} }, 0); } catch (e) {}
+}
+rtBind() {
+this.rtSync();
+this._rt = () => this.rtSync();
+try { window.addEventListener('resize', this._rt); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+const el = document.getElementById('pf-rt-About');
+if (el) { this._rtRO = new ResizeObserver(this._rt); this._rtRO.observe(el); }
+}
+} catch (e) {}
+}
+rtFree() {
+try { window.removeEventListener('resize', this._rt); } catch (e) {}
+try { if (this._rtRO) { this._rtRO.disconnect(); this._rtRO = null; } } catch (e) {}
+}
 renderVals() {
 const p = this.props;
-return {
+const v = {
 sketch: p.sketch ?? '0.3',
 tint: p.tint ?? '0.12',
 tintColor: p.tintColor ?? '#C62B23',
@@ -333,6 +378,10 @@ align: p.align ?? 'left',
 ink: p.ink ?? '#241910',
 accent: p.accent ?? '#C62B23'
 };
+const _wide = ((this.state || {}).wide) !== false;
+v.desk = _wide;
+v.phone = !_wide;
+return v;
 }
 }
 </script>

@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spatial fragments — phone</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+
+.mf-pg{position:relative;box-sizing:border-box;width:100%;min-height:100vh;
+background-color:#FBF6E6;color:#262525;
+font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
+.mf-grid{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;pointer-events:none;
+opacity:0.17;background-image:linear-gradient(to right,#2A4A86 1px,transparent 1px),
+linear-gradient(to bottom,#2A4A86 1px,transparent 1px);background-size:17px 17px}
+.mf-in{position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;padding:0 16px;
+box-sizing:border-box}
+.mf-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
+
+.mf-top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+gap:10px;padding:16px;border-bottom:1px solid rgba(156,151,149,0.45)}
+.mf-top a{color:#262525;text-decoration:none;font-size:9px;letter-spacing:0.18em;
+text-transform:uppercase;font-weight:500;-webkit-tap-highlight-color:transparent}
+.mf-top nav{display:flex;gap:14px}
+.mf-top a:active{color:#C62B23}
+
+.mf-marq{position:relative;z-index:2;overflow:hidden;padding:12px 0;
+border-bottom:1px solid rgba(38,37,37,0.5)}
+.mf-track{display:flex;width:max-content;animation:mf-roll 22s linear infinite}
+.mf-track span{flex:0 0 auto;padding-right:40px;font-size:54px;line-height:1;font-weight:300;
+letter-spacing:-0.06em;text-transform:uppercase;white-space:nowrap}
+@keyframes mf-roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* the taped note, without the tape */
+.mf-note{position:relative;box-sizing:border-box;margin:20px 0 0;padding:20px 18px 22px;
+background-color:#FDF7EA;transform:rotate(-1.4deg);
+background-image:repeating-linear-gradient(to bottom,transparent 0 27px,rgba(36,25,16,0.09) 27px 28px);
+box-shadow:0 1px 0 rgba(36,25,16,0.10),0 14px 28px -20px rgba(36,25,16,0.55)}
+.mf-note p{margin:0;color:#C62B23;font-size:34px;line-height:1.02;letter-spacing:0.01em}
+.mf-note small{display:block;margin-top:10px;color:#262525;font-size:14px;line-height:1.45;
+font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+
+/* four square tiles trading places, the same shuffle as the desktop board */
+.mf-sq{position:relative;box-sizing:border-box;width:100%;aspect-ratio:1 / 1;margin:22px 0 0;
+overflow:hidden;--g:8px;--mv:800ms}
+.mf-cell{position:absolute;left:0;top:0;box-sizing:border-box;overflow:hidden;
+width:calc(50% - var(--g) / 2);height:calc(50% - var(--g) / 2);
+border:1px solid rgba(38,37,37,0.28);background-color:#FFFFFF;
+transform:translate(0px, 0px);transition:transform var(--mv) cubic-bezier(.5,0,.18,1);
+will-change:transform}
+.mf-cell img{width:100%!important;height:100%!important;object-fit:contain!important}
+.mf-open{padding:0;background:none;cursor:zoom-in;-webkit-tap-highlight-color:transparent}
+.mf-red{border-color:transparent}
+.mf-hint{margin:12px 0 0;text-align:center;color:#786653;font-size:9px;letter-spacing:0.2em;
+text-transform:uppercase;font-weight:500}
+
+.mf-foot{position:relative;z-index:2;margin-top:26px}
+.mf-fnav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
+.mf-fnav a{color:#241910;text-decoration:none;font-size:16px;
+-webkit-tap-highlight-color:transparent}
+.mf-fnav span{opacity:0}
+.mf-contact{display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px;
+border-top:1px solid rgba(36,25,16,0.25);background-color:#FEF9ED}
+.mf-contact a{color:#241910;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.mf-contact .mf-mid{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500}
+.mf-contact .mf-hand{font-size:16px}
+
+/* a board, opened over the page */
+.mf-lb{position:fixed;left:0;top:0;right:0;bottom:0;z-index:95;display:flex;align-items:center;
+justify-content:center;padding:14px;background:rgba(11,11,11,0.86);
+-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.mf-lbveil{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;border:0;padding:0;
+background:transparent}
+.mf-lbframe{position:relative;z-index:2;box-sizing:border-box;width:100%;height:74vh;padding:8px;
+background:#FEF9ED}
+.mf-lbslide{position:absolute;left:8px;top:8px;right:8px;bottom:8px;overflow:hidden}
+.mf-lbslide img{width:100%!important;height:100%!important;object-fit:contain!important}
+.mf-lbbtn{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;
+width:40px;height:40px;padding:0 0 2px;border:1px solid rgba(36,25,16,0.5);border-radius:50%;
+background:rgba(254,249,237,0.94);color:#241910;font-size:21px;line-height:1;cursor:pointer}
+.mf-lbprev{left:14px;bottom:14px}
+.mf-lbnext{right:14px;bottom:14px}
+.mf-lbx{right:12px;top:12px;width:36px;height:36px;font-size:18px}
+.mf-lbn{position:absolute;left:50%;bottom:24px;z-index:4;transform:translateX(-50%);
+color:rgba(254,249,237,0.8);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;
+font-weight:500}
+
+@media (prefers-reduced-motion:reduce){.mf-track{animation:none}.mf-cell{transition:none}}
+</style>
+</helmet>
+<sc-if value="{{lbOpen}}" hint-placeholder-val="{{ false }}">
+<div class="mf-lb" role="dialog" aria-modal="true" aria-label="Mood board">
+<button type="button" class="mf-lbveil" onClick="{{lbClose}}" aria-label="Close"></button>
+<div class="mf-lbframe">
+<div class="mf-lbslide" style="display: {{lbD0}};"><dc-import name="Slot-C6-Checkpoint1" hint-size="100%,100%"></dc-import></div>
+<div class="mf-lbslide" style="display: {{lbD1}};"><dc-import name="Slot-C6-Checkpoint2" hint-size="100%,100%"></dc-import></div>
+<div class="mf-lbslide" style="display: {{lbD2}};"><dc-import name="Slot-C6-Checkpoint3" hint-size="100%,100%"></dc-import></div>
+</div>
+<button type="button" class="mf-lbbtn mf-lbprev" onClick="{{lbPrev}}" aria-label="Previous mood board">‹</button>
+<button type="button" class="mf-lbbtn mf-lbnext" onClick="{{lbNext}}" aria-label="Next mood board">›</button>
+<button type="button" class="mf-lbbtn mf-lbx" onClick="{{lbClose}}" aria-label="Close">×</button>
+<span class="mf-lbn">{{lbLabel}}</span>
+</div>
+</sc-if>
+<div class="mf-pg" id="mf-pg-Chapter6">
+<div class="mf-grid" aria-hidden="true"></div>
+
+<header class="mf-top">
+<a href="Home.dc.html">Shanmathi Sivakumar</a>
+<nav><a href="About.dc.html">About</a><a href="Main.dc.html">Projects</a></nav>
+</header>
+
+<div class="mf-marq" aria-label="Spatial fragments"><div class="mf-track"><span aria-hidden="true">spatial fragments</span><span aria-hidden="true">spatial fragments</span><span aria-hidden="true">spatial fragments</span><span aria-hidden="true">spatial fragments</span><span aria-hidden="true">spatial fragments</span><span aria-hidden="true">spatial fragments</span></div></div>
+
+<div class="mf-in">
+
+<div class="mf-note">
+<p class="mf-hand">mood boards</p>
+<small>A few things caught my eye. Then they started making a room.</small>
+</div>
+
+<div class="mf-sq" id="mf-sq-Chapter6" role="group" aria-label="Mood boards">
+<button type="button" class="mf-cell mf-open" data-mf-tile="1" onClick="{{open1}}" style="transform: translate(0px, 0px);" aria-label="Open mood board 1"><dc-import name="Slot-C6-Checkpoint1" hint-size="100%,100%"></dc-import></button>
+<button type="button" class="mf-cell mf-open" data-mf-tile="2" onClick="{{open2}}" style="transform: translate(calc(100% + 8px), 0px);" aria-label="Open mood board 2"><dc-import name="Slot-C6-Checkpoint2" hint-size="100%,100%"></dc-import></button>
+<button type="button" class="mf-cell mf-open" data-mf-tile="3" onClick="{{open3}}" style="transform: translate(0px, calc(100% + 8px));" aria-label="Open mood board 3"><dc-import name="Slot-C6-Checkpoint3" hint-size="100%,100%"></dc-import></button>
+<div class="mf-cell mf-red" data-mf-tile="4" aria-hidden="true" style="background-color: #C62B23; transform: translate(calc(100% + 8px), calc(100% + 8px));"></div>
+</div>
+<p class="mf-hint">Tap a board to see it bigger</p>
+
+</div>
+
+<div class="mf-foot">
+<nav class="mf-fnav mf-hand" aria-label="Other projects">
+<a href="Chapter5.dc.html">previous project</a>
+<span>·</span>
+</nav>
+<div class="mf-contact">
+<a class="mf-hand" href="https://www.instagram.com/shansivakumar" target="_blank" rel="noopener">shansivakumar</a>
+<a class="mf-mid" href="Main.dc.html">Return to index ↗</a>
+<a class="mf-hand" href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+sqEl() { try { return document.getElementById('mf-sq-Chapter6'); } catch (e) { return null; } }
+sqApply() {
+const g = this.sqEl();
+if (!g) return;
+const off = 'calc(100% + 8px)';
+const pos = this._pos || [0, 1, 2, 3];
+const tiles = g.querySelectorAll('[data-mf-tile]');
+for (let i = 0; i < tiles.length; i++) {
+const t = tiles[i];
+const p = typeof pos[i] === 'number' ? pos[i] : i;
+const tf = 'translate(' + ((p % 2) ? off : '0px') + ', ' + ((p > 1) ? off : '0px') + ')';
+if (t.style.transform === tf) continue;
+// a fresh element after a render must be placed, not animated in from the corner
+const fresh = !t.style.transform;
+if (fresh) t.style.transition = 'none';
+t.style.transitionDelay = (i * 70) + 'ms';
+t.style.transform = tf;
+if (fresh) { void t.offsetWidth; t.style.transition = ''; }
+}
+}
+sqShuffle() {
+const cur = this._pos || [0, 1, 2, 3];
+let next = cur, guard = 0;
+while (guard < 40) {
+guard++;
+const a = [0, 1, 2, 3];
+for (let i = 3; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+const t = a[i]; a[i] = a[j]; a[j] = t;
+}
+let same = true;
+for (let i = 0; i < 4; i++) { if (a[i] !== cur[i]) { same = false; break; } }
+if (!same) { next = a; break; }
+}
+this._pos = next;
+this.sqApply();
+}
+canRun() {
+let red = false;
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+return !red && this._vis !== false && this._hidden !== true
+&& typeof (this.state || {}).lb !== 'number';
+}
+loop() {
+this._t = null;
+if (!this.canRun()) return;
+this.sqShuffle();
+this._t = setTimeout(() => this.loop(), 1200);
+}
+arm() { if (this._t || !this.canRun()) return; this._t = setTimeout(() => this.loop(), 1200); }
+disarm() { try { clearTimeout(this._t); } catch (e) {} this._t = null; }
+componentDidMount() {
+const g = this.sqEl();
+this._pos = [0, 1, 2, 3];
+this._vis = true;
+this._hidden = false;
+this.sqApply();
+try {
+if (g && typeof IntersectionObserver !== 'undefined') {
+this._io = new IntersectionObserver((es) => {
+es.forEach((e) => {
+this._vis = e.isIntersecting;
+if (e.isIntersecting) this.arm(); else this.disarm();
+});
+}, { threshold: 0.05 });
+this._io.observe(g);
+}
+} catch (e) {}
+this._vh = () => {
+this._hidden = !!document.hidden;
+if (this._hidden) this.disarm(); else this.arm();
+};
+try { document.addEventListener('visibilitychange', this._vh); } catch (e) {}
+this.arm();
+}
+componentWillUnmount() {
+this.disarm();
+try { if (this._io) { this._io.disconnect(); this._io = null; } } catch (e) {}
+try { document.removeEventListener('visibilitychange', this._vh); } catch (e) {}
+}
+renderVals() {
+const st = this.state || {};
+const pad = (k) => (k < 10 ? '0' : '') + k;
+const lb = typeof st.lb === 'number' ? st.lb : -1;
+const v = {
+lbOpen: lb >= 0,
+lbLabel: (lb >= 0 ? pad(lb + 1) : '00') + ' / 03',
+lbClose: () => this.setState({ lb: -1 }),
+lbNext: () => this.setState({ lb: (lb + 1) % 3 }),
+lbPrev: () => this.setState({ lb: (lb + 2) % 3 })
+};
+for (let k = 0; k < 3; k++) {
+v['lbD' + k] = k === lb ? 'block' : 'none';
+v['open' + (k + 1)] = () => this.setState({ lb: k });
+}
+// the square keeps its places across the render that opens the viewer
+if (!this._pend) {
+this._pend = true;
+try { setTimeout(() => { this._pend = false; this.sqApply(); if (lb < 0) this.arm(); else this.disarm(); }, 0); }
+catch (e) { this._pend = false; }
+}
+return v;
+}
+}
+</script>
+</body>
+</html>
