@@ -11,7 +11,9 @@ What it does:
   2. Drops the export's README.md (it describes the export, not this site).
   3. Rebuilds docs/index.html from docs/Home.dc.html, so the bare domain
      always opens the latest homepage.
-  4. Checks every link, image and component reference and reports anything
+  4. Adds the phone layout (mobile.css, mobile.js and a viewport tag) to every
+     page, since Claude Design exports come without it.
+  5. Checks every link, image and component reference and reports anything
      missing, so a broken page is caught before it is pushed.
 
 It never deletes files. Old, unused assets can be listed with --unused.
@@ -29,7 +31,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, "docs")
 
 # Files that belong to this site, not to any export. Never overwritten.
-PROTECTED = {"CNAME", ".nojekyll", "Library.dc.html", "index.html"}
+PROTECTED = {"CNAME", ".nojekyll", "Library.dc.html", "index.html", "mobile.css", "mobile.js"}
+
+# Added to the <head> of every full page so phones get the stacked layout.
+MOBILE_TAGS = (
+    '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    '<link rel="stylesheet" href="./mobile.css">\n'
+    '<script src="./mobile.js" defer></script>'
+)
 
 
 def merge(zip_path):
@@ -58,6 +67,28 @@ def rebuild_index():
     home = os.path.join(SITE, "Home.dc.html")
     if os.path.exists(home):
         shutil.copy2(home, os.path.join(SITE, "index.html"))
+
+
+def add_mobile_layout():
+    """Add the phone layout to every full page that doesn't have it yet.
+
+    Only full pages are touched (they contain the scaling "pf-stage"); the
+    Slot-*, Annot* and other component files are loaded into those pages and
+    must stay as exported.
+    """
+    added = []
+    for name in sorted(os.listdir(SITE)):
+        if not name.endswith(".html"):
+            continue
+        path = os.path.join(SITE, name)
+        text = open(path, encoding="utf-8").read()
+        if 'class="pf-stage"' not in text or "mobile.css" in text or "<head>" not in text:
+            continue
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text.replace("<head>", "<head>\n" + MOBILE_TAGS, 1))
+        added.append(name)
+    if added:
+        print(f"Added phone layout to: {', '.join(added)}")
 
 
 def referenced_files():
@@ -109,6 +140,7 @@ def main():
         for z in args.zips:
             merge(z)
         rebuild_index()
+    add_mobile_layout()
     if args.unused:
         list_unused()
     sys.exit(0 if check() else 1)

@@ -33,12 +33,20 @@ The site is designed in Claude Design and published with GitHub Pages. It is a s
     ├── assets/          Images, drawings, fonts and the CV PDF
     ├── vendor/          React, used by the Claude Design page runtime
     ├── support.js       Claude Design page runtime
+    ├── mobile.css       Phone layout (below 760px wide)
+    ├── mobile.js        Phone helpers: card order on About, tap for night view
     ├── Library.dc.html  Redirects an old link to the Projects page
     ├── CNAME            Custom domain for GitHub Pages
     └── .nojekyll        Tells GitHub Pages to serve files as-is
 ```
 
 Pages and their components sit side by side in `docs/` on purpose. The Claude Design runtime loads each component by name from the page's own folder, so moving them into subfolders would break the site.
+
+## Phone layout
+
+Claude Design exports every page as a fixed 1440px canvas that shrinks to fit the window, which leaves text unreadably small on a phone. `mobile.css` turns the shrinking off below 760px and restacks each page into one column; `mobile.js` adds the few things CSS can't do on its own (ordering the About cards, tap instead of hover for the night render). Desktop and tablet are unaffected.
+
+The update script adds both files and a viewport tag to every page automatically, so a fresh export from Claude Design keeps the phone layout.
 
 ## Updating the site
 
@@ -49,7 +57,7 @@ Pages and their components sit side by side in `docs/` on purpose. The Claude De
    python3 tools/update_site.py ~/Downloads/Export.zip
    ```
 
-   The script copies the export into `docs/`, rebuilds `index.html` from the homepage, and lists any link, image or component that doesn't resolve. It exits with an error if something is missing.
+   The script copies the export into `docs/`, rebuilds `index.html` from the homepage, adds the phone layout to every page, and lists any link, image or component that doesn't resolve. It exits with an error if something is missing.
 3. Commit and push. GitHub Pages republishes in about a minute.
 
 Several exports can be merged at once: `python3 tools/update_site.py one.zip two.zip`.
@@ -59,7 +67,7 @@ To list images no page uses anymore: `python3 tools/update_site.py --unused`.
 
 - **Don't rename exported files.** Pages link to each other by their exported names (`About.dc.html`, `Chapter1.dc.html` and so on), and the names are case-sensitive.
 - **Don't edit files in `docs/` by hand.** The next export overwrites them. Make changes in Claude Design and re-export.
-- **Keep `CNAME`, `.nojekyll`, `index.html` and `Library.dc.html`.** They belong to this site, not to any export, and the update script never overwrites them (it regenerates `index.html` itself).
+- **Keep `CNAME`, `.nojekyll`, `index.html`, `Library.dc.html`, `mobile.css` and `mobile.js`.** They belong to this site, not to any export, and the update script never overwrites them (it regenerates `index.html` itself).
 
 ## Hosting
 
