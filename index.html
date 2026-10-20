@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Studio homepage</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#241910;background:#FEF9ED}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+
+
+/* --- Bebas Neue, per the Photoshop spec: 36pt, tracking 180 --- */
+@font-face{font-family:'Bebas Neue';src:url('./assets/52846e07bbe4848363c5a3aad3642df9.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+
+/* --- illustration: layered so the plant can move on its own --- */
+.pf-art{position:relative;display:block;width:100%;max-width:960px}
+.pf-art img{display:block;width:100%;height:auto}
+.pf-art .pf-plant,.pf-art .pf-beams{position:absolute;left:0;top:0;width:100%;height:100%}
+.pf-plant{transform-origin:8% 88%}
+.pf-beams{pointer-events:none;opacity:0;transition:opacity 420ms ease}
+.pf-main:hover .pf-beams,.pf-main:focus-within .pf-beams{opacity:1}
+.pf-main:hover .pf-room,.pf-main:focus-within .pf-room{animation:pf-shake 640ms ease-in-out}
+.pf-main:hover .pf-plant,.pf-main:focus-within .pf-plant{animation:pf-leaf 820ms ease-in-out}
+@keyframes pf-shake{
+0%,100%{transform:translate(0,0) rotate(0deg)}
+18%{transform:translate(-2.5px,1px) rotate(-0.22deg)}
+38%{transform:translate(2.5px,-1.5px) rotate(0.28deg)}
+58%{transform:translate(-1.8px,-1px) rotate(-0.18deg)}
+80%{transform:translate(1.4px,1px) rotate(0.12deg)}}
+@keyframes pf-leaf{
+0%,100%{transform:rotate(0deg) translate(0,0)}
+14%{transform:rotate(-1.5deg) translate(-1.5px,0)}
+32%{transform:rotate(1.7deg) translate(1.5px,-1.5px)}
+52%{transform:rotate(-1.1deg) translate(-1px,1px)}
+74%{transform:rotate(0.8deg) translate(1px,0)}}
+
+/* --- nav labels nudge with the circle --- */
+.pf-nav:hover img,.pf-nav:focus-visible img{animation:pf-nudge 460ms ease-in-out}
+@keyframes pf-nudge{
+0%,100%{transform:translate(0,0) rotate(0deg)}
+22%{transform:translate(-1.6px,0.8px) rotate(-0.7deg)}
+46%{transform:translate(1.6px,-0.8px) rotate(0.8deg)}
+72%{transform:translate(-0.9px,0.4px) rotate(-0.4deg)}}
+
+/* --- typeset greeting --- */
+.pf-greet{margin:0;font-family:'Bebas Neue','Helvetica Neue',Helvetica,Arial,sans-serif;
+font-weight:400;font-size:48px;letter-spacing:0.18em;text-indent:0.18em;line-height:1.1;
+text-align:center;color:#241910;text-transform:uppercase}
+
+/* --- navigation: handwriting + a quick red circle on hover/focus --- */
+.pf-nav{position:relative;display:inline-flex;align-items:center;padding:15px 24px}
+.pf-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.pf-ring path{fill:none;stroke:#C8432B;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1200;stroke-dashoffset:1200;vector-effect:non-scaling-stroke}
+.pf-ring .r1{stroke-width:3}
+.pf-ring .r2{stroke-width:2.4;opacity:.6}
+.pf-nav:hover .r1,.pf-nav:focus-visible .r1{animation:pf-circle 400ms cubic-bezier(.35,.75,.4,1) forwards}
+.pf-nav:hover .r2,.pf-nav:focus-visible .r2{animation:pf-circle 280ms cubic-bezier(.35,.75,.4,1) 180ms forwards}
+@keyframes pf-circle{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+.pf-nav:focus{outline:none}
+.pf-nav:focus-visible{outline:none}
+
+/* --- entrance after the name animation --- */
+.pf-hide{opacity:0}
+.pf-enter{animation:pf-fade 900ms cubic-bezier(.3,.7,.3,1) both}
+@keyframes pf-fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pf-veil{animation:pf-veil 2.65s linear both}
+@keyframes pf-veil{0%,91%{opacity:1}100%{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+.pf-enter,.pf-veil{animation:none;opacity:1}
+.pf-ring path{stroke-dashoffset:0}
+.pf-nav .r1,.pf-nav .r2{opacity:0;transition:opacity 120ms}
+.pf-nav:hover .r1,.pf-nav:focus-visible .r1{animation:none;opacity:1}
+.pf-nav:hover .r2,.pf-nav:focus-visible .r2{animation:none;opacity:.6}
+.pf-main:hover .pf-room,.pf-main:hover .pf-plant,.pf-nav:hover img{animation:none !important}
+}
+
+@media (hover:none){
+.pf-main:active .pf-beams{opacity:1}
+.pf-main:active .pf-room{animation:pf-shake 640ms ease-in-out}
+.pf-main:active .pf-plant{animation:pf-leaf 820ms ease-in-out}
+}
+
+/* pf-fit-pass — one fixed layout, scaled to fit any window */
+html,body{overflow-x:hidden}
+.pf-stage{width:100%;overflow:hidden}
+.pf-fit{width:1440px;transform-origin:top left;will-change:transform}
+</style>
+</helmet>
+<sc-if value="{{showIntro}}" hint-placeholder-val="{{ true }}">
+<div class="pf-veil" aria-label="Portfolio opening" style="position: fixed; inset: 0; z-index: 50; overflow: hidden; background-color: #0b0b0b;">
+<dc-import name="Opening" embedded="yes" hint-size="100%,100%"></dc-import>
+<button type="button" onClick="{{skipIntro}}" style="position: absolute; right: 24px; bottom: 24px; z-index: 60; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.45); padding: 0 0 4px; background: transparent; color: #ffffff; mix-blend-mode: difference; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; cursor: pointer;">Skip opening · Enter</button>
+</div>
+</sc-if>
+<div class="pf-stage" id="pf-stage-Home">
+<div class="pf-fit" id="pf-fit-Home">
+<div style="position: relative; display: flex; flex-direction: column; width: 100%; min-height: 900px; box-sizing: border-box; overflow: hidden; background-color: #FEF9ED; background-image: linear-gradient(to right, rgba(36, 25, 16, 0.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(36, 25, 16, 0.055) 1px, transparent 1px); background-size: 26px 26px; color: #241910; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300;">
+
+
+
+<header class="pf-navbar pf-hide{{enter}}" aria-label="Main navigation" style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 26px 44px 0; animation-delay: 0ms;">
+<a class="pf-nav" href="About.dc.html">
+<img class="pf-ink-abt" src="./assets/dd23c601f5e5efbe7428059e7df3295e.svg" alt="About" style="display: block; height: 27px; width: auto;">
+<svg class="pf-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path class="r1" d="M15.3 55.5 Q13.3 47.8 14.0 44.1 Q14.8 40.5 16.2 37.6 Q17.6 34.7 20.3 32.3 Q23.0 30.0 26.8 27.5 Q30.6 25.0 35.6 22.9 Q40.6 20.7 46.9 19.2 Q53.2 17.7 59.8 16.9 Q66.4 16.2 73.5 15.6 Q80.7 15.0 89.1 14.3 Q97.5 13.7 106.1 13.6 Q114.7 13.5 123.0 13.6 Q131.2 13.8 138.6 14.2 Q146.0 14.7 152.4 15.7 Q158.8 16.7 165.4 18.6 Q171.9 20.6 176.6 23.5 Q181.3 26.4 184.9 29.9 Q188.5 33.3 190.3 36.2 Q192.2 39.2 193.3 42.4 Q194.4 45.7 193.8 49.5 Q193.3 53.3 191.6 57.3 Q189.9 61.2 186.7 63.8 Q183.4 66.4 178.6 69.1 Q173.7 71.8 169.0 73.6 Q164.3 75.4 158.4 76.8 Q152.5 78.3 146.0 79.3 Q139.5 80.3 132.7 81.6 Q125.9 82.8 118.7 84.0 Q111.5 85.1 104.0 85.3 Q96.6 85.4 89.4 85.5 Q82.1 85.6 75.5 85.3 Q68.8 84.9 62.2 84.6 Q55.6 84.4 48.7 83.3 Q41.9 82.3 36.2 80.4 Q30.5 78.5 25.5 75.6 Q20.6 72.8 16.1 69.2 Q11.5 65.6 8.4 61.9 Q5.3 58.1 3.5 54.2 Q1.8 50.4 2.0 47.2 Q2.2 44.0 4.0 41.0 L5.9 38.0"></path>
+<path class="r2" d="M20.2 63.8 Q14.7 57.8 12.9 55.5 Q11.1 53.2 9.9 50.3 Q8.6 47.3 9.0 45.2 Q9.4 43.1 10.7 40.3 Q12.1 37.5 14.4 34.3 Q16.7 31.2 20.8 29.5 Q24.9 27.8 29.4 25.4 Q34.0 23.0 39.0 20.9 Q43.9 18.7 49.8 17.5 Q55.8 16.2 61.6 15.7 Q67.4 15.1 74.2 13.9 Q80.9 12.7 87.8 12.7 Q94.6 12.8 100.3 12.7 Q106.1 12.6 112.4 12.8 Q118.7 12.9 124.0 14.9 Q129.3 16.8 133.9 18.2 Q138.5 19.5 143.6 21.7 Q148.7 23.9 152.9 25.7 Q157.0 27.5 160.7 29.1 L164.4 30.7"></path>
+</svg>
+</a>
+<a class="pf-nav" href="Main.dc.html">
+<img class="pf-ink-prj" src="./assets/a8449acaf34bface2c4af60a977183a2.svg" alt="Projects" style="display: block; height: 26px; width: auto;">
+<svg class="pf-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<path class="r1" d="M15.3 55.5 Q13.3 47.8 14.0 44.1 Q14.8 40.5 16.2 37.6 Q17.6 34.7 20.3 32.3 Q23.0 30.0 26.8 27.5 Q30.6 25.0 35.6 22.9 Q40.6 20.7 46.9 19.2 Q53.2 17.7 59.8 16.9 Q66.4 16.2 73.5 15.6 Q80.7 15.0 89.1 14.3 Q97.5 13.7 106.1 13.6 Q114.7 13.5 123.0 13.6 Q131.2 13.8 138.6 14.2 Q146.0 14.7 152.4 15.7 Q158.8 16.7 165.4 18.6 Q171.9 20.6 176.6 23.5 Q181.3 26.4 184.9 29.9 Q188.5 33.3 190.3 36.2 Q192.2 39.2 193.3 42.4 Q194.4 45.7 193.8 49.5 Q193.3 53.3 191.6 57.3 Q189.9 61.2 186.7 63.8 Q183.4 66.4 178.6 69.1 Q173.7 71.8 169.0 73.6 Q164.3 75.4 158.4 76.8 Q152.5 78.3 146.0 79.3 Q139.5 80.3 132.7 81.6 Q125.9 82.8 118.7 84.0 Q111.5 85.1 104.0 85.3 Q96.6 85.4 89.4 85.5 Q82.1 85.6 75.5 85.3 Q68.8 84.9 62.2 84.6 Q55.6 84.4 48.7 83.3 Q41.9 82.3 36.2 80.4 Q30.5 78.5 25.5 75.6 Q20.6 72.8 16.1 69.2 Q11.5 65.6 8.4 61.9 Q5.3 58.1 3.5 54.2 Q1.8 50.4 2.0 47.2 Q2.2 44.0 4.0 41.0 L5.9 38.0"></path>
+<path class="r2" d="M20.2 63.8 Q14.7 57.8 12.9 55.5 Q11.1 53.2 9.9 50.3 Q8.6 47.3 9.0 45.2 Q9.4 43.1 10.7 40.3 Q12.1 37.5 14.4 34.3 Q16.7 31.2 20.8 29.5 Q24.9 27.8 29.4 25.4 Q34.0 23.0 39.0 20.9 Q43.9 18.7 49.8 17.5 Q55.8 16.2 61.6 15.7 Q67.4 15.1 74.2 13.9 Q80.9 12.7 87.8 12.7 Q94.6 12.8 100.3 12.7 Q106.1 12.6 112.4 12.8 Q118.7 12.9 124.0 14.9 Q129.3 16.8 133.9 18.2 Q138.5 19.5 143.6 21.7 Q148.7 23.9 152.9 25.7 Q157.0 27.5 160.7 29.1 L164.4 30.7"></path>
+</svg>
+</a>
+</header>
+
+<main class="pf-main pf-hide{{enter}}" style="flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px; padding: 8px 44px 56px; animation-delay: 140ms;">
+<div class="pf-art">
+<img class="pf-room" src="./assets/415248465336bcb713bb791855b91c49.svg" alt="Pen and ink drawing of my studio: a heavy wooden worktable spread with drawings, books and three task lamps, a chair at the right and drawings leaning against the table.">
+<img class="pf-plant" src="./assets/5a8f36b20e80b66ab4cf69a9a253e484.svg" alt="">
+<svg class="pf-beams" viewBox="0 246 1500 800" aria-hidden="true" focusable="false"><defs><linearGradient id="pf-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.62"></stop><stop offset="0.55" stop-color="#F4D45B" stop-opacity="0.28"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></linearGradient><radialGradient id="pf-pool"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.5"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></radialGradient></defs><path d="M456 446 L532 426 L650 582 L388 608 Z" fill="url(#pf-beam)"></path><ellipse cx="519" cy="595" rx="86" ry="17" fill="url(#pf-pool)"></ellipse><path d="M750 420 L826 400 L944 558 L682 582 Z" fill="url(#pf-beam)"></path><ellipse cx="813" cy="570" rx="86" ry="17" fill="url(#pf-pool)"></ellipse><path d="M858 386 L934 406 L1050 558 L798 582 Z" fill="url(#pf-beam)"></path><ellipse cx="924" cy="570" rx="86" ry="17" fill="url(#pf-pool)"></ellipse></svg>
+</div>
+<p class="pf-greet">Welcome to Shanmathi’s design studio</p>
+</main>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"intro": {"editor": "enum", "options": ["once per visit", "every time", "off"], "default": "once per visit"}, "$preview": {"width": 1440, "height": 900}}'>
+class Component extends DCLogic {
+pfFit() {
+try {
+const stage = document.getElementById('pf-stage-Home');
+const fit = document.getElementById('pf-fit-Home');
+if (!stage || !fit) return;
+const w = stage.clientWidth || document.documentElement.clientWidth || 1440;
+const s = Math.min(1, w / 1440);
+fit.style.transform = 'scale(' + s + ')';
+fit.style.marginLeft = Math.max(0, (w - 1440 * s) / 2) + 'px';
+stage.style.height = Math.ceil(fit.offsetHeight * s) + 'px';
+} catch (e) {}
+}
+pfFitBind() {
+this._pfFit = () => this.pfFit();
+this.pfFit();
+try { window.addEventListener('resize', this._pfFit); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+this._pfRO = new ResizeObserver(this._pfFit);
+this._pfRO.observe(document.getElementById('pf-fit-Home'));
+}
+} catch (e) {}
+try { setTimeout(this._pfFit, 120); setTimeout(this._pfFit, 700); } catch (e) {}
+}
+pfFitFree() {
+try { window.removeEventListener('resize', this._pfFit); } catch (e) {}
+try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e) {}
+}
+
+componentDidMount() {
+this.pfFitBind();
+try { window.scrollTo(0, 0); } catch (e) {}
+if (!this.introSkipped()) this.startIntro();
+}
+componentWillUnmount() {
+this.pfFitFree(); clearTimeout(this.introTimer); }
+introSkipped() {
+if (this._init === undefined) {
+const mode = this.props.intro ?? 'once per visit';
+let seen = false;
+try { seen = sessionStorage.getItem('pf-home-intro') === '1'; } catch (e) {}
+this._init = mode === 'off' || (mode === 'once per visit' && seen);
+}
+return this._init;
+}
+startIntro() {
+try { sessionStorage.setItem('pf-home-intro', '1'); } catch (e) {}
+clearTimeout(this.introTimer);
+this.introTimer = setTimeout(() => this.setState({ introDone: true }), 2650);
+}
+renderVals() {
+const st = this.state || {};
+const done = st.introDone ?? this.introSkipped();
+return {
+showIntro: !done,
+enter: done ? ' pf-enter' : '',
+skipIntro: () => { clearTimeout(this.introTimer); this.setState({ introDone: true }); }
+};
+}
+}
+</script>
+</body>
+</html>
