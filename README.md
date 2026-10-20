@@ -30,11 +30,10 @@ The site is designed in Claude Design and published with GitHub Pages. It is a s
 └── docs/                The published website (GitHub Pages serves this folder)
     ├── index.html       Copy of Home.dc.html, so the domain opens the homepage
     ├── *.dc.html        Pages, plus the components they load (Slot-*, Annot*, DreamFooter)
+    ├── *-Phone.dc.html  Phone artboard for each page (shown at 760px wide or less)
     ├── assets/          Images, drawings, fonts and the CV PDF
     ├── vendor/          React, used by the Claude Design page runtime
     ├── support.js       Claude Design page runtime
-    ├── mobile.css       Phone layout (below 760px wide)
-    ├── mobile.js        Phone helpers: card order on About, tap for night view
     ├── Library.dc.html  Redirects an old link to the Projects page
     ├── CNAME            Custom domain for GitHub Pages
     └── .nojekyll        Tells GitHub Pages to serve files as-is
@@ -44,9 +43,9 @@ Pages and their components sit side by side in `docs/` on purpose. The Claude De
 
 ## Phone layout
 
-Claude Design exports every page as a fixed 1440px canvas that shrinks to fit the window, which leaves text unreadably small on a phone. `mobile.css` turns the shrinking off below 760px and restacks each page into one column; `mobile.js` adds the few things CSS can't do on its own (ordering the About cards, tap instead of hover for the night render). Desktop and tablet are unaffected.
+Each page has two artboards in Claude Design: the desktop page and its phone version (`Home-Phone.dc.html`, `About-Phone.dc.html` and so on). A small switch inside each page shows the phone artboard when the page is 760px wide or less and the desktop page above that. Both are designed and edited in Claude Design, so the phone version is exported along with its page.
 
-The update script adds both files and a viewport tag to every page automatically, so a fresh export from Claude Design keeps the phone layout.
+The update script adds a `viewport` tag to every page, because the exports don't include one. Without it, phones report a ~980px window and would show the desktop page instead of the phone artboard.
 
 ## Updating the site
 
@@ -57,7 +56,7 @@ The update script adds both files and a viewport tag to every page automatically
    python3 tools/update_site.py ~/Downloads/Export.zip
    ```
 
-   The script copies the export into `docs/`, rebuilds `index.html` from the homepage, adds the phone layout to every page, and lists any link, image or component that doesn't resolve. It exits with an error if something is missing.
+   The script copies the export into `docs/`, rebuilds `index.html` from the homepage, adds the viewport tag to every page, and lists any link, image or component that doesn't resolve. It exits with an error if something is missing.
 3. Commit and push. GitHub Pages republishes in about a minute.
 
 Several exports can be merged at once: `python3 tools/update_site.py one.zip two.zip`.
@@ -67,7 +66,7 @@ To list images no page uses anymore: `python3 tools/update_site.py --unused`.
 
 - **Don't rename exported files.** Pages link to each other by their exported names (`About.dc.html`, `Chapter1.dc.html` and so on), and the names are case-sensitive.
 - **Don't edit files in `docs/` by hand.** The next export overwrites them. Make changes in Claude Design and re-export.
-- **Keep `CNAME`, `.nojekyll`, `index.html`, `Library.dc.html`, `mobile.css` and `mobile.js`.** They belong to this site, not to any export, and the update script never overwrites them (it regenerates `index.html` itself).
+- **Keep `CNAME`, `.nojekyll`, `index.html` and `Library.dc.html`.** They belong to this site, not to any export, and the update script never overwrites them (it regenerates `index.html` itself).
 
 ## Hosting
 

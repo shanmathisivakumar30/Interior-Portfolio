@@ -11,8 +11,9 @@ What it does:
   2. Drops the export's README.md (it describes the export, not this site).
   3. Rebuilds docs/index.html from docs/Home.dc.html, so the bare domain
      always opens the latest homepage.
-  4. Adds the phone layout (mobile.css, mobile.js and a viewport tag) to every
-     page, since Claude Design exports come without it.
+  4. Makes sure every page has a viewport tag. Claude Design exports come
+     without one, and without it phones report a ~980px window, so each page
+     would show its desktop layout instead of its phone artboard.
   5. Checks every link, image and component reference and reports anything
      missing, so a broken page is caught before it is pushed.
 
@@ -31,13 +32,17 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, "docs")
 
 # Files that belong to this site, not to any export. Never overwritten.
-PROTECTED = {"CNAME", ".nojekyll", "Library.dc.html", "index.html", "mobile.css", "mobile.js"}
+PROTECTED = {"CNAME", ".nojekyll", "Library.dc.html", "index.html"}
 
-# Added to the <head> of every full page so phones get the stacked layout.
-MOBILE_TAGS = (
-    '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-    '<link rel="stylesheet" href="./mobile.css">\n'
-    '<script src="./mobile.js" defer></script>'
+# Added to the <head> of every full page so phones report their real width
+# and each page's width switch shows the phone artboard.
+VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1">'
+
+# Tags from the retired phone layer (mobile.css / mobile.js, replaced by the
+# phone artboards in Claude Design). Stripped if an old page still has them.
+RETIRED_TAGS = (
+    '<link rel="stylesheet" href="./mobile.css">\n',
+    '<script src="./mobile.js" defer></script>\n',
 )
 
 
@@ -69,26 +74,32 @@ def rebuild_index():
         shutil.copy2(home, os.path.join(SITE, "index.html"))
 
 
-def add_mobile_layout():
-    """Add the phone layout to every full page that doesn't have it yet.
+def ensure_viewport():
+    """Give every full page a viewport tag, and drop any retired phone-layer tags.
 
     Only full pages are touched (they contain the scaling "pf-stage"); the
-    Slot-*, Annot* and other component files are loaded into those pages and
-    must stay as exported.
+    *-Phone, Slot-*, Annot* and other component files are loaded into those
+    pages and must stay as exported.
     """
-    added = []
+    changed = []
     for name in sorted(os.listdir(SITE)):
         if not name.endswith(".html"):
             continue
         path = os.path.join(SITE, name)
         text = open(path, encoding="utf-8").read()
-        if 'class="pf-stage"' not in text or "mobile.css" in text or "<head>" not in text:
+        if 'class="pf-stage"' not in text or "<head>" not in text:
             continue
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(text.replace("<head>", "<head>\n" + MOBILE_TAGS, 1))
-        added.append(name)
-    if added:
-        print(f"Added phone layout to: {', '.join(added)}")
+        new = text
+        for tag in RETIRED_TAGS:
+            new = new.replace(tag, "")
+        if 'name="viewport"' not in new:
+            new = new.replace("<head>", "<head>\n" + VIEWPORT, 1)
+        if new != text:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(new)
+            changed.append(name)
+    if changed:
+        print(f"Viewport tag checked on: {', '.join(changed)}")
 
 
 def referenced_files():
@@ -140,7 +151,7 @@ def main():
         for z in args.zips:
             merge(z)
         rebuild_index()
-    add_mobile_layout()
+    ensure_viewport()
     if args.unused:
         list_unused()
     sys.exit(0 if check() else 1)
