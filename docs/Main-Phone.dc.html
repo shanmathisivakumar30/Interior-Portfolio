@@ -12,53 +12,78 @@
 <helmet>
 <style>
 @font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
+body{margin:0}
 
+/* the page is a column now: head, the line of type, then the list taking
+   whatever is left and sitting in the middle of it */
 .ph-idx{position:relative;box-sizing:border-box;width:100%;min-height:100vh;
-padding:18px 18px 40px;background-color:#FEF9ED;
+display:flex;flex-direction:column;
+padding:18px 16px 36px;background-color:#FEF9ED;
 background-image:radial-gradient(circle at center,rgba(125,116,104,0.035) 0 1px,transparent 1.15px);
 background-size:5px 5px;color:#262525;
 font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
-.ph-wrap{width:100%;max-width:430px;margin:0 auto}
+.ph-wrap{display:flex;flex-direction:column;flex:1 1 auto;
+width:100%;max-width:430px;margin:0 auto}
 
 .ph-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
-padding-bottom:26px}
+padding-bottom:22px}
 .ph-head a{color:#262525;text-decoration:none;font-size:9px;letter-spacing:0.22em;
 text-transform:uppercase;font-weight:500;-webkit-tap-highlight-color:transparent}
 .ph-head a:active{color:#C62B23}
 
-.ph-intro{margin:0 0 30px;font-size:16px;line-height:1.45;font-style:italic;color:#262525}
+.ph-intro{margin:0 0 28px;font-size:11px;line-height:1.45;font-style:italic;color:#262525}
 
-.ph-list{border-top:1px solid #9C9795}
+/* the list holds the middle of the screen */
+.ph-mid{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;min-height:0}
 
-/* the category sits above the title, both hard against the left edge */
-.ph-row{display:block;padding:15px 0 17px;border-bottom:1px solid #9C9795;
-color:#262525;text-decoration:none;-webkit-tap-highlight-color:transparent;
-transition:background-color 200ms ease,padding-left 200ms ease}
-/* the same angled file tab as the desktop index, moved above the title */
-.ph-cat{position:relative;display:inline-flex;align-items:center;justify-content:center;
-box-sizing:border-box;height:26px;padding:0 16px;margin:0 0 9px;background-color:#262525;
-clip-path:polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+/* every size below comes from these three, which the board works out for
+   itself from the room it has - see fitList */
+.ph-list{--ttl:20px;--row:15px;--tab:7px;--tabh:17px;
+border-top:1px solid #9C9795}
+
+/* The tab used to sit beside the title and take a third of the line away
+   from it, which is why the titles could never grow. It now tucks into the
+   foot of the row above instead - the same place on the page, the same lap
+   over the rule - so the title has the whole width to itself. */
+.ph-row{position:relative}
+.ph-tab{display:block;box-sizing:border-box;height:var(--row);
+padding:0 6px;border-bottom:1px solid #9C9795;overflow:hidden;color:#262525;
+text-decoration:none;-webkit-tap-highlight-color:transparent;
+transition:height 200ms cubic-bezier(.2,.8,.2,1),transform 200ms cubic-bezier(.2,.8,.2,1),
+background-color 200ms ease}
+.ph-ttl{margin:0;padding:0.06em 6px 0 0;font-size:var(--ttl);line-height:0.82;
+letter-spacing:-0.075em;font-weight:300;text-transform:uppercase;white-space:nowrap;
+overflow:hidden;text-overflow:clip}
+
+/* the typology tab, riding above its row on the right, as on the desktop index */
+.ph-folder{position:absolute;right:4px;top:calc(var(--tabh) * -1);z-index:2;display:flex;
+align-items:center;justify-content:center;box-sizing:border-box;height:var(--tabh);
+padding:0 8px;background-color:#262525;
+clip-path:polygon(8px 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
 font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400;
-font-size:11px;letter-spacing:0.03em;text-transform:uppercase;white-space:nowrap;
+font-size:var(--tab);letter-spacing:0.03em;text-transform:uppercase;white-space:nowrap;
 transition:background-color 200ms ease}
-.ph-cat::before{content:"";position:absolute;left:1px;top:1px;right:1px;bottom:0;
-background-color:#FEF9ED;clip-path:polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+.ph-folder::before{content:"";position:absolute;left:1px;top:1px;right:1px;bottom:1px;
+background-color:#FEF9ED;clip-path:polygon(8px 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
 transition:background-color 200ms ease}
-.ph-cat i{position:relative;z-index:1;font-style:normal;color:#262525}
-.ph-ttl{margin:0;font-size:34px;line-height:0.96;letter-spacing:-0.035em;font-weight:300;
-text-transform:uppercase;
-/* two lines, and never a clipped one: wrap rather than overflow */
-overflow-wrap:break-word;word-break:normal;hyphens:none}
+.ph-folder i{position:relative;z-index:1;font-style:normal;color:#262525}
 
-.ph-row:active,.ph-row:focus-visible{background-color:#C62B23;color:#FEF9ED;
-padding-left:10px;outline:none}
-.ph-row:active .ph-cat,.ph-row:focus-visible .ph-cat{background-color:#C62B23}
-.ph-row:active .ph-cat::before,.ph-row:focus-visible .ph-cat::before{background-color:#C62B23}
+/* the first row has nothing above it to tuck the tab under, so it gets the gap */
+.ph-row:first-child{margin-top:var(--tabh)}
 
-@media (prefers-reduced-motion:reduce){.ph-row{transition:none}}
+.ph-row:active .ph-tab,.ph-tab:focus-visible{height:calc(var(--row) + 8px);
+transform:translateX(-7px);background-color:#C62B23;color:#FEF9ED;outline:none}
+.ph-row:active .ph-folder,.ph-row:focus-within .ph-folder{background-color:#C62B23}
+.ph-row:active .ph-folder::before,.ph-row:focus-within .ph-folder::before{background-color:#C62B23}
+
+/* the ruler used to measure a title's own width; never seen */
+.ph-probe{position:absolute;left:-9999px;top:0;white-space:nowrap;padding:0;
+visibility:hidden;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){.ph-tab{transition:none}}
 </style>
 </helmet>
-<div class="ph-idx">
+<div class="ph-idx" id="ph-idx" style="background-color: {{paper}};">
 <div class="ph-wrap">
 
 <header class="ph-head">
@@ -66,49 +91,153 @@ padding-left:10px;outline:none}
 <a href="About.dc.html">About</a>
 </header>
 
-<p class="ph-intro">Every file holds the possibility of a life. These are stories of spaces imagined through light and time</p>
+<p class="ph-intro" style="font-size: 9px; margin-bottom: {{introGap}};">Every file holds the possibility of a life. <br>These are stories of spaces imagined through light and time</p>
 
-<nav class="ph-list" aria-label="Projects">
-
-<a class="ph-row" href="Chapter1.dc.html">
-<span class="ph-cat"><i>Residential interior</i></span>
-<h2 class="ph-ttl">Light, within!</h2>
-</a>
-
-<a class="ph-row" href="Chapter3.dc.html">
-<span class="ph-cat"><i>Residential interior</i></span>
-<h2 class="ph-ttl">A house that listens</h2>
-</a>
-
-<a class="ph-row" href="Chapter4.dc.html">
-<span class="ph-cat"><i>Glamping project</i></span>
-<h2 class="ph-ttl">A little unbuttoned</h2>
-</a>
-
-<a class="ph-row" href="Chapter2.dc.html">
-<span class="ph-cat"><i>Hospitality interior</i></span>
-<h2 class="ph-ttl">The breakfast club</h2>
-</a>
-
-<a class="ph-row" href="Chapter5.dc.html">
-<span class="ph-cat"><i>Healthcare interior</i></span>
-<h2 class="ph-ttl">A softer landing</h2>
-</a>
-
-<a class="ph-row" href="Chapter6.dc.html">
-<span class="ph-cat"><i>Moodboard compilations</i></span>
-<h2 class="ph-ttl">Spatial fragments</h2>
-</a>
-
+<div class="ph-mid">
+<nav class="ph-list" id="ph-list" aria-label="Projects">
+<div class="ph-row"><span class="ph-folder"><i>Residential interior</i></span><a class="ph-tab" href="Chapter1.dc.html" style="height: 49px"><h2 class="ph-ttl">Light, within!</h2></a></div>
+<div class="ph-row"><span class="ph-folder"><i>Residential interior</i></span><a class="ph-tab" href="Chapter3.dc.html"><h2 class="ph-ttl">A house that listens</h2></a></div>
+<div class="ph-row"><span class="ph-folder"><i>Glamping project</i></span><a class="ph-tab" href="Chapter4.dc.html"><h2 class="ph-ttl">A little unbuttoned</h2></a></div>
+<div class="ph-row"><span class="ph-folder"><i>Hospitality interior</i></span><a class="ph-tab" href="Chapter2.dc.html"><h2 class="ph-ttl">The breakfast club</h2></a></div>
+<div class="ph-row"><span class="ph-folder"><i>Healthcare interior</i></span><a class="ph-tab" href="Chapter5.dc.html"><h2 class="ph-ttl">A softer landing</h2></a></div>
+<div class="ph-row"><span class="ph-folder"><i>miscellaneous views</i></span><a class="ph-tab" href="Chapter7.dc.html"><h2 class="ph-ttl">FEW LOOSE FRAMES!</h2></a></div>
+<div class="ph-row"><span class="ph-folder"><i>Moodboard compilations</i></span><a class="ph-tab" href="Chapter6.dc.html"><h2 class="ph-ttl">Spatial fragments</h2></a></div>
 </nav>
+</div>
 
 </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"titleMax": {"editor": "text", "default": "46px"}, "tabSize": {"editor": "text", "default": "9px"}, "density": {"editor": "enum", "options": ["snug", "tight", "normal", "open", "full"], "default": "snug"}, "introGap": {"editor": "text", "default": "28px"}, "paper": {"editor": "color", "default": "#FEF9ED"}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
+
+num(v, fallback) {
+const n = parseFloat(v);
+return (isNaN(n) || n <= 0) ? fallback : n;
+}
+// how much of the free height the list is allowed to take up
+flFill() {
+const d = this.props.density ?? 'snug';
+// snug is the row at its own height: title, tab and a little air, with the
+// list sitting in the middle of the page rather than stretched down it
+return d === 'snug' ? 0 : d === 'tight' ? 0.34 : d === 'normal' ? 0.55
+: d === 'open' ? 0.72 : 0.92;
+}
+
+// The board sizes itself. The titles want to be as large as they can be,
+// but each one has to clear the tab belonging to the row below it - and
+// those tabs are different widths - so the answer is the smallest of the
+// seven sizes that each row can carry, not one number written by hand.
+fitList() {
+const list = document.getElementById('ph-list');
+if (!list || this._fitting) return;
+this._fitting = true;
+try { this.fitRun(list); } finally { this._fitting = false; }
+}
+fitRun(list) {
+const rows = list.querySelectorAll('.ph-row');
+const n = rows.length;
+if (!n) return;
+
+const tabPx = Math.max(5, Math.min(20, this.num(this.props.tabSize, 9)));
+const capPx = Math.max(16, Math.min(90, this.num(this.props.titleMax, 46)));
+const tabH = Math.round(tabPx * 17 / 7);
+
+// the tabs are laid out first: their width is what the titles must clear
+list.style.setProperty('--tab', tabPx + 'px');
+list.style.setProperty('--tabh', tabH + 'px');
+
+const tabs = [], titles = [];
+for (let i = 0; i < n; i++) {
+tabs.push(rows[i].querySelector('.ph-folder'));
+titles.push(rows[i].querySelector('.ph-ttl'));
+}
+
+// a title's width grows in step with its type size, so one measurement at
+// a known size gives every size. The ruler carries the same face as the
+// titles, which is why it is cloned from one rather than built.
+const ref = 100;
+const probe = document.createElement('span');
+probe.className = 'ph-probe';
+const base = titles[0] ? window.getComputedStyle(titles[0]) : null;
+probe.style.fontFamily = base ? base.fontFamily : 'inherit';
+probe.style.fontWeight = base ? base.fontWeight : '300';
+probe.style.textTransform = 'uppercase';
+probe.style.letterSpacing = '-0.075em';
+probe.style.fontSize = ref + 'px';
+list.appendChild(probe);
+
+// the whole line, less the row's own padding: the tabs no longer take any
+// of it, so the only limit on the type is the longest title itself
+const inner = Math.max(80, list.clientWidth - 18);
+let best = capPx;
+let widest = 0;
+for (let i = 0; i < n; i++) {
+probe.textContent = titles[i].textContent || '';
+const w = probe.getBoundingClientRect().width;
+if (w > widest) widest = w;
+}
+probe.remove();
+if (widest > 0) best = Math.min(best, inner * ref / widest);
+const ttl = Math.max(18, Math.floor(best));
+
+// the row stays shorter than the type in it, which is what laps the
+// titles; the leftover height is then shared out, so the list holds the
+// middle of the screen instead of a band at the top of it
+// a row has to hold its title and still leave the foot clear for the next
+// row's tab, or the two would sit on top of each other
+const snug = Math.max(14, Math.round(ttl * 0.9) + tabH + 6);
+list.style.setProperty('--ttl', ttl + 'px');
+
+// settle at the snug size first and measure the room from there: reading
+// the room after the rows have already grown into it would feed itself
+list.style.setProperty('--row', snug + 'px');
+let row = snug;
+try {
+const mid = list.parentElement;
+void list.offsetHeight;
+const free = (mid ? mid.clientHeight : 0) - (tabH + n * snug + n);
+if (free > 0) {
+const share = (free * this.flFill()) / n;
+row = Math.round(snug + Math.max(0, Math.min(snug * 2.4, share)));
+}
+} catch (e) {}
+list.style.setProperty('--row', row + 'px');
+this._fit = ttl + '/' + row + '/' + tabPx;
+}
+
+fitSoon() {
+try { clearTimeout(this._ft); } catch (e) {}
+this._ft = setTimeout(() => { this._ft = null; this.fitList(); }, 0);
+}
+componentDidMount() {
+this.fitList();
+this._fr = () => this.fitSoon();
+try { window.addEventListener('resize', this._fr); } catch (e) {}
+try {
+if (typeof ResizeObserver !== 'undefined') {
+this._ro = new ResizeObserver(this._fr);
+const el = document.getElementById('ph-idx');
+if (el) this._ro.observe(el);
+}
+} catch (e) {}
+// Penpoint arriving changes how wide the tabs are, so measure again
+try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(this._fr); } catch (e) {}
+try { setTimeout(this._fr, 160); setTimeout(this._fr, 700); } catch (e) {}
+}
+componentWillUnmount() {
+try { clearTimeout(this._ft); } catch (e) {}
+try { window.removeEventListener('resize', this._fr); } catch (e) {}
+try { if (this._ro) { this._ro.disconnect(); this._ro = null; } } catch (e) {}
+}
+
 renderVals() {
-return {};
+const v = {};
+v.paper = this.props.paper ?? '#FEF9ED';
+v.introGap = this.props.introGap ?? '28px';
+// the elements are new after every render, so measure again
+this.fitSoon();
+return v;
 }
 }
 </script>

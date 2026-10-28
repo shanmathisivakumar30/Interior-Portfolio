@@ -49,6 +49,9 @@ cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ph-art.ph-lit .ph-beams{opacity:1}
 .ph-art.ph-lit .ph-room{animation:ph-shake 640ms ease-in-out}
 .ph-art.ph-lit .ph-plant{animation:ph-leaf 820ms ease-in-out}
+/* the opening flicker: only the light moves, the drawing stays put */
+.ph-art.ph-flick .ph-beams{transition:opacity 90ms linear}
+.ph-art.ph-flick .ph-room,.ph-art.ph-flick .ph-plant{animation:none}
 @keyframes ph-shake{
 0%,100%{transform:translate(0,0) rotate(0deg)}
 18%{transform:translate(-2.5px,1px) rotate(-0.22deg)}
@@ -68,11 +71,13 @@ text-align:center;text-transform:uppercase;color:#241910}
 
 .ph-hint{margin:0;padding-top:2px;text-align:center;color:#9C9795;font-size:9px;
 letter-spacing:0.2em;text-transform:uppercase;font-weight:500;
-transition:opacity 300ms ease}
+opacity:0;transition:opacity 300ms ease}
+.ph-hint.ph-on{opacity:1}
 .ph-hint.ph-off{opacity:0}
 
 @media (prefers-reduced-motion:reduce){
 .ph-art.ph-lit .ph-room,.ph-art.ph-lit .ph-plant{animation:none}
+.ph-beams{transition:none}
 .ph-ring path{stroke-dashoffset:0}
 .ph-navlink:active .ph-ring path{animation:none}}
 </style>
@@ -96,7 +101,7 @@ transition:opacity 300ms ease}
 </nav>
 
 <div class="ph-mid">
-<button type="button" class="ph-art{{lit}}" onClick="{{light}}" aria-label="Light the studio lamps">
+<button type="button" class="ph-art{{lit}}{{flick}}" onClick="{{light}}" aria-label="Light the studio lamps">
 <img class="ph-room" src="./assets/415248465336bcb713bb791855b91c49.svg" alt="Pen and ink drawing of my studio: a heavy wooden worktable spread with drawings, books and three task lamps, a chair at the right and drawings leaning against the table.">
 <img class="ph-plant" src="./assets/5a8f36b20e80b66ab4cf69a9a253e484.svg" alt="">
 <svg class="ph-beams" viewBox="0 246 1500 800" aria-hidden="true" focusable="false"><defs><linearGradient id="ph-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.62"></stop><stop offset="0.55" stop-color="#F4D45B" stop-opacity="0.28"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></linearGradient><radialGradient id="ph-pool"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.5"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></radialGradient></defs><path d="M456 446 L532 426 L650 582 L388 608 Z" fill="url(#ph-beam)"></path><ellipse cx="519" cy="595" rx="86" ry="17" fill="url(#ph-pool)"></ellipse><path d="M750 420 L826 400 L944 558 L682 582 Z" fill="url(#ph-beam)"></path><ellipse cx="813" cy="570" rx="86" ry="17" fill="url(#ph-pool)"></ellipse><path d="M858 386 L934 406 L1050 558 L798 582 Z" fill="url(#ph-beam)"></path><ellipse cx="924" cy="570" rx="86" ry="17" fill="url(#ph-pool)"></ellipse></svg>
@@ -111,17 +116,81 @@ transition:opacity 300ms ease}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
+componentDidMount() {
+let reduced = false;
+try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+if (reduced) { this.setState({ done: true }); return; }
+this._seq = [];
+this.lampWait();
+}
+lampArt() { try { return document.querySelector('.ph-art'); } catch (e) { return null; } }
+// The strikes were being spent before the page was worth looking at: they
+// fired a third of a second after mounting, which on a phone is usually
+// before the drawing has loaded. Wait for the picture, then for the drawing
+// to actually be on screen, and only then strike.
+lampWait() {
+if (this._lampOn) return;
+const el = this.lampArt();
+if (!el) { this._seq.push(setTimeout(() => this.lampWait(), 120)); return; }
+const img = el.querySelector('.ph-room');
+if (img && !img.complete) {
+try { img.addEventListener('load', () => this.lampWait(), { once: true }); } catch (e) {}
+this._seq.push(setTimeout(() => this.lampWait(), 1200));   // and a backstop
+return;
+}
+let watched = false;
+try {
+if (typeof IntersectionObserver !== 'undefined') {
+this._lampIO = new IntersectionObserver((es) => {
+es.forEach((e) => {
+if (!e.isIntersecting) return;
+try { this._lampIO.disconnect(); } catch (x) {}
+this._lampIO = null;
+this.lampStrike();
+});
+}, { threshold: 0.3 });
+this._lampIO.observe(el);
+watched = true;
+}
+} catch (e) { watched = false; }
+if (!watched) this.lampStrike();
+}
+lampStrike() {
+if (this._lampOn) return;
+this._lampOn = true;
+// four strikes, slow enough to read as a lamp being switched on
+const ON = 260, OFF = 210, START = 380, TIMES = 4;
+let t = START;
+for (let k = 0; k < TIMES; k++) {
+this._seq.push(setTimeout(() => this.setState({ flick: true, lit: true }), t));
+t += ON;
+this._seq.push(setTimeout(() => this.setState({ flick: true, lit: false }), t));
+t += OFF;
+}
+this._seq.push(setTimeout(() => this.setState({ flick: false, lit: false, done: true }), t));
+}
+lampStop() {
+try { (this._seq || []).forEach(clearTimeout); } catch (e) {}
+this._seq = [];
+this._lampOn = true;
+try { if (this._lampIO) { this._lampIO.disconnect(); this._lampIO = null; } } catch (e) {}
+}
 componentWillUnmount() {
 try { clearTimeout(this._lit); } catch (e) {}
+this.lampStop();
 }
 renderVals() {
 const st = this.state || {};
 return {
 lit: st.lit ? ' ph-lit' : '',
-hint: st.touched ? ' ph-off' : '',
+flick: st.flick ? ' ph-flick' : '',
+// the hint waits for the flicker to finish, then goes once the drawing is tapped
+hint: (st.done && !st.touched) ? ' ph-on' : ' ph-off',
 light: () => {
 try { clearTimeout(this._lit); } catch (e) {}
-this.setState({ lit: true, touched: true });
+// a tap during the strikes ends them rather than fighting them
+this.lampStop();
+this.setState({ lit: true, touched: true, flick: false, done: true });
 this._lit = setTimeout(() => this.setState({ lit: false }), 1600);
 }
 };
