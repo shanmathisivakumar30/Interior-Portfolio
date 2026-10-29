@@ -18,7 +18,10 @@ padding:20px 0 34px;background-color:#FBEDE9;
 background-image:linear-gradient(to right,rgba(198,43,35,0.10) 1px,transparent 1px),
 linear-gradient(to bottom,rgba(198,43,35,0.10) 1px,transparent 1px);
 background-size:26px 26px;color:#241910;
-font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
+/* every size and face on this page hangs off these, which the Type
+   controls set; the value after the comma is what they fall back to */
+font-family:var(--ab-bodyface,'Helvetica Neue',Helvetica,Arial,sans-serif);
+letter-spacing:var(--ab-track,normal);font-weight:300;overflow-x:hidden}
 .ph-wrap{position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;
 padding:0 18px;box-sizing:border-box}
 
@@ -32,13 +35,13 @@ transform:rotate(-0.8deg)}
 .ph-punch{display:flex;gap:16px;padding:9px 0 14px}
 .ph-punch i{display:block;width:17px;height:9px;border-radius:2px;background-color:#F3E3DE}
 .ph-note:nth-of-type(even){transform:rotate(0.8deg)}
-.ph-note h2{margin:0 0 12px;font-size:26px;line-height:1.05;color:#C62B23;
-font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
-.ph-note p{margin:0;font-size:14px;line-height:1.55}
+.ph-note h2{margin:0 0 12px;font-size:var(--ab-head,26px);line-height:1.05;color:#C62B23;
+font-family:var(--ab-headface,'Penpoint','Bradley Hand','Segoe Print',cursive);font-weight:400}
+.ph-note p{margin:0;font-size:var(--ab-body,13px);line-height:var(--ab-lead,1.55)}
 
-.ph-name{margin:0;font-size:34px;line-height:1.05;color:#241910}
-.ph-role{margin:8px 0 0;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;
-font-weight:500;color:#786653}
+.ph-name{margin:0;font-size:var(--ab-name,20px);line-height:1.05;color:#241910}
+.ph-note p.ph-role{margin:8px 0 0;font-size:var(--ab-role,9px);letter-spacing:0.2em;
+text-transform:uppercase;font-weight:500;color:#786653}
 
 .ph-cv{display:block;margin:0 0 16px;padding:15px 18px;border:1px solid #241910;
 background-color:#C62B23;color:#FEF9ED;text-align:center;text-decoration:none;
@@ -48,77 +51,103 @@ font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;
 
 .ph-con{margin:0;padding:0;list-style:none}
 .ph-con li{padding:7px 0;border-bottom:1px solid rgba(36,25,16,0.12);
-font-size:14px;line-height:1.5;word-break:break-word}
+font-size:var(--ab-body,13px);line-height:var(--ab-lead,1.5);word-break:break-word}
 .ph-con li:last-child{border-bottom:0}
 .ph-con a{color:#241910;text-decoration:none;border-bottom:1px solid rgba(36,25,16,0.35)}
 
-.ph-sub{margin:14px 0 7px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
-font-weight:500;color:#786653}
-.ph-sub:first-of-type{margin-top:0}
+.ph-note p.ph-sub{margin:14px 0 7px;font-size:var(--ab-label,10px);letter-spacing:0.2em;
+text-transform:uppercase;font-weight:500;color:#786653}
+.ph-note p.ph-sub:first-of-type{margin-top:0}
 .ph-chips{display:flex;flex-wrap:wrap;gap:7px;margin:0}
 .ph-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;box-sizing:border-box;
 padding:5px 10px 5px 7px;border:1px solid rgba(198,43,35,.38);border-radius:5px;
-background-color:#FFFBF2;font-size:12px;line-height:1.2;overflow-wrap:break-word}
+background-color:#FFFBF2;font-size:var(--ab-body,13px);line-height:1.2;overflow-wrap:break-word}
 .ph-chip b{flex:0 0 auto;display:block;width:14px;height:14px;border:1.5px solid #C62B23;
 border-radius:3px}
 
 /* In practice: a neat two-column list, nothing at an angle */
 .ph-prac{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px;
 margin:0;padding:0;list-style:none}
-.ph-prac li{font-size:15px;line-height:1.35;overflow-wrap:break-word}
+.ph-prac li{font-size:var(--ab-body,13px);line-height:var(--ab-lead,1.35);overflow-wrap:break-word}
 .ph-prac li::before{content:"○ ";color:#C62B23}
 
 .ph-job{padding:11px 0;border-bottom:1px solid rgba(36,25,16,0.12)}
 .ph-job:last-child{border-bottom:0;padding-bottom:0}
-.ph-when{margin:0 0 3px;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;
-font-weight:500;color:#C62B23}
-.ph-what{margin:0;font-size:14px;line-height:1.45}
+.ph-note p.ph-when{margin:0 0 3px;font-size:var(--ab-label,10px);letter-spacing:0.16em;
+text-transform:uppercase;font-weight:500;color:#C62B23}
+.ph-note p.ph-what{margin:0;font-size:var(--ab-body,13px);line-height:var(--ab-lead,1.45)}
 
-.ph-num{margin:0 0 10px;font-size:14px;line-height:1.55}
-.ph-num:last-child{margin-bottom:0}
+.ph-note p.ph-num{margin:0 0 10px;font-size:var(--ab-body,13px);line-height:var(--ab-lead,1.55)}
+.ph-note p.ph-num:last-child{margin-bottom:0}
 
-.ph-foot{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:14px}
-.ph-foot a{color:#241910;text-decoration:none;font-size:17px;
+.ph-foot{display:flex;flex-direction:column;align-items:center;gap:26px;padding-top:18px}
+.ph-foot a{color:#241910;text-decoration:none;font-size:var(--ab-foot,17px);
 -webkit-tap-highlight-color:transparent}
 .ph-foot a:active{color:#C62B23}
+.ph-foot a.xk{position:relative;display:inline-block}
+
+/* the character over the human bit: her size is the Character control,
+   her place on the note is wherever you drag her. !important because
+   the panel rewrites her style attribute on every drag. */
+.ph-note .sc-host[data-sc-name="AnnotFace"]{width:var(--face-w,62px)!important}
+
+/* the same red crayon ring the project pages use */
+.xk-ring{position:absolute;left:-11px;top:-9px;width:calc(100% + 22px);
+height:calc(100% + 18px);z-index:2;pointer-events:none;overflow:visible}
+.xk-ring path{fill:none;stroke:#C8432B;stroke-linecap:round;stroke-linejoin:round;
+vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200}
+.xk-ring .xk-a{stroke-width:3}
+.xk-ring .xk-b{stroke-width:2.4;opacity:0.6}
+a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a{
+animation:xk-draw 420ms cubic-bezier(.35,.75,.4,1) forwards}
+a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b{
+animation:xk-draw 300ms cubic-bezier(.35,.75,.4,1) 170ms forwards}
+/* a tap is not a hover: the ring is put on by hand when a finger lands */
+a.xk.xk-on .xk-a{animation:xk-draw 420ms cubic-bezier(.35,.75,.4,1) forwards}
+a.xk.xk-on .xk-b{animation:xk-draw 300ms cubic-bezier(.35,.75,.4,1) 170ms forwards}
+@keyframes xk-draw{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
+a.xk:focus{outline:none}
+@media (prefers-reduced-motion:reduce){
+.xk-ring path{stroke-dashoffset:0}
+a.xk.xk-on .xk-a,a.xk.xk-on .xk-b,
+a.xk:hover .xk-a,a.xk:hover .xk-b{animation:none}}
 </style>
 </helmet>
-<div class="ph-ab" style="height: 2455px">
+<div class="ph-ab">
 <div class="ph-wrap">
 
 <section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
-<h1 class="ph-name ph-hand" style="font-size: 20px; text-align: center">Shanmathi Sivakumar</h1>
-<p class="ph-role" style="font-size: 9px; text-align: center">Interior Designer | Architect</p>
+<h1 class="ph-name ph-hand" style="text-align: center">Shanmathi Sivakumar</h1>
+<p class="ph-role" style="text-align: center">Interior Designer | Architect</p>
 </section>
 
 
 
 <section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
-<h2>contact me!!</h2>
-<ul class="ph-con">
-<li style="font-size: 12px">Dallas, Texas</li>
-<li style="font-size: 12px"><a href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a>&nbsp;;</li><li style="font-size: 12px">Instagram : shansivakumar</li>
-<li style="font-size: 12px"><a href="https://www.linkedin.com/in/shanmathisivakumar30" target="_blank" rel="noopener">LinkedIn · shanmathisivakumar30</a></li>
-<li style="font-size: 12px">Authorised to work in the United States</li>
-</ul>
+<h2>The human bit</h2>
+<dc-import name="AnnotFace" face="{{face}}" motion="on" intensity="subtle" hint-size="150,116" style="position: absolute; right: 92px; top: 19px; z-index: 3; margin: 0px; box-sizing: border-box; width: 50px"></dc-import>
+<p class="ph-num" style="font-family: &quot;Helvetica Neue&quot;; font-size: 11px"><span>I’m Shanmathi, an interior designer and architect, and a constellation of places, projects, people, and things I’ve paused to notice.</span><br><br><span>I like spaces that take a deep breath. A little less clutter, a little more intention, and a bright pop of colour.</span><br><br><span>Away from drawings, I’m usually collecting words, adjusting a recipe, or turning a passing curiosity into a small research project. Apparently, making things feel right follows me home.</span><br><br></p>
+
+
+
 </section>
 
 <section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
 <h2>The technical bit</h2>
-<a class="ph-cv" href="./assets/c5290c6de29203925fb86e1ad32ef519.pdf" target="_blank" rel="noopener" style="width: 184px; height: -24px; font-size: 6px">Download detailed CV (PDF) ↓</a><p class="ph-sub" style="font-size: 10px">Drafting</p>
+<a class="ph-cv" href="{{cvFile}}" download="{{cvName}}" target="_blank" rel="noopener" style="width: 184px; height: -24px; font-size: 8px">Download detailed CV (PDF) ↓</a><p class="ph-sub">Drafting</p>
 <div class="ph-chips">
 <span class="ph-chip"><b></b>AutoCAD</span>
 <span class="ph-chip"><b></b>SketchUp</span>
 <span class="ph-chip"><b></b>Revit</span>
 </div>
-<p class="ph-sub" style="font-size: 10px">Visualisation and rendering</p>
+<p class="ph-sub">Visualisation and rendering</p>
 <div class="ph-chips">
 <span class="ph-chip"><b></b>V-Ray</span>
 <span class="ph-chip"><b></b>Lumion</span>
 <span class="ph-chip"><b></b>Enscape</span>
 <span class="ph-chip"><b></b>D5 Render</span>
 </div>
-<p class="ph-sub" style="font-size: 10px">Presentation and post-production</p>
+<p class="ph-sub">Presentation and post-production</p>
 <div class="ph-chips">
 <span class="ph-chip"><b></b>Adobe Photoshop</span>
 <span class="ph-chip"><b></b>Google flow</span>
@@ -126,24 +155,18 @@ font-weight:500;color:#C62B23}
 </section>
 
 <section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
-<h2>The human bit</h2>
-<p class="ph-num" style="font-size: 12px">1. I speak design, detail, and site.</p>
-<p class="ph-num" style="font-size: 12px">2. I turn concepts into visual stories that help clients understand the design and make informed decisions.</p>
-<p class="ph-num" style="font-size: 12px">3. I connect the dots between drawings, disciplines, and site conditions, spotting gaps and resolving conflicting requirements.</p>
-<p class="ph-num" style="font-size: 12px">I keep teams, material decisions, and documentation moving together, even when coordinating projects remotely.</p>
-</section><section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
 <h2>In practice</h2>
 <ul class="ph-prac">
-<li style="font-size: 12px">Spatial planning</li>
-<li style="font-size: 12px">Mood boards</li>
-<li style="font-size: 12px">Construction / as-built drawings</li>
-<li style="font-size: 12px">Site coordination</li>
-<li style="font-size: 12px">Vendor coordination</li>
-<li style="font-size: 12px">Procurement coordination</li>
-<li style="font-size: 12px">Client coordination</li>
-<li style="font-size: 12px">Construction detailing</li>
-<li style="font-size: 12px">Material optimisation</li>
-<li style="font-size: 12px">Local sourcing</li>
+<li>Spatial planning</li>
+<li>Mood boards</li>
+<li>Construction / as-built drawings</li>
+<li>Site coordination</li>
+<li>Vendor coordination</li>
+<li>Procurement coordination</li>
+<li>Client coordination</li>
+<li>Construction detailing</li>
+<li>Material optimisation</li>
+<li>Local sourcing</li>
 </ul>
 </section>
 
@@ -151,42 +174,122 @@ font-weight:500;color:#C62B23}
 <h2>My Experience</h2>
 <div class="ph-job">
 <p class="ph-when">2023 – 2025</p>
-<p class="ph-what" style="font-size: 12px">Sr. Project Designer at DesignInk Interiors, India</p>
+<p class="ph-what">Sr. Project Designer at DesignInk Interiors, India</p>
 </div>
 <div class="ph-job">
 <p class="ph-when">2022 · 2023</p>
-<p class="ph-what" style="font-size: 12px">Project designer at Auroma Architecture, Auroville, India</p>
+<p class="ph-what">Project designer at Auroma Architecture, Auroville, India</p>
 </div>
 <div class="ph-job">
 <p class="ph-when">2019 – 2022</p>
-<p class="ph-what" style="font-size: 12px">Architect at Taamaesek Engineering, Chennai, India</p>
+<p class="ph-what">Architect at Taamaesek Engineering, India</p>
 </div>
 <div class="ph-job">
 <p class="ph-when">2018 · 2019</p>
-<p class="ph-what" style="font-size: 12px">Intern Architect at Aturvya Architects, Chennai, India</p>
+<p class="ph-what">Intern Architect at Aturvya Architects, India</p>
 </div>
 </section>
 
 <section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
 <h2>education</h2>
 <p class="ph-when">2014 – 2019 · Chennai, India</p>
-<p class="ph-what" style="font-size: 12px">Bachelor of Architecture, Anna University</p>
+<p class="ph-what">Bachelor of Architecture, Anna University</p>
 </section>
 
 
 
-<nav class="ph-foot ph-hand" aria-label="More of the site">
-<a href="Home.dc.html">← Back to the studio</a>
-<a href="Main.dc.html">Project index →</a>
+<section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
+<h2>contact me!!</h2>
+<ul class="ph-con">
+<li>Dallas, Texas</li>
+<li><a href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a>&nbsp;;</li><li>Instagram : shansivakumar</li>
+<li><a href="https://www.linkedin.com/in/shanmathisivakumar30" target="_blank" rel="noopener">LinkedIn · shanmathisivakumar30</a></li>
+
+</ul>
+</section><nav class="ph-foot ph-hand" aria-label="More of the site">
+<a class="xk" href="Home.dc.html">← Back to the studio<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M65.6 13.0 Q82.5 9.8 91.6 9.4 Q100.8 8.9 109.9 9.7 Q118.9 10.5 127.6 11.6 Q136.3 12.8 145.0 14.3 Q153.6 15.7 160.7 18.4 Q167.8 21.0 171.7 24.7 Q175.6 28.5 177.8 32.2 Q180.1 35.9 182.8 39.4 Q185.5 42.9 187.6 46.6 Q189.7 50.3 189.7 54.2 Q189.8 58.1 188.4 62.1 Q186.9 66.0 183.7 69.9 Q180.5 73.8 174.2 76.9 Q167.8 80.0 159.2 81.8 Q150.6 83.6 142.1 84.8 Q133.6 86.1 125.3 87.5 Q117.0 88.9 108.1 89.5 Q99.2 90.1 90.4 89.2 Q81.6 88.4 73.6 86.9 Q65.5 85.4 57.5 83.8 Q49.5 82.2 42.1 80.1 Q34.7 77.9 28.6 75.0 Q22.5 72.1 17.3 68.8 Q12.0 65.5 7.9 61.7 Q3.8 57.9 3.4 53.8 Q3.0 49.6 6.8 45.8 Q10.7 41.9 15.3 38.6 L20.0 35.2"></path></svg></a>
+<a class="xk" href="Main.dc.html">Project index →<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M15.2 42.2 Q18.0 34.8 20.5 31.1 Q22.9 27.3 28.4 24.2 Q33.8 21.0 41.3 18.9 Q48.7 16.7 56.5 14.8 Q64.3 13.0 72.6 11.4 Q80.9 9.8 90.0 9.3 Q99.0 8.7 108.0 9.4 Q117.0 10.1 125.4 11.4 Q133.9 12.7 141.5 14.6 Q149.2 16.5 155.2 19.3 Q161.2 22.1 165.8 25.2 Q170.4 28.3 175.4 31.3 Q180.5 34.3 185.8 37.5 Q191.1 40.7 193.8 44.6 Q196.5 48.4 195.4 52.5 Q194.4 56.5 191.3 60.2 Q188.3 64.0 184.1 67.5 Q180.0 70.9 174.1 73.9 Q168.3 76.8 161.1 79.1 Q153.9 81.3 146.5 83.2 Q139.0 85.2 131.1 86.8 Q123.2 88.5 114.5 89.0 Q105.8 89.6 97.2 89.0 Q88.5 88.3 80.1 87.6 Q71.7 86.8 62.9 86.0 Q54.0 85.3 45.5 83.6 Q37.1 81.9 30.7 79.0 Q24.4 76.0 20.3 72.4 Q16.1 68.8 13.5 65.1 Q10.9 61.3 10.5 57.4 Q10.1 53.5 11.7 49.8 Q13.2 46.1 14.9 42.5 Q16.5 38.9 18.1 35.2 L19.6 31.4"></path><path class="xk-b" d="M26.5 32.5 Q37.7 25.1 45.8 22.1 Q53.9 19.1 63.9 17.5 Q73.9 15.8 84.5 15.1 Q95.2 14.3 105.6 15.2 Q116.0 16.1 125.1 18.1 Q134.3 20.0 143.5 21.8 Q152.8 23.6 161.7 26.1 Q170.6 28.6 176.0 32.5 Q181.4 36.3 184.0 40.7 L186.6 45.0"></path></svg></a>
 </nav>
 
 </div>
 </div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&amp;display=swap"></helmet></x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"nameSize": {"editor": "text", "default": "20px", "section": "Type"}, "roleSize": {"editor": "text", "default": "9px", "section": "Type"}, "headSize": {"editor": "text", "default": "26px", "section": "Type"}, "headFace": {"editor": "enum", "options": ["hand", "sans", "display"], "default": "hand", "section": "Type"}, "bodySize": {"editor": "text", "default": "13px", "section": "Type"}, "bodyFace": {"editor": "enum", "options": ["sans", "hand", "display"], "default": "sans", "section": "Type"}, "labelSize": {"editor": "text", "default": "10px", "section": "Type"}, "footSize": {"editor": "text", "default": "17px", "section": "Type"}, "lead": {"editor": "text", "default": "1.55", "section": "Type"}, "track": {"editor": "text", "default": "normal", "section": "Type"}, "faceSize": {"editor": "text", "default": "62px", "section": "Character"}, "face": {"editor": "enum", "options": ["smile", "neutral", "curious", "thoughtful"], "default": "smile", "section": "Character"}, "cvFile": {"editor": "text", "default": "./assets/e0ca70f8b8cadb60d5131c329b277eae.pdf", "section": "CV"}, "cvName": {"editor": "text", "default": "Shanmathi-Sivakumar-CV.pdf", "section": "CV"}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
+componentDidMount() { this.abType(); this.xkWatch(); }
+// One place to set the type. Each control writes a custom property, and the
+// stylesheet reads them, so a size or a face moves everything it governs
+// instead of one run of text at a time.
+abFace(k) {
+if (k === 'hand') return "'Penpoint','Bradley Hand','Segoe Print',cursive";
+if (k === 'display') return "'Bebas Neue','Helvetica Neue',Helvetica,Arial,sans-serif";
+return "'Helvetica Neue',Helvetica,Arial,sans-serif";
+}
+abType() {
+try {
+const r = document.documentElement;
+if (!r) return;
+const p = this.props;
+const set = (k, v) => { try { r.style.setProperty(k, v); } catch (e) {} };
+set('--ab-name', p.nameSize ?? '20px');
+set('--ab-role', p.roleSize ?? '9px');
+set('--ab-head', p.headSize ?? '26px');
+set('--ab-headface', this.abFace(p.headFace ?? 'hand'));
+set('--ab-body', p.bodySize ?? '13px');
+set('--ab-bodyface', this.abFace(p.bodyFace ?? 'sans'));
+set('--ab-label', p.labelSize ?? '10px');
+set('--ab-foot', p.footSize ?? '17px');
+set('--ab-lead', p.lead ?? '1.55');
+set('--ab-track', p.track ?? 'normal');
+set('--face-w', p.faceSize ?? '62px');
+} catch (e) {}
+}
+// A tap is not a hover. The ring goes on when the finger lands, and the
+// link is held for as long as the ring takes to draw, so it is seen
+// instead of guessed at. Held back only on a touch screen and only on the
+// page itself - inside the editor the runtime moves between artboards.
+xkBind(sel) {
+let touch = false, own = false, red = false;
+try { touch = window.matchMedia('(hover: none)').matches; } catch (e) {}
+try { own = window.top === window.self; } catch (e) { own = false; }
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+let links = [];
+try { links = document.querySelectorAll(sel || 'a.xk'); } catch (e) { return; }
+for (let i = 0; i < links.length; i++) {
+const a = links[i];
+if (a._xkOn) continue;
+a._xkOn = 1;
+const draw = () => {
+// remove, reflow, add: that is what restarts the stroke
+try { a.classList.remove('xk-on'); void a.offsetWidth; a.classList.add('xk-on'); } catch (e) {}
+};
+try { a.addEventListener('touchstart', draw, { passive: true }); } catch (e) {}
+if (!touch || !own || red) continue;
+a.addEventListener('click', (ev) => {
+if (a._xkGo) { a._xkGo = false; return; }
+const href = a.getAttribute('href') || '';
+if (!href || href.charAt(0) === '#' || a.getAttribute('target')) return;
+ev.preventDefault();
+ev.stopPropagation();
+draw();
+a._xkGo = true;
+setTimeout(() => {
+try { a.click(); } catch (e) { try { window.location.href = href; } catch (x) {} }
+}, 400);
+});
+}
+}
+xkWatch(sel) {
+this.xkBind(sel);
+try { [0, 400, 1400].forEach((t) => setTimeout(() => this.xkBind(sel), t)); } catch (e) {}
+}
 renderVals() {
-return {};
+const p = this.props;
+// a turn of a Type control lands here: put the new values on the page
+this.abType();
+// where the CV lives, and the name it is saved under
+return { face: p.face ?? 'smile',
+cvFile: p.cvFile ?? './assets/e0ca70f8b8cadb60d5131c329b277eae.pdf', cvName: p.cvName ?? 'Shanmathi-Sivakumar-CV.pdf' };
 }
 }
 </script>

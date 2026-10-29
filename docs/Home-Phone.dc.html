@@ -31,7 +31,8 @@ text-decoration:none;-webkit-tap-highlight-color:transparent}
 .ph-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .ph-ring path{fill:none;stroke:#C8432B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
 vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200}
-.ph-navlink:active .ph-ring path,.ph-navlink:focus-visible .ph-ring path{
+.ph-navlink:active .ph-ring path,.ph-navlink:focus-visible .ph-ring path,
+.ph-navlink.xk-on .ph-ring path{
 animation:ph-circle 420ms cubic-bezier(.35,.75,.4,1) forwards}
 @keyframes ph-circle{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
 .ph-navlink:focus{outline:none}
@@ -79,7 +80,7 @@ opacity:0;transition:opacity 300ms ease}
 .ph-art.ph-lit .ph-room,.ph-art.ph-lit .ph-plant{animation:none}
 .ph-beams{transition:none}
 .ph-ring path{stroke-dashoffset:0}
-.ph-navlink:active .ph-ring path{animation:none}}
+.ph-navlink:active .ph-ring path,.ph-navlink.xk-on .ph-ring path{animation:none}}
 </style>
 </helmet>
 <div class="ph-home">
@@ -117,10 +118,88 @@ opacity:0;transition:opacity 300ms ease}
 <script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
 componentDidMount() {
+this.xkWatch('a.ph-navlink');
 let reduced = false;
 try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 if (reduced) { this.setState({ done: true }); return; }
 this._seq = [];
+// the first arrival is this mount; the ones after it are caught below
+this._lampAt = Date.now();
+this.lampWait();
+this.lampWatch();
+}
+// A tap is not a hover. The ring goes on when the finger lands, and the
+// link is held for as long as the ring takes to draw, so it is seen
+// instead of guessed at. Held back only on a touch screen and only on the
+// page itself - inside the editor the runtime moves between artboards.
+xkBind(sel) {
+let touch = false, own = false, red = false;
+try { touch = window.matchMedia('(hover: none)').matches; } catch (e) {}
+try { own = window.top === window.self; } catch (e) { own = false; }
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+let links = [];
+try { links = document.querySelectorAll(sel || 'a.xk'); } catch (e) { return; }
+for (let i = 0; i < links.length; i++) {
+const a = links[i];
+if (a._xkOn) continue;
+a._xkOn = 1;
+const draw = () => {
+// remove, reflow, add: that is what restarts the stroke
+try { a.classList.remove('xk-on'); void a.offsetWidth; a.classList.add('xk-on'); } catch (e) {}
+};
+try { a.addEventListener('touchstart', draw, { passive: true }); } catch (e) {}
+if (!touch || !own || red) continue;
+a.addEventListener('click', (ev) => {
+if (a._xkGo) { a._xkGo = false; return; }
+const href = a.getAttribute('href') || '';
+if (!href || href.charAt(0) === '#' || a.getAttribute('target')) return;
+ev.preventDefault();
+ev.stopPropagation();
+draw();
+a._xkGo = true;
+setTimeout(() => {
+try { a.click(); } catch (e) { try { window.location.href = href; } catch (x) {} }
+}, 400);
+});
+}
+}
+xkWatch(sel) {
+this.xkBind(sel);
+try { [0, 400, 1400].forEach((t) => setTimeout(() => this.xkBind(sel), t)); } catch (e) {}
+}
+// Every arrival deserves the flicker, not just the first. Coming back with
+// the back button often restores the page whole from the browser's cache,
+// so nothing mounts and nothing fired; the tab coming back to the front
+// and the drawing returning to the screen count as arrivals too.
+lampWatch() {
+this._lampVis = () => { try { if (!document.hidden) this.lampAgain(); } catch (e) {} };
+try { document.addEventListener('visibilitychange', this._lampVis); } catch (e) {}
+try { window.addEventListener('pageshow', this._lampVis); } catch (e) {}
+try {
+const el = this.lampArt();
+if (el && typeof IntersectionObserver !== 'undefined') {
+this._lampBack = new IntersectionObserver((es) => {
+es.forEach((e) => {
+if (!e.isIntersecting) { this._lampOut = true; return; }
+if (this._lampOut) { this._lampOut = false; this.lampAgain(); }
+});
+}, { threshold: 0.1 });
+this._lampBack.observe(el);
+}
+} catch (e) {}
+}
+lampAgain() {
+let red = false;
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+if (red) return;
+const now = Date.now();
+if (this._lampAt && now - this._lampAt < 4000) return;
+this._lampAt = now;
+try { (this._seq || []).forEach(clearTimeout); } catch (e) {}
+this._seq = [];
+try { clearTimeout(this._lit); } catch (e) {}
+this._lampOn = false;
+this.setState({ flick: false, lit: false, done: false, touched: false });
 this.lampWait();
 }
 lampArt() { try { return document.querySelector('.ph-art'); } catch (e) { return null; } }
@@ -158,6 +237,7 @@ if (!watched) this.lampStrike();
 lampStrike() {
 if (this._lampOn) return;
 this._lampOn = true;
+this._lampAt = Date.now();
 // four strikes, slow enough to read as a lamp being switched on
 const ON = 260, OFF = 210, START = 380, TIMES = 4;
 let t = START;
@@ -178,6 +258,9 @@ try { if (this._lampIO) { this._lampIO.disconnect(); this._lampIO = null; } } ca
 componentWillUnmount() {
 try { clearTimeout(this._lit); } catch (e) {}
 this.lampStop();
+try { document.removeEventListener('visibilitychange', this._lampVis); } catch (e) {}
+try { window.removeEventListener('pageshow', this._lampVis); } catch (e) {}
+try { if (this._lampBack) { this._lampBack.disconnect(); this._lampBack = null; } } catch (e) {}
 }
 renderVals() {
 const st = this.state || {};

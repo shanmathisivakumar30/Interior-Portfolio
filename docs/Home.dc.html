@@ -96,7 +96,7 @@ text-align:center;color:#241910;text-transform:uppercase}
 .pf-phoneslot > *{width:100%}
 
 /* pf-fit-pass — one fixed layout, scaled to fit any window */
-html,body{overflow-x:hidden}
+html,body{margin:0;overflow-x:hidden}
 .pf-stage{width:100%;overflow:hidden}
 .pf-fit{width:1440px;transform-origin:top left;will-change:transform}
 </style>
@@ -158,10 +158,16 @@ const stage = document.getElementById('pf-stage-Home');
 const fit = document.getElementById('pf-fit-Home');
 if (!stage || !fit) return;
 const w = stage.clientWidth || document.documentElement.clientWidth || 1440;
-const s = Math.min(1, w / 1440);
+// the sheet has to come down to fit the window both ways. Scaling on the
+// width alone is what left the foot of the page below the fold.
+const vh = document.documentElement.clientHeight || window.innerHeight || 900;
+const h = fit.offsetHeight || 900;
+const s = Math.min(1, w / 1440, vh / h);
 fit.style.transform = 'scale(' + s + ')';
+// whichever axis had room to spare, the sheet sits in the middle of it
 fit.style.marginLeft = Math.max(0, (w - 1440 * s) / 2) + 'px';
-stage.style.height = Math.ceil(fit.offsetHeight * s) + 'px';
+fit.style.marginTop = Math.max(0, (vh - h * s) / 2) + 'px';
+stage.style.height = Math.max(Math.ceil(h * s), vh) + 'px';
 } catch (e) {}
 }
 pfFitBind() {

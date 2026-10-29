@@ -19,7 +19,8 @@ img{max-width:100%}
 @font-face{font-family:'Bebas Neue';src:url('./assets/52846e07bbe4848363c5a3aad3642df9.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 
 /* --- navigation, identical to the studio homepage --- */
-.pf-nav{position:relative;display:inline-flex;align-items:center;padding:15px 24px}
+.pf-navbar{pointer-events:none}
+.pf-nav{position:relative;display:inline-flex;align-items:center;padding:15px 24px;pointer-events:auto}
 .pf-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .pf-ring path{fill:none;stroke:#C8432B;stroke-linecap:round;stroke-linejoin:round;
 stroke-dasharray:1200;stroke-dashoffset:1200;vector-effect:non-scaling-stroke}
@@ -43,7 +44,7 @@ stroke-dasharray:1200;stroke-dashoffset:1200;vector-effect:non-scaling-stroke}
    keeping them apart means neither animation can overwrite a saved angle. */
 .pf-note{position:absolute}
 .pf-rock{transition:transform 240ms ease}
-.pf-note:hover .pf-rock,.pf-note:focus-within .pf-rock{animation:pf-rock 1150ms ease-in-out infinite}
+.pf-note:hover .pf-rock,.pf-note:focus-within .pf-rock{animation:pf-rock 950ms ease-in-out infinite}
 @keyframes pf-rock{0%,100%{transform:rotate(0deg)}
 25%{transform:rotate(-1.15deg)}
 75%{transform:rotate(1.15deg)}}
@@ -63,7 +64,7 @@ border-left:1px solid rgba(36,25,16,.12);border-right:1px solid rgba(36,25,16,.1
 .pf-ul path{fill:none;stroke:#C62B23;stroke-width:3;stroke-linecap:round}
 
 /* --- the string that ties the notes together ----------------------- */
-.pf-strings{position:absolute;left:0;top:0;width:1440px;height:100%;pointer-events:none;z-index:2}
+.pf-strings{position:absolute;left:0;top:0;width:1760px;height:100%;pointer-events:none;z-index:2}
 .pf-strings path{fill:none;stroke:#CBA27C;stroke-width:2.4;stroke-linecap:round}
 
 /* --- software chips ------------------------------------------------ */
@@ -87,10 +88,15 @@ background-color:#FFFBF2;white-space:nowrap}
 .pf-phoneslot{width:100%}
 .pf-phoneslot > *{width:100%}
 
-/* pf-fit-pass — one fixed layout, scaled to fit any window */
-html,body{overflow-x:hidden}
-.pf-stage{width:100%;overflow:hidden}
-.pf-fit{width:1440px;transform-origin:top left;will-change:transform}
+/* pf-fit-pass — one fixed layout, scaled to fit any window.
+   1760 x 990 is 16:9, the shape of nearly every desktop screen, so the sheet
+   meets all four edges instead of leaving ground down both sides. */
+html,body{margin:0;overflow-x:hidden;background-color:#FBEDE9}
+.pf-stage{position:relative;width:100%;overflow:hidden}
+.pf-fit{position:relative;z-index:1;width:1760px;transform-origin:top left;will-change:transform}
+/* the ground, the grid and the tint belong to the window, not to the sheet:
+   painted here they run edge to edge whatever shape the window is */
+.pf-ground{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;pointer-events:none}
 
 /* --- below 760px the scrapbook stacks instead of shrinking --------- */
 .pf-fit.pf-mob{width:100% !important;transform:none !important;margin-left:0 !important}
@@ -107,14 +113,15 @@ html,body{overflow-x:hidden}
 <div class="pf-phoneslot"><dc-import name="About-Phone" embedded="yes" hint-size="100%,844px"></dc-import></div>
 </sc-if>
 <sc-if value="{{desk}}" hint-placeholder-val="{{ true }}">
-<div class="pf-stage" id="pf-stage-About" style="height: 1137px">
-<div class="pf-fit" id="pf-fit-About" style="height: 1172px">
-<div class="pf-page" style="position: relative; width: 100%; min-height: 1180px; box-sizing: border-box; overflow: hidden; background-color: #FBEDE9; background-image: linear-gradient(to right, rgba(198, 43, 35, 0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(198, 43, 35, 0.10) 1px, transparent 1px); background-size: 26px 26px; color: #241910; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300; opacity: 1; height: 1145px">
-<div class="pf-bg" aria-hidden="true" style="position: absolute; left: 130px; top: 268px; width: 1180px; z-index: 0; opacity: {{sketch}}; pointer-events: none;">
+<div class="pf-stage" id="pf-stage-About">
+<div class="pf-ground" aria-hidden="true" style="background-color: #FBEDE9; background-image: linear-gradient(to right, rgba(198, 43, 35, 0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(198, 43, 35, 0.10) 1px, transparent 1px); background-size: 40px 40px;"></div>
+<div class="pf-tint" aria-hidden="true" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; z-index: 0; background-color: {{tintColor}}; opacity: {{tint}}; pointer-events: none;"></div>
+<div class="pf-fit" id="pf-fit-About">
+<div class="pf-page" style="position: relative; width: 100%; min-height: 990px; box-sizing: border-box; overflow: hidden; background-color: transparent; color: #241910; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 300; opacity: 1; height: 990px">
+<div class="pf-bg" aria-hidden="true" style="position: absolute; left: -74px; top: -14px; width: 1908px; z-index: 0; opacity: {{sketch}}; pointer-events: none;">
 <img src="./assets/415248465336bcb713bb791855b91c49.svg" alt="" style="display: block; width: 100%; height: auto;">
 <img src="./assets/5a8f36b20e80b66ab4cf69a9a253e484.svg" alt="" style="position: absolute; left: 0px; top: 0px; display: block; width: 100%; height: auto;">
 </div>
-<div class="pf-tint" aria-hidden="true" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; z-index: 1; background-color: {{tintColor}}; opacity: {{tint}}; pointer-events: none;"></div>
 
 
 <header class="pf-navbar" aria-label="Main navigation" style="position: relative; z-index: 20; display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 26px 44px 0;">
@@ -134,7 +141,7 @@ html,body{overflow-x:hidden}
 </a>
 </header><div class="pf-notes">
 
-<div class="pf-note" style="left: 72px; top: 104px; width: 400px; z-index: 12;">
+<div class="pf-note" style="left: 56px; top: 56px; width: 400px; z-index: 12;">
 <div class="pf-rock">
 <div class="pf-in" style="animation-delay: 60ms;">
 <h1 class="pf-hand" style="margin: 0; color: {{ink}}; font-size: 54px; line-height: 1.02; letter-spacing: 0.01em;">Shanmathi Sivakumar</h1>
@@ -143,15 +150,15 @@ html,body{overflow-x:hidden}
 </div>
 </div>
 
-<div class="pf-note" style="left: 72px; top: 246px; width: 300px; z-index: 12;">
+<div class="pf-note" style="left: 58px; top: 238px; width: 300px; z-index: 12;">
 <div class="pf-rock">
 <div class="pf-in" style="animation-delay: 180ms; width: 284px; height: 35px; padding-top: 7px">
-<a href="./assets/c5290c6de29203925fb86e1ad32ef519.pdf" download="Shanmathi-Sivakumar-CV.pdf" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; box-sizing: border-box; padding: 15px 26px; border: 1px solid {{accent}}; border-radius: 999px; background-color: {{accent}}; color: #FFF8F2; font-size: 10px; letter-spacing: 0.17em; text-transform: uppercase; font-weight: 500;">Download detailed CV (PDF) ↓</a>
+<a href="{{cvFile}}" download="{{cvName}}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; box-sizing: border-box; padding: 15px 26px; border: 1px solid {{accent}}; border-radius: 999px; background-color: {{accent}}; color: #FFF8F2; font-size: 10px; letter-spacing: 0.17em; text-transform: uppercase; font-weight: 500;">Download detailed CV (PDF) ↓</a>
 </div>
 </div>
 </div>
 
-<div class="pf-note" style="left: 470px; top: 118px; width: 462px; transform: rotate(1.4deg); z-index: 7;">
+<div class="pf-note" style="left: 540px; top: 44px; width: 462px; transform: rotate(1.4deg); z-index: 7;">
 <div class="pf-rock">
 <div class="pf-in pf-paper" style="animation-delay: 300ms; padding: 0 0 22px;">
 <div class="pf-punch" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -175,23 +182,23 @@ html,body{overflow-x:hidden}
 
 
 
-<div class="pf-note" style="left: 85px; top: 595px; width: 356px; transform: rotate(2.2deg); z-index: 6; position: absolute">
-<div class="pf-rock">
-<div class="pf-in pf-paper" style="animation-delay: 540ms; padding: 0 0 26px; transform: rotate(11deg)">
+<div class="pf-note" style="left: 40px; top: 360px; width: 356px; transform: rotate(-12deg); z-index: 6; position: absolute; height: 193px">
+<div class="pf-rock" style="height: 346px; width: 396px">
+<div class="pf-in pf-paper" style="animation-delay: 540ms; padding: 0 0 26px; transform: rotate(11deg); height: 351px">
 <div class="pf-punch" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-<div style="padding: 14px 28px 0;">
-<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">The human bit</h2>
+<div style="padding: 14px 28px 0; height: 290px; width: 365px">
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1; width: 382px">The Human bit</h2>
 <svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.0 C 48 2.4 94 7.2 138 3.2 C 168 1.0 196 5.6 217 3.0"></path></svg>
-<div style="margin: 18px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="color: #241910; font-family: Helvetica, sans-serif">1. I speak design, detail, and site.</p></div>
-<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif">2. I turn concepts into visual stories that help clients understand the design and make informed decisions.</p></div>
-<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif">3. I connect the dots between drawings, disciplines, and site conditions, spotting gaps and resolving conflicting requirements.</p></div>
-<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif">I keep teams, material decisions, and documentation moving together, even when coordinating projects remotely.</p></div>
+<div style="margin: 18px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"></div>
+<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"><p data-pm-slice="1 1 []" style="font-family: Helvetica, sans-serif; height: 282px; font-size: 13px">I’m Shanmathi, an interior designer and architect, and a constellation of places, projects, people, and things I’ve paused to notice.<br><br>I like spaces that take a deep breath. A little less clutter, a little more intention, and a bright pop of colour.<br><br>Away from drawings, I’m usually collecting words, adjusting a recipe, or turning a passing curiosity into a small research project. Apparently, making things feel right follows me home.<br><br><br></p></div>
+<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"></div>
+<div style="margin: 14px 0 0; color: {{ink}}; font-size: {{bodySize}}; line-height: {{lead}}; letter-spacing: {{track}}; text-align: {{align}};"></div>
 </div>
 </div>
 </div>
 </div>
 
-<div class="pf-note" style="left: 983px; top: 190px; width: 404px; transform: rotate(-12deg); z-index: 5; position: absolute">
+<div class="pf-note" style="left: 1252px; top: 134px; width: 404px; transform: rotate(-12deg); z-index: 5; position: absolute">
 <div class="pf-rock">
 <div class="pf-in pf-paper" style="animation-delay: 660ms; padding: 26px 30px 28px;">
 <span class="pf-tape" aria-hidden="true" style="left: -22px; top: 18px; transform: rotate(-38deg);"></span>
@@ -208,49 +215,27 @@ html,body{overflow-x:hidden}
 </div>
 </div>
 
-<div class="pf-note" style="left: 551px; top: 735px; width: 356px; transform: rotate(2.6deg); z-index: 9; position: absolute">
-<div class="pf-rock">
-<div class="pf-in pf-paper" style="animation-delay: 780ms; padding: 26px 30px 30px;">
-<span class="pf-tape" aria-hidden="true" style="right: -20px; top: 22px; transform: rotate(36deg);"></span>
-<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">education</h2>
-<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.2 C 45 2.8 90 7.0 134 3.4 C 165 1.4 193 5.8 217 3.2"></path></svg>
-<p style="margin: 18px 0 0; color: {{ink}}; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">Bachelor of Architecture, Anna University</p>
-<p style="margin: 7px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2014 – 2019 · Chennai, India</p>
-</div>
-</div>
-</div>
 
-<div class="pf-note" style="left: 107px; top: 320px; width: 318px; transform: rotate(-2.8deg); z-index: 10; position: absolute">
-<div class="pf-rock">
-<div class="pf-in pf-paper" style="animation-delay: 900ms; padding: 24px 28px 26px;">
-<span class="pf-tape" aria-hidden="true" style="left: 118px; top: -10px; transform: rotate(4deg);"></span>
-<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">contact me!!</h2>
-<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 5.8 C 47 2.2 92 7.0 137 3.6 C 167 1.6 195 6.0 217 3.0"></path></svg>
-<p style="margin: 16px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">Dallas, Texas</p>
-<p style="margin: 6px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">shanmathisivakumar30@gmail.com</p>
-<p style="margin: 6px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">LinkedIn · shanmathisivakumar30</p>
-<p style="margin: 10px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500;">Authorised to work in the United States</p>
-</div>
-</div>
-</div>
+
+
 
 </div>
 
-<svg class="pf-strings" viewBox="0 0 1440 1180" preserveAspectRatio="none" aria-hidden="true" focusable="false" style="opacity: 1">
-<path d="M744 452 C 741 437 733 428 710 418"></path>
-<path d="M928 505 C 953 492 960 470 976 440"></path>
-<path d="M560 548 C 519 542 479 534 430 526"></path>
-<path d="M648 648 C 651 692 656 722 663 760"></path>
-<path d="M906 640 C 936 650 956 654 972 664"></path>
-<path d="M198 628 C 196 692 200 742 208 790"></path>
+<svg class="pf-strings" viewBox="0 0 1760 990" preserveAspectRatio="none" aria-hidden="true" focusable="false" style="opacity: 1">
+<path d="M460 160 C 490 140 514 124 540 112"></path>
+<path d="M1004 190 C 1062 176 1132 162 1200 152"></path>
+<path d="M430 540 C 500 522 580 512 640 506"></path>
+<path d="M788 600 C 780 618 760 634 724 650"></path>
+<path d="M940 500 C 1052 500 1184 496 1304 502"></path>
+<path d="M110 276 C 112 300 118 326 130 356"></path>
 </svg>
 
 
 
-<a href="Home.dc.html" style="position: absolute; left: 44px; bottom: 30px; z-index: 20; color: #8E6A62; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">← Back to the studio</a>
-<a href="Main.dc.html" style="position: absolute; right: 44px; bottom: 30px; z-index: 20; color: #8E6A62; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;">Project index →</a>
+<a href="Home.dc.html" style="position: absolute; left: 44px; bottom: 16px; z-index: 20; color: #241910; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; font-family: &quot;Penpoint&quot;">← Back to the studio</a>
+<a href="Main.dc.html" style="position: absolute; right: 44px; bottom: 16px; z-index: 20; color: #241910; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; font-family: &quot;Penpoint&quot;">Project index →</a>
 
-<div class="pf-note" style="left: 557px; top: 490px; width: 298px; transform: rotate(-1.2deg); z-index: 11; height: 185px; position: absolute">
+<div class="pf-note" style="left: 731px; top: 402px; width: 298px; transform: rotate(-1.2deg); z-index: 11; height: 185px; position: absolute">
 <div class="pf-rock">
 <div class="pf-in pf-paper" style="animation-delay: 0ms; padding: 46px 34px 50px; text-align: center;">
 <span class="pf-tape" aria-hidden="true" style="left: 149px; top: -11px; transform: rotate(-3deg);"></span>
@@ -258,7 +243,7 @@ html,body{overflow-x:hidden}
 
 </div>
 </div>
-</div><div class="pf-note" style="left: 1057px; top: 532px; width: 310px; z-index: 8; position: absolute; font-weight: 300; height: 356px; transform: rotate(8deg)">
+</div><div class="pf-note" style="left: 1362px; top: 480px; width: 310px; z-index: 8; position: absolute; font-weight: 300; height: 356px; transform: rotate(8deg)">
 <div class="pf-rock">
 <div class="pf-in pf-paper" style="animation-delay: 420ms; padding: 0 0 26px; transform: rotate(-7deg)">
 <div class="pf-punch" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -276,13 +261,35 @@ html,body{overflow-x:hidden}
 </div>
 </div>
 </div>
+</div><div class="pf-note" style="left: 727px; top: 651px; width: 324px; transform: rotate(10deg); z-index: 10; position: absolute; height: 265px">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 900ms; padding: 24px 28px 26px; height: 232px">
+<span class="pf-tape" aria-hidden="true" style="left: 118px; top: -10px; transform: rotate(4deg);"></span>
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">contact me!!</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 5.8 C 47 2.2 92 7.0 137 3.6 C 167 1.6 195 6.0 217 3.0"></path></svg>
+<p style="margin: 16px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">Dallas, Texas</p>
+<p style="margin: 6px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">shanmathisivakumar30@gmail.com</p>
+<p style="margin: 6px 0 0; color: #241910; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">LinkedIn · shanmathisivakumar30</p>
+
+</div>
+</div>
+</div><div class="pf-note" style="left: 219px; top: 752px; width: 356px; transform: rotate(-11deg); z-index: 9; position: absolute">
+<div class="pf-rock">
+<div class="pf-in pf-paper" style="animation-delay: 780ms; padding: 26px 30px 30px;">
+<span class="pf-tape" aria-hidden="true" style="right: -20px; top: 22px; transform: rotate(36deg);"></span>
+<h2 class="pf-hand" style="margin: 0; color: {{accent}}; font-size: {{headSize}}; line-height: 1;">education</h2>
+<svg class="pf-ul" viewBox="0 0 220 9" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.2 C 45 2.8 90 7.0 134 3.4 C 165 1.4 193 5.8 217 3.2"></path></svg>
+<p style="margin: 18px 0 0; color: {{ink}}; font-size: 15px; line-height: {{lead}}; letter-spacing: {{track}}; font-family: Helvetica, sans-serif">Bachelor of Architecture, Anna University</p>
+<p style="margin: 7px 0 0; color: {{accent}}; font-size: {{dateSize}}; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;">2014 – 2019 · Chennai, India</p>
+</div>
+</div>
 </div></div>
 </div>
 </div>
 </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"sketch": {"editor": "text", "default": "0.3"}, "tint": {"editor": "text", "default": "0.12"}, "tintColor": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#F01D1D", "#786653"]}, "skillsSize": {"editor": "text", "default": "104px"}, "headSize": {"editor": "text", "default": "40px"}, "bodySize": {"editor": "text", "default": "13px"}, "dateSize": {"editor": "text", "default": "10px"}, "lead": {"editor": "text", "default": "1.55"}, "track": {"editor": "text", "default": "0.01em"}, "align": {"editor": "enum", "options": ["left", "center", "right", "justify"], "default": "left"}, "ink": {"editor": "color", "default": "#241910"}, "accent": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#241910", "#786653"]}, "$preview": {"width": 1440, "height": 1180}}'>
+<script type="text/x-dc" data-dc-script data-props='{"cvFile": {"editor": "text", "default": "./assets/e0ca70f8b8cadb60d5131c329b277eae.pdf", "section": "CV"}, "cvName": {"editor": "text", "default": "Shanmathi-Sivakumar-CV.pdf", "section": "CV"}, "sketch": {"editor": "text", "default": "0.3"}, "tint": {"editor": "text", "default": "0.12"}, "tintColor": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#F01D1D", "#786653"]}, "skillsSize": {"editor": "text", "default": "104px"}, "headSize": {"editor": "text", "default": "40px"}, "bodySize": {"editor": "text", "default": "13px"}, "dateSize": {"editor": "text", "default": "10px"}, "lead": {"editor": "text", "default": "1.55"}, "track": {"editor": "text", "default": "0.01em"}, "align": {"editor": "enum", "options": ["left", "center", "right", "justify"], "default": "left"}, "ink": {"editor": "color", "default": "#241910"}, "accent": {"editor": "color", "default": "#C62B23", "options": ["#C62B23", "#C8432B", "#241910", "#786653"]}, "$preview": {"width": 1760, "height": 990}}'>
 class Component extends DCLogic {
 pfFit() {
 try {
@@ -299,10 +306,18 @@ fit.style.marginLeft = '';
 stage.style.height = '';
 return;
 }
-const s = Math.min(1, w / 1440);
+// the sheet has to come down to fit the window both ways. Scaling on the
+// width alone is what left the foot of the page below the fold.
+const vh = document.documentElement.clientHeight || window.innerHeight || 900;
+const h = fit.offsetHeight || 990;
+// no ceiling of 1 here: on a screen bigger than the sheet it grows to fill,
+// instead of sitting at its drawn size with bare ground all round it
+const s = Math.max(0.2, Math.min(w / 1760, vh / h));
 fit.style.transform = 'scale(' + s + ')';
-fit.style.marginLeft = Math.max(0, (w - 1440 * s) / 2) + 'px';
-stage.style.height = Math.ceil(fit.offsetHeight * s) + 'px';
+// whichever axis had room to spare, the sheet sits in the middle of it
+fit.style.marginLeft = Math.max(0, (w - 1760 * s) / 2) + 'px';
+fit.style.marginTop = Math.max(0, (vh - h * s) / 2) + 'px';
+stage.style.height = Math.max(Math.ceil(h * s), vh) + 'px';
 } catch (e) {}
 }
 pfFitBind() {
@@ -363,6 +378,9 @@ try { if (this._rtRO) { this._rtRO.disconnect(); this._rtRO = null; } } catch (e
 renderVals() {
 const p = this.props;
 const v = {
+// where the CV lives, and the name it is saved under
+cvFile: p.cvFile ?? './assets/e0ca70f8b8cadb60d5131c329b277eae.pdf',
+cvName: p.cvName ?? 'Shanmathi-Sivakumar-CV.pdf',
 sketch: p.sketch ?? '0.3',
 tint: p.tint ?? '0.12',
 tintColor: p.tintColor ?? '#C62B23',

@@ -29,7 +29,7 @@ opacity:0.5;pointer-events:none}
 
 .mp-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
 padding:16px 16px 14px;border-bottom:1px solid rgba(156,151,149,0.45)}
-.mp-top a{color:#262525;text-decoration:none;font-size:9px;letter-spacing:0.18em;
+.mp-top a{color:#262525;text-decoration:none;font-size:10px;letter-spacing:0.18em;
 text-transform:uppercase;font-weight:500;-webkit-tap-highlight-color:transparent}
 .mp-top nav{display:flex;gap:14px}
 .mp-top a:active{color:#C62B23}
@@ -64,6 +64,17 @@ cursor:pointer;-webkit-tap-highlight-color:transparent}
 .mp-lay{position:absolute;left:5px;top:5px;right:5px;bottom:5px;overflow:hidden;
 background-color:#FFFFFF;transition:opacity 260ms ease}
 .mp-lay img{width:100%!important;height:100%!important;object-fit:cover!important}
+/* the night view blinks a few times on arrival, then rests on day */
+.mp-hero.mp-ndemo .mp-lay:nth-child(1){animation:mp-flick-day 2800ms linear 1 both}
+.mp-hero.mp-ndemo .mp-lay:nth-child(2){animation:mp-flick-night 2800ms linear 1 both}
+@keyframes mp-flick-day{
+0%,9%{opacity:1}11%,20%{opacity:0}22%,31%{opacity:1}
+33%,45%{opacity:0}47%,56%{opacity:1}58%,80%{opacity:0}
+82%,100%{opacity:1}}
+@keyframes mp-flick-night{
+0%,9%{opacity:0}11%,20%{opacity:1}22%,31%{opacity:0}
+33%,45%{opacity:1}47%,56%{opacity:0}58%,80%{opacity:1}
+82%,100%{opacity:0}}
 .mp-cap{margin:8px 0 0;text-align:right;color:#9C9795;font-size:9px;letter-spacing:0.14em;
 text-transform:uppercase;font-weight:500}
 .mp-q{margin:16px 0 0;font-size:13px;line-height:1.4;text-align:center;
@@ -213,13 +224,17 @@ text-transform:none;font-weight:400}
 
 /* the full-size drawing viewer */
 .mp-lb{position:fixed;left:0;top:0;right:0;bottom:0;z-index:95;display:flex;align-items:center;
-justify-content:center;padding:14px;background:rgba(11,11,11,0.86);
+justify-content:center;padding:58px 14px 64px;background:rgba(11,11,11,0.86);
 -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .mp-lbveil{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;border:0;padding:0;
 background:transparent}
-.mp-lbframe{position:relative;z-index:2;box-sizing:border-box;width:100%;height:72vh;padding:8px;
-background:#FEF9ED}
-.mp-lbslide{position:absolute;left:8px;top:8px;right:8px;bottom:8px;overflow:hidden}
+/* No paper behind the picture. The frame is only the box the picture
+   is fitted into, and the slot board's own white ground is cleared with
+   it - that ground is what showed above and below a wide picture. */
+.mp-lbframe{position:relative;z-index:2;box-sizing:border-box;width:100%;height:100%;padding:0;background:transparent}
+.mp-lbslide{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden}
+.mp-lbslide,.mp-lbslide *{background-color:transparent!important}
+.mp-lbslide > *{display:block;width:100%!important;height:100%!important}
 .mp-lbslide img{width:100%!important;height:100%!important;object-fit:contain!important}
 .mp-lbbtn{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;
 width:40px;height:40px;padding:0 0 2px;border:1px solid rgba(36,25,16,0.5);border-radius:50%;
@@ -233,7 +248,8 @@ font-weight:500}
 
 @media (prefers-reduced-motion:reduce){
 .mp-track{animation:none}
-.mp-lay,.mp-dl{transition:none}}
+.mp-lay,.mp-dl{transition:none}
+.mp-hero.mp-ndemo .mp-lay{animation:none}}
 
 /* --- a red crayon ring, drawn on hover, as on the studio page --- */
 .xk-ring{position:absolute;left:-11px;top:-9px;width:calc(100% + 22px);
@@ -246,11 +262,14 @@ a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a{
 animation:xk-draw 420ms cubic-bezier(.35,.75,.4,1) forwards}
 a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b{
 animation:xk-draw 300ms cubic-bezier(.35,.75,.4,1) 170ms forwards}
+/* a tap is not a hover: the ring is put on by hand when a finger lands */
+a.xk.xk-on .xk-a{animation:xk-draw 420ms cubic-bezier(.35,.75,.4,1) forwards}
+a.xk.xk-on .xk-b{animation:xk-draw 300ms cubic-bezier(.35,.75,.4,1) 170ms forwards}
 @keyframes xk-draw{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
 a.xk:focus{outline:none}
 @media (prefers-reduced-motion:reduce){
-a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a,
-a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b{
+a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a,a.xk.xk-on .xk-a,
+a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b,a.xk.xk-on .xk-b{
 animation:none;stroke-dashoffset:0}}
 </style>
 </helmet>
@@ -272,14 +291,14 @@ animation:none;stroke-dashoffset:0}}
 <span class="mp-lbn">{{lbLabel}}</span>
 </div></sc-if>
 <div class="mp-pg" id="mp-pg-Chapter1">
-<header class="mp-top"><a class="xk" href="Home.dc.html" style="position:relative;font-size: 9px">Shanmathi Sivakumar<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M6.7 47.2 Q9.2 39.2 12.0 35.4 Q14.8 31.5 20.1 28.2 Q25.5 24.8 33.1 22.5 Q40.7 20.2 48.7 18.6 Q56.7 16.9 64.4 15.2 Q72.1 13.5 80.4 12.1 Q88.7 10.7 97.7 10.3 Q106.7 9.9 115.7 10.5 Q124.7 11.1 133.5 12.3 Q142.2 13.6 150.1 15.7 Q158.0 17.7 164.1 20.7 Q170.3 23.7 175.2 27.0 Q180.1 30.3 184.2 33.9 Q188.4 37.4 190.4 41.3 Q192.4 45.1 191.2 49.1 Q190.1 53.0 187.4 56.6 Q184.7 60.3 182.0 63.9 Q179.3 67.5 175.7 71.1 Q172.1 74.6 166.4 77.7 Q160.7 80.9 153.5 83.3 Q146.2 85.8 137.9 87.7 Q129.5 89.5 120.3 90.2 Q111.1 90.9 101.9 90.3 Q92.8 89.6 84.2 88.5 Q75.7 87.3 67.3 86.2 Q58.9 85.0 50.9 83.1 Q43.0 81.3 36.8 78.5 Q30.6 75.6 26.0 72.3 Q21.3 69.0 17.3 65.6 Q13.2 62.1 10.5 58.4 Q7.7 54.6 7.2 50.6 Q6.8 46.6 8.1 42.7 L9.5 38.7"></path><path class="xk-b" d="M56.7 19.2 Q76.9 16.0 87.5 14.9 Q98.2 13.8 109.1 14.4 Q120.0 15.0 129.8 16.9 Q139.7 18.8 148.1 21.5 Q156.5 24.2 162.1 27.8 Q167.7 31.5 172.3 35.2 Q176.9 39.0 182.1 43.0 Q187.3 47.0 188.0 51.6 Q188.8 56.2 184.4 60.4 Q180.1 64.7 174.0 68.4 Q167.8 72.1 159.6 75.0 Q151.3 77.8 141.7 79.6 Q132.2 81.5 122.3 83.0 Q112.4 84.5 101.8 84.6 L91.2 84.6"></path></svg></a><nav><a style="position:relative" class="xk" href="About.dc.html">About<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M65.6 13.0 Q82.5 9.8 91.6 9.4 Q100.8 8.9 109.9 9.7 Q118.9 10.5 127.6 11.6 Q136.3 12.8 145.0 14.3 Q153.6 15.7 160.7 18.4 Q167.8 21.0 171.7 24.7 Q175.6 28.5 177.8 32.2 Q180.1 35.9 182.8 39.4 Q185.5 42.9 187.6 46.6 Q189.7 50.3 189.7 54.2 Q189.8 58.1 188.4 62.1 Q186.9 66.0 183.7 69.9 Q180.5 73.8 174.2 76.9 Q167.8 80.0 159.2 81.8 Q150.6 83.6 142.1 84.8 Q133.6 86.1 125.3 87.5 Q117.0 88.9 108.1 89.5 Q99.2 90.1 90.4 89.2 Q81.6 88.4 73.6 86.9 Q65.5 85.4 57.5 83.8 Q49.5 82.2 42.1 80.1 Q34.7 77.9 28.6 75.0 Q22.5 72.1 17.3 68.8 Q12.0 65.5 7.9 61.7 Q3.8 57.9 3.4 53.8 Q3.0 49.6 6.8 45.8 Q10.7 41.9 15.3 38.6 L20.0 35.2"></path></svg></a><a style="position:relative" class="xk" href="Main.dc.html">Projects<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M12.8 38.4 Q16.9 30.7 22.6 27.7 Q28.2 24.6 34.8 22.0 Q41.3 19.4 48.0 16.8 Q54.7 14.1 62.7 12.1 Q70.7 10.2 79.9 9.5 Q89.0 8.9 98.1 9.2 Q107.2 9.5 115.9 10.3 Q124.7 11.2 132.4 13.1 Q140.1 15.1 145.9 17.9 Q151.8 20.7 157.6 23.2 Q163.4 25.7 170.7 27.9 Q178.1 30.2 184.6 33.2 Q191.1 36.2 193.7 40.1 Q196.2 44.0 195.7 48.0 Q195.2 52.1 193.6 56.0 Q191.9 59.9 188.4 63.5 Q184.9 67.2 179.1 70.2 Q173.3 73.2 167.0 75.8 Q160.6 78.4 154.3 80.9 Q147.9 83.5 140.2 85.4 Q132.5 87.2 123.7 87.6 Q115.0 88.0 106.5 87.8 Q98.0 87.7 89.3 88.1 Q80.6 88.5 71.1 88.5 Q61.6 88.5 53.0 86.9 Q44.3 85.3 37.6 82.4 Q31.0 79.4 25.9 76.1 Q20.8 72.7 17.8 69.0 Q14.8 65.2 14.5 61.3 Q14.3 57.4 14.7 53.8 Q15.2 50.1 14.3 46.5 Q13.5 42.8 13.5 38.9 Q13.6 34.9 17.4 31.4 Q21.3 27.8 27.7 25.1 L34.0 22.3"></path><path class="xk-b" d="M167.2 26.8 Q178.6 34.7 181.1 39.1 Q183.6 43.5 184.8 47.9 Q185.9 52.4 183.4 56.7 Q180.9 61.1 174.8 64.7 Q168.6 68.4 162.2 71.8 Q155.9 75.2 148.1 78.4 Q140.3 81.6 130.1 83.5 Q119.9 85.3 108.8 85.9 Q97.6 86.5 86.7 85.5 Q75.8 84.4 66.7 81.9 Q57.6 79.3 49.2 76.7 Q40.8 74.0 33.4 70.8 L25.9 67.6"></path></svg></a></nav></header>
+<header class="mp-top"><a class="xk" href="Home.dc.html" style="position:relative;font-size: 10px">Shanmathi Sivakumar<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M6.7 47.2 Q9.2 39.2 12.0 35.4 Q14.8 31.5 20.1 28.2 Q25.5 24.8 33.1 22.5 Q40.7 20.2 48.7 18.6 Q56.7 16.9 64.4 15.2 Q72.1 13.5 80.4 12.1 Q88.7 10.7 97.7 10.3 Q106.7 9.9 115.7 10.5 Q124.7 11.1 133.5 12.3 Q142.2 13.6 150.1 15.7 Q158.0 17.7 164.1 20.7 Q170.3 23.7 175.2 27.0 Q180.1 30.3 184.2 33.9 Q188.4 37.4 190.4 41.3 Q192.4 45.1 191.2 49.1 Q190.1 53.0 187.4 56.6 Q184.7 60.3 182.0 63.9 Q179.3 67.5 175.7 71.1 Q172.1 74.6 166.4 77.7 Q160.7 80.9 153.5 83.3 Q146.2 85.8 137.9 87.7 Q129.5 89.5 120.3 90.2 Q111.1 90.9 101.9 90.3 Q92.8 89.6 84.2 88.5 Q75.7 87.3 67.3 86.2 Q58.9 85.0 50.9 83.1 Q43.0 81.3 36.8 78.5 Q30.6 75.6 26.0 72.3 Q21.3 69.0 17.3 65.6 Q13.2 62.1 10.5 58.4 Q7.7 54.6 7.2 50.6 Q6.8 46.6 8.1 42.7 L9.5 38.7"></path><path class="xk-b" d="M56.7 19.2 Q76.9 16.0 87.5 14.9 Q98.2 13.8 109.1 14.4 Q120.0 15.0 129.8 16.9 Q139.7 18.8 148.1 21.5 Q156.5 24.2 162.1 27.8 Q167.7 31.5 172.3 35.2 Q176.9 39.0 182.1 43.0 Q187.3 47.0 188.0 51.6 Q188.8 56.2 184.4 60.4 Q180.1 64.7 174.0 68.4 Q167.8 72.1 159.6 75.0 Q151.3 77.8 141.7 79.6 Q132.2 81.5 122.3 83.0 Q112.4 84.5 101.8 84.6 L91.2 84.6"></path></svg></a><nav><a style="position:relative" class="xk" href="About.dc.html">About<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M65.6 13.0 Q82.5 9.8 91.6 9.4 Q100.8 8.9 109.9 9.7 Q118.9 10.5 127.6 11.6 Q136.3 12.8 145.0 14.3 Q153.6 15.7 160.7 18.4 Q167.8 21.0 171.7 24.7 Q175.6 28.5 177.8 32.2 Q180.1 35.9 182.8 39.4 Q185.5 42.9 187.6 46.6 Q189.7 50.3 189.7 54.2 Q189.8 58.1 188.4 62.1 Q186.9 66.0 183.7 69.9 Q180.5 73.8 174.2 76.9 Q167.8 80.0 159.2 81.8 Q150.6 83.6 142.1 84.8 Q133.6 86.1 125.3 87.5 Q117.0 88.9 108.1 89.5 Q99.2 90.1 90.4 89.2 Q81.6 88.4 73.6 86.9 Q65.5 85.4 57.5 83.8 Q49.5 82.2 42.1 80.1 Q34.7 77.9 28.6 75.0 Q22.5 72.1 17.3 68.8 Q12.0 65.5 7.9 61.7 Q3.8 57.9 3.4 53.8 Q3.0 49.6 6.8 45.8 Q10.7 41.9 15.3 38.6 L20.0 35.2"></path></svg></a><a style="position:relative" class="xk" href="Main.dc.html">Projects<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M12.8 38.4 Q16.9 30.7 22.6 27.7 Q28.2 24.6 34.8 22.0 Q41.3 19.4 48.0 16.8 Q54.7 14.1 62.7 12.1 Q70.7 10.2 79.9 9.5 Q89.0 8.9 98.1 9.2 Q107.2 9.5 115.9 10.3 Q124.7 11.2 132.4 13.1 Q140.1 15.1 145.9 17.9 Q151.8 20.7 157.6 23.2 Q163.4 25.7 170.7 27.9 Q178.1 30.2 184.6 33.2 Q191.1 36.2 193.7 40.1 Q196.2 44.0 195.7 48.0 Q195.2 52.1 193.6 56.0 Q191.9 59.9 188.4 63.5 Q184.9 67.2 179.1 70.2 Q173.3 73.2 167.0 75.8 Q160.6 78.4 154.3 80.9 Q147.9 83.5 140.2 85.4 Q132.5 87.2 123.7 87.6 Q115.0 88.0 106.5 87.8 Q98.0 87.7 89.3 88.1 Q80.6 88.5 71.1 88.5 Q61.6 88.5 53.0 86.9 Q44.3 85.3 37.6 82.4 Q31.0 79.4 25.9 76.1 Q20.8 72.7 17.8 69.0 Q14.8 65.2 14.5 61.3 Q14.3 57.4 14.7 53.8 Q15.2 50.1 14.3 46.5 Q13.5 42.8 13.5 38.9 Q13.6 34.9 17.4 31.4 Q21.3 27.8 27.7 25.1 L34.0 22.3"></path><path class="xk-b" d="M167.2 26.8 Q178.6 34.7 181.1 39.1 Q183.6 43.5 184.8 47.9 Q185.9 52.4 183.4 56.7 Q180.9 61.1 174.8 64.7 Q168.6 68.4 162.2 71.8 Q155.9 75.2 148.1 78.4 Q140.3 81.6 130.1 83.5 Q119.9 85.3 108.8 85.9 Q97.6 86.5 86.7 85.5 Q75.8 84.4 66.7 81.9 Q57.6 79.3 49.2 76.7 Q40.8 74.0 33.4 70.8 L25.9 67.6"></path></svg></a></nav></header>
 <div class="mp-band">
 <div class="mp-backdrop" aria-hidden="true"><dc-import name="Slot-C1-Backdrop" hint-size="100%,100%"></dc-import></div>
 <div class="mp-marq" aria-label="Light, within!"><div class="mp-track"><span aria-hidden="true">Light, within!</span><span aria-hidden="true">Light, within!</span><span aria-hidden="true">Light, within!</span><span aria-hidden="true">Light, within!</span><span aria-hidden="true">Light, within!</span><span aria-hidden="true">Light, within!</span></div></div>
 <div class="mp-in"><section class="mp-sec">
 <button type="button" class="mp-hero" onClick="{{flip}}" aria-label="Switch between the day and night view"><span class="mp-lay" style="opacity: {{dayO}};"><dc-import name="Slot-C1-HeroDay" hint-size="100%,100%"></dc-import></span><span class="mp-lay" style="opacity: {{nightO}};"><dc-import name="Slot-C1-HeroNight" hint-size="100%,100%"></dc-import></span></button><p class="mp-q" style="margin-top: 14px; font-size: 9px; font-family: &quot;Penpoint&quot;">‘What if a house did not simply open to light, but learned how to hold it?’</p>
 
-<div class="mp-face" style="right: 0px; top: 226px; width: 34px; height: 27px; position: absolute"><dc-import name="AnnotFace" face="neutral" hint-size="150,116"></dc-import></div>
+<div class="mp-face" style="right: 0px; top: 226px; width: 34px; height: 27px; position: absolute"><dc-import name="AnnotFace" face="neutral" hint-size="150,116"></dc-import></div><div class="mp-face" style="right: 0px; top: 226px; width: 34px; height: 27px; position: absolute"><dc-import name="AnnotFace" face="neutral" hint-size="150,116"></dc-import></div>
 
 
 </section></div></div>
@@ -292,7 +311,7 @@ animation:none;stroke-dashoffset:0}}
 <h2 class="mp-lead" style="font-size: 8px">Let the room speak to you</h2>
 <p class="mp-p" style="font-size: 8px">Light, Within is a home shaped around the slow movement of daylight. Rather than placing nature at its edges, the house draws it inward. Courtyards interrupt rooms, trees rise through voids, water slips alongside circulation, and screens turn sunlight into shifting patterns across stone and plaster.</p>
 <p class="mp-p" style="font-size: 8px">The house is not built around a view of nature. It is built around living within it.</p>
-<div class="mp-face" style="right: 6px; bottom: 6px; width: 44px; transform: rotate(-9deg);"><dc-import name="AnnotFace" face="smile" hint-size="150,116"></dc-import></div>
+<div class="mp-face" style="right: 21px; bottom: 30px; width: 44px; transform: rotate(-9deg); position: absolute"><dc-import name="AnnotFace" face="smile" hint-size="150,116"></dc-import></div>
 <p class="mp-end" style="color: #000000; font-size: 8px">Light, within and everywhere!</p>
 </section></div></div>
 <div class="mp-in"><section class="mp-sheet">
@@ -350,9 +369,9 @@ animation:none;stroke-dashoffset:0}}
 <div class="mp-contact"><a class="mp-hand" href="https://www.instagram.com/shansivakumar" target="_blank" rel="noopener"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAMFBMVEUAAAAkGRAjGA8jGA8jGA89AAAjGA8kFxAjGA8kGA4dGw9VAAAlJQAfFw8AAAAAAADc8FODAAAAEHRSTlMA+rvOjgRMFytuDwMGIAAAECzfBgAAAiZJREFUeNp1lD9oE3EUxz/3u7v8MRbuJaF/BvGuiAhmaJbazXYoSKc4BBeHxG52yaQuYiuiLkInRxEEwUW6Cg6Z2i6WOJlBJJugpZ6CJM3JxeEuaX4X8uDH/e77fu+93/u+934GwL1PJx2Goi6uvAQM4MkLdFn+AAZkMyTlUQMD1lqw+GsEyjcwjwFLpHh3/PjbNZFVoC75hu5oxpNZOCeyauuKiiXy2rQs9SXUFe1wobfCG5mfuBQ7Mmc67dJSO4HnPmaU6uDuaejmZfoWoergaHjq/c/twCBUjlqKIbtaBUJwKrZrIAXdf1akBmUxs3Rj6OnNwe0mqWKwD9keko/xOyJS2IVMA/BkpLBEREbseKKGvi8AMDgY1Sv+Wj5X7j9w+DoiNHZVl2ITUhHhY67sFqV17I0KQ3oMMU6ATFb9CcAezGSOA8DzIwv7H2YABCb9YDx4EGIAcOpS0W5lsBBt/NDVFAN+JGoSx1BE5bUdtatZ2Bg2gNkZ5BLBe1sAfay+ZnHqcEC1wnW8QKdkRwrb8FikthdREmeeC3Ko5f5R1LVnmfN3Y5vw8AhK6FxB6moHyHxnZBFxQf+GA/O34vMOlAvN+Cf9/NnQz/lyAU8awxyjBZCWvHLxIz6DeEXUKeXSrCWb3Q5RyqFXSSqCh1wyP1thd2I+fvtbymAwOWodHKhLvqUr0p7MTh/nqQ/A1CdDQXcziV9rgAnsvzqc88/aY3H9HfAfVU2RNlmGjKkAAAAASUVORK5CYII=" alt="" aria-hidden="true" style="width:1em!important;height:1em!important;display:inline-block;vertical-align:-0.14em;margin-right:0.4em;object-fit:contain!important">shansivakumar</a><span class="mp-dot">·</span><a class="mp-hand" href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a></div>
 </div>
 <nav class="mp-fnav" aria-label="Other projects" style="font-size: {{navSize}}; font-family: {{navFam}};">
-<span class="mp-blank">previous</span>
-<a style="position:relative" class="xk mp-idx" href="Main.dc.html">Return to index ↗<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M18.3 29.5 Q28.6 22.7 35.6 20.0 Q42.5 17.3 51.3 15.9 Q60.0 14.5 68.9 14.0 Q77.9 13.5 86.3 12.8 Q94.8 12.2 103.6 11.5 Q112.4 10.9 121.5 11.3 Q130.6 11.8 139.0 13.4 Q147.4 15.0 155.0 17.3 Q162.7 19.5 169.2 22.4 Q175.7 25.3 179.9 28.9 Q184.1 32.5 186.4 36.3 Q188.8 40.2 190.4 44.1 Q192.1 47.9 192.1 51.9 Q192.0 55.9 188.7 59.6 Q185.4 63.3 180.2 66.4 Q175.0 69.6 170.1 72.7 Q165.2 75.8 159.8 78.9 Q154.4 82.1 147.2 84.6 Q140.0 87.1 131.3 88.6 Q122.7 90.2 113.4 90.9 Q104.2 91.6 94.8 91.3 Q85.4 90.9 76.9 89.1 Q68.5 87.4 61.2 85.1 Q53.9 82.8 46.7 80.6 Q39.5 78.5 32.6 75.9 Q25.8 73.4 21.3 70.0 Q16.7 66.6 14.5 62.8 Q12.2 59.0 10.6 55.2 L9.0 51.4"></path><path class="xk-b" d="M180.2 62.0 Q170.4 69.9 162.0 72.5 Q153.5 75.2 145.2 77.7 Q136.8 80.2 127.7 82.7 Q118.5 85.1 107.5 85.9 Q96.5 86.7 85.5 85.9 Q74.4 85.2 64.6 83.0 Q54.7 80.9 47.9 77.3 Q41.1 73.8 35.3 70.3 L29.5 66.7"></path></svg></a>
-<a style="position:relative" class="xk" href="Chapter3.dc.html">next<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M15.2 42.2 Q18.0 34.8 20.5 31.1 Q22.9 27.3 28.4 24.2 Q33.8 21.0 41.3 18.9 Q48.7 16.7 56.5 14.8 Q64.3 13.0 72.6 11.4 Q80.9 9.8 90.0 9.3 Q99.0 8.7 108.0 9.4 Q117.0 10.1 125.4 11.4 Q133.9 12.7 141.5 14.6 Q149.2 16.5 155.2 19.3 Q161.2 22.1 165.8 25.2 Q170.4 28.3 175.4 31.3 Q180.5 34.3 185.8 37.5 Q191.1 40.7 193.8 44.6 Q196.5 48.4 195.4 52.5 Q194.4 56.5 191.3 60.2 Q188.3 64.0 184.1 67.5 Q180.0 70.9 174.1 73.9 Q168.3 76.8 161.1 79.1 Q153.9 81.3 146.5 83.2 Q139.0 85.2 131.1 86.8 Q123.2 88.5 114.5 89.0 Q105.8 89.6 97.2 89.0 Q88.5 88.3 80.1 87.6 Q71.7 86.8 62.9 86.0 Q54.0 85.3 45.5 83.6 Q37.1 81.9 30.7 79.0 Q24.4 76.0 20.3 72.4 Q16.1 68.8 13.5 65.1 Q10.9 61.3 10.5 57.4 Q10.1 53.5 11.7 49.8 Q13.2 46.1 14.9 42.5 Q16.5 38.9 18.1 35.2 L19.6 31.4"></path><path class="xk-b" d="M26.5 32.5 Q37.7 25.1 45.8 22.1 Q53.9 19.1 63.9 17.5 Q73.9 15.8 84.5 15.1 Q95.2 14.3 105.6 15.2 Q116.0 16.1 125.1 18.1 Q134.3 20.0 143.5 21.8 Q152.8 23.6 161.7 26.1 Q170.6 28.6 176.0 32.5 Q181.4 36.3 184.0 40.7 L186.6 45.0"></path></svg></a>
+<a style="position:relative" class="xk" href="Chapter3.dc.html">previous<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M65.6 13.0 Q82.5 9.8 91.6 9.4 Q100.8 8.9 109.9 9.7 Q118.9 10.5 127.6 11.6 Q136.3 12.8 145.0 14.3 Q153.6 15.7 160.7 18.4 Q167.8 21.0 171.7 24.7 Q175.6 28.5 177.8 32.2 Q180.1 35.9 182.8 39.4 Q185.5 42.9 187.6 46.6 Q189.7 50.3 189.7 54.2 Q189.8 58.1 188.4 62.1 Q186.9 66.0 183.7 69.9 Q180.5 73.8 174.2 76.9 Q167.8 80.0 159.2 81.8 Q150.6 83.6 142.1 84.8 Q133.6 86.1 125.3 87.5 Q117.0 88.9 108.1 89.5 Q99.2 90.1 90.4 89.2 Q81.6 88.4 73.6 86.9 Q65.5 85.4 57.5 83.8 Q49.5 82.2 42.1 80.1 Q34.7 77.9 28.6 75.0 Q22.5 72.1 17.3 68.8 Q12.0 65.5 7.9 61.7 Q3.8 57.9 3.4 53.8 Q3.0 49.6 6.8 45.8 Q10.7 41.9 15.3 38.6 L20.0 35.2"></path></svg></a>
+<a style="position:relative" class="xk mp-idx" href="Home.dc.html">Home<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M18.3 29.5 Q28.6 22.7 35.6 20.0 Q42.5 17.3 51.3 15.9 Q60.0 14.5 68.9 14.0 Q77.9 13.5 86.3 12.8 Q94.8 12.2 103.6 11.5 Q112.4 10.9 121.5 11.3 Q130.6 11.8 139.0 13.4 Q147.4 15.0 155.0 17.3 Q162.7 19.5 169.2 22.4 Q175.7 25.3 179.9 28.9 Q184.1 32.5 186.4 36.3 Q188.8 40.2 190.4 44.1 Q192.1 47.9 192.1 51.9 Q192.0 55.9 188.7 59.6 Q185.4 63.3 180.2 66.4 Q175.0 69.6 170.1 72.7 Q165.2 75.8 159.8 78.9 Q154.4 82.1 147.2 84.6 Q140.0 87.1 131.3 88.6 Q122.7 90.2 113.4 90.9 Q104.2 91.6 94.8 91.3 Q85.4 90.9 76.9 89.1 Q68.5 87.4 61.2 85.1 Q53.9 82.8 46.7 80.6 Q39.5 78.5 32.6 75.9 Q25.8 73.4 21.3 70.0 Q16.7 66.6 14.5 62.8 Q12.2 59.0 10.6 55.2 L9.0 51.4"></path><path class="xk-b" d="M180.2 62.0 Q170.4 69.9 162.0 72.5 Q153.5 75.2 145.2 77.7 Q136.8 80.2 127.7 82.7 Q118.5 85.1 107.5 85.9 Q96.5 86.7 85.5 85.9 Q74.4 85.2 64.6 83.0 Q54.7 80.9 47.9 77.3 Q41.1 73.8 35.3 70.3 L29.5 66.7"></path></svg></a>
+<a style="position:relative" class="xk" href="Chapter4.dc.html">next<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M15.2 42.2 Q18.0 34.8 20.5 31.1 Q22.9 27.3 28.4 24.2 Q33.8 21.0 41.3 18.9 Q48.7 16.7 56.5 14.8 Q64.3 13.0 72.6 11.4 Q80.9 9.8 90.0 9.3 Q99.0 8.7 108.0 9.4 Q117.0 10.1 125.4 11.4 Q133.9 12.7 141.5 14.6 Q149.2 16.5 155.2 19.3 Q161.2 22.1 165.8 25.2 Q170.4 28.3 175.4 31.3 Q180.5 34.3 185.8 37.5 Q191.1 40.7 193.8 44.6 Q196.5 48.4 195.4 52.5 Q194.4 56.5 191.3 60.2 Q188.3 64.0 184.1 67.5 Q180.0 70.9 174.1 73.9 Q168.3 76.8 161.1 79.1 Q153.9 81.3 146.5 83.2 Q139.0 85.2 131.1 86.8 Q123.2 88.5 114.5 89.0 Q105.8 89.6 97.2 89.0 Q88.5 88.3 80.1 87.6 Q71.7 86.8 62.9 86.0 Q54.0 85.3 45.5 83.6 Q37.1 81.9 30.7 79.0 Q24.4 76.0 20.3 72.4 Q16.1 68.8 13.5 65.1 Q10.9 61.3 10.5 57.4 Q10.1 53.5 11.7 49.8 Q13.2 46.1 14.9 42.5 Q16.5 38.9 18.1 35.2 L19.6 31.4"></path><path class="xk-b" d="M26.5 32.5 Q37.7 25.1 45.8 22.1 Q53.9 19.1 63.9 17.5 Q73.9 15.8 84.5 15.1 Q95.2 14.3 105.6 15.2 Q116.0 16.1 125.1 18.1 Q134.3 20.0 143.5 21.8 Q152.8 23.6 161.7 26.1 Q170.6 28.6 176.0 32.5 Q181.4 36.3 184.0 40.7 L186.6 45.0"></path></svg></a>
 </nav>
 </div>
 </x-dc>
@@ -388,8 +407,117 @@ cpFree() {
 try { const el = this.cpEl(); if (el && this._cpOn) el.removeEventListener('scroll', this._cpOn); }
 catch (e) {}
 }
-componentDidMount() { this.cpBind(); }
-componentWillUnmount() { this.cpFree(); }
+// A tap is not a hover. The ring goes on when the finger lands, and the
+// link is held for as long as the ring takes to draw, so it is seen
+// instead of guessed at. Held back only on a touch screen and only on the
+// page itself - inside the editor the runtime moves between artboards.
+xkBind(sel) {
+let touch = false, own = false, red = false;
+try { touch = window.matchMedia('(hover: none)').matches; } catch (e) {}
+try { own = window.top === window.self; } catch (e) { own = false; }
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+let links = [];
+try { links = document.querySelectorAll(sel || 'a.xk'); } catch (e) { return; }
+for (let i = 0; i < links.length; i++) {
+const a = links[i];
+if (a._xkOn) continue;
+a._xkOn = 1;
+const draw = () => {
+// remove, reflow, add: that is what restarts the stroke
+try { a.classList.remove('xk-on'); void a.offsetWidth; a.classList.add('xk-on'); } catch (e) {}
+};
+try { a.addEventListener('touchstart', draw, { passive: true }); } catch (e) {}
+if (!touch || !own || red) continue;
+a.addEventListener('click', (ev) => {
+if (a._xkGo) { a._xkGo = false; return; }
+const href = a.getAttribute('href') || '';
+if (!href || href.charAt(0) === '#' || a.getAttribute('target')) return;
+ev.preventDefault();
+ev.stopPropagation();
+draw();
+a._xkGo = true;
+setTimeout(() => {
+try { a.click(); } catch (e) { try { window.location.href = href; } catch (x) {} }
+}, 400);
+});
+}
+}
+xkWatch(sel) {
+this.xkBind(sel);
+try { [0, 400, 1400].forEach((t) => setTimeout(() => this.xkBind(sel), t)); } catch (e) {}
+}
+
+ndHero() { try { return document.querySelector('.mp-hero'); } catch (e) { return null; } }
+// the day/night blink that greets you on the desktop page, here too: on
+// arrival, on coming back to the page, and whenever the hero returns to
+// the screen - a sliver of it showing is enough
+ndPlay(force) {
+const hero = this.ndHero();
+if (!hero) return;
+let red = false;
+try { red = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+if (red) return;
+const now = Date.now();
+if (!force && this._ndAt && now - this._ndAt < 4000) return;
+this._ndAt = now;
+try { clearTimeout(this._nd1); clearTimeout(this._nd2); } catch (e) {}
+this._nd1 = setTimeout(() => {
+try {
+// the class goes on the element directly: a class written as a {{hole}}
+// is not re-patched on render. remove + reflow + add restarts the run
+hero.classList.remove('mp-ndemo');
+void hero.offsetWidth;
+hero.classList.add('mp-ndemo');
+} catch (e) {}
+this._nd2 = setTimeout(() => {
+try { hero.classList.remove('mp-ndemo'); } catch (e) {}
+}, 2920);
+}, 700);
+}
+// spending the blink before the pictures exist is what it must not do
+ndWait() {
+const hero = this.ndHero();
+if (!hero) { this._ndW = setTimeout(() => this.ndWait(), 150); return; }
+const imgs = hero.querySelectorAll('img');
+let pending = 0;
+for (let i = 0; i < imgs.length; i++) {
+if (!imgs[i].complete) {
+pending++;
+try { imgs[i].addEventListener('load', () => this.ndPlay(true), { once: true }); } catch (e) {}
+}
+}
+if (!imgs.length) { this._ndW = setTimeout(() => this.ndWait(), 200); return; }
+if (pending) { this._ndW = setTimeout(() => this.ndPlay(), 2000); return; }
+this.ndPlay();
+}
+ndBind() {
+this.ndWait();
+this._ndVis = () => { try { if (!document.hidden) this.ndPlay(); } catch (e) {} };
+try { document.addEventListener('visibilitychange', this._ndVis); } catch (e) {}
+try { window.addEventListener('pageshow', this._ndVis); } catch (e) {}
+try {
+const hero = this.ndHero();
+if (hero && typeof IntersectionObserver !== 'undefined') {
+this._ndIO = new IntersectionObserver((es) => {
+es.forEach((e) => {
+if (!e.isIntersecting) { this._ndOut = true; return; }
+if (this._ndOut) { this._ndOut = false; this.ndPlay(); }
+});
+}, { threshold: 0.05 });
+this._ndIO.observe(hero);
+}
+} catch (e) {}
+}
+ndFree() {
+try { clearTimeout(this._nd1); clearTimeout(this._nd2); clearTimeout(this._ndW); } catch (e) {}
+try { document.removeEventListener('visibilitychange', this._ndVis); } catch (e) {}
+try { window.removeEventListener('pageshow', this._ndVis); } catch (e) {}
+try { if (this._ndIO) { this._ndIO.disconnect(); this._ndIO = null; } } catch (e) {}
+}
+componentDidMount() {
+this.xkWatch(); this.ndBind(); this.cpBind(); }
+componentWillUnmount() {
+this.ndFree(); this.cpFree(); }
 // which slots really hold a drawing: a slot still showing the REPLACE tile
 // is not one, so it leaves the strip and the count
 dwScan() {
