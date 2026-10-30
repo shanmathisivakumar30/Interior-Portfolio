@@ -113,6 +113,7 @@ font-size:17px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transpar
 
 /* a day in the life */
 .mp-day{position:relative;width:100%;aspect-ratio:1150 / 642;overflow:hidden;
+touch-action:pan-y;
 background-color:#FFFFFF}
 .mp-day .mp-dl{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;
 transition:opacity 300ms ease}
@@ -217,6 +218,22 @@ font-size:inherit;font-family:inherit}
 .mp-fnav > :nth-child(2){justify-self:center;text-align:center}
 .mp-fnav > :nth-child(3){justify-self:end;text-align:right}
 .mp-fnav .mp-blank{opacity:0;pointer-events:none}
+/* with previous and next moved up beside the figure, Home is on its own
+   in the bottom row and belongs in the middle of it */
+.mp-fnav > :only-child{justify-self:center;text-align:center}
+/* previous and next, either side of the dreaming figure */
+.mp-dreamrow{position:relative}
+/* the ring needs the link positioned, so every one of them carries an
+   inline position:relative - which is why a plain rule here lost. */
+.mp-dnav{position:absolute!important;top:38%!important;z-index:4;
+transform:translateY(-50%);white-space:nowrap;
+color:#241910;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.mp-dnav:active{color:#C62B23}
+/* Home on its own: one track, so centred means the middle of the row */
+.mp-fnav.mp-fone{grid-template-columns:1fr}
+.mp-fnav.mp-fone > *{justify-self:center;text-align:center}
+.mp-dprev{left:18px!important;right:auto!important}
+.mp-dnext{right:18px!important;left:auto!important}
 /* all three read the same: the index link stops overriding the face */
 .mp-fnav .mp-idx{font-family:inherit;font-size:inherit;letter-spacing:normal;
 text-transform:none;font-weight:400}
@@ -232,6 +249,8 @@ background:transparent}
    it - that ground is what showed above and below a wide picture. */
 .mp-lbframe{position:relative;z-index:2;box-sizing:border-box;width:100%;height:100%;padding:0;background:transparent}
 .mp-lbslide{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden}
+.mp-lbtap{position:absolute;left:0;top:0;right:0;bottom:0;z-index:3;border:0;padding:0;
+background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .mp-lbslide,.mp-lbslide *{background-color:transparent!important}
 .mp-lbslide > *{display:block;width:100%!important;height:100%!important}
 .mp-lbslide img{width:100%!important;height:100%!important;object-fit:contain!important}
@@ -279,10 +298,16 @@ animation:none;stroke-dashoffset:0}}
 <div class="mp-lbslide" style="display: {{lbD0}};"><dc-import name="Slot-C2-DrawMainPlan" hint-size="100%,100%"></dc-import></div>
 <div class="mp-lbslide" style="display: {{lbD1}};"><dc-import name="Slot-C2-DrawMainPlan2" hint-size="100%,100%"></dc-import></div>
 <div class="mp-lbslide" style="display: {{lbD2}};"><dc-import name="Slot-C2-DrawMainPlan3" hint-size="100%,100%"></dc-import></div>
-<div class="mp-lbslide" style="display: {{lbD3}};"><dc-import name="Slot-C2-DrawMainPlan5" hint-size="100%,100%"></dc-import></div>
-<div class="mp-lbslide" style="display: {{lbD4}};"><dc-import name="Slot-C2-DrawSections" hint-size="100%,100%"></dc-import></div>
-<div class="mp-lbslide" style="display: {{lbD5}};"><dc-import name="Slot-C2-DrawSections2" hint-size="100%,100%"></dc-import></div>
-<div class="mp-lbslide" style="display: {{lbD6}};"><dc-import name="Slot-C2-DrawSections3" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD3}};"><dc-import name="Slot-C2-DrawMainPlan4" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD4}};"><dc-import name="Slot-C2-DrawMainPlan5" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD5}};"><dc-import name="Slot-C2-DrawMainPlan6" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD6}};"><dc-import name="Slot-C2-DrawSections" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD7}};"><dc-import name="Slot-C2-DrawSections2" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD8}};"><dc-import name="Slot-C2-DrawSections3" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD9}};"><dc-import name="Slot-C2-DrawSections4" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD10}};"><dc-import name="Slot-C2-DrawSections5" hint-size="100%,100%"></dc-import></div>
+<div class="mp-lbslide" style="display: {{lbD11}};"><dc-import name="Slot-C2-DrawSections6" hint-size="100%,100%"></dc-import></div>
+<button type="button" class="mp-lbtap" onClick="{{lbNext}}" aria-label="Next drawing"></button>
 </div>
 <button type="button" class="mp-lbbtn mp-lbprev" onClick="{{lbPrev}}" aria-label="Previous drawing">‹</button>
 <button type="button" class="mp-lbbtn mp-lbnext" onClick="{{lbNext}}" aria-label="Next drawing">›</button>
@@ -352,21 +377,30 @@ animation:none;stroke-dashoffset:0}}
 <button type="button" class="mp-dw" data-dw="0" style="display: {{dwT0}}" onClick="{{openP0}}" aria-label="Open P-01 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawMainPlan" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-01</b>&nbsp;Main plan</span></button>
 <button type="button" class="mp-dw" data-dw="1" style="display: {{dwT1}}" onClick="{{openP1}}" aria-label="Open P-02 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawMainPlan2" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-02</b>&nbsp;Main plan</span></button>
 <button type="button" class="mp-dw" data-dw="2" style="display: {{dwT2}}" onClick="{{openP2}}" aria-label="Open P-03 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawMainPlan3" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-03</b>&nbsp;Main plan</span></button>
-
+<button type="button" class="mp-dw" data-dw="3" style="display: {{dwT3}}" onClick="{{openP3}}" aria-label="Open P-04 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawMainPlan4" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-04</b>&nbsp;Main plan</span></button>
+<button type="button" class="mp-dw" data-dw="4" style="display: {{dwT4}}" onClick="{{openP4}}" aria-label="Open P-05 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawMainPlan5" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-05</b>&nbsp;Main plan</span></button>
+<button type="button" class="mp-dw" data-dw="5" style="display: {{dwT5}}" onClick="{{openP5}}" aria-label="Open P-06 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawMainPlan6" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>P-06</b>&nbsp;Main plan</span></button>
 </div>
 <p class="mp-sublab">Sections</p><div class="mp-grid">
-<button type="button" class="mp-dw" data-dw="4" style="display: {{dwT4}}" onClick="{{openS0}}" aria-label="Open S-01 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-01</b>&nbsp;Section / elevation</span></button>
-<button type="button" class="mp-dw" data-dw="5" style="display: {{dwT5}}" onClick="{{openS1}}" aria-label="Open S-02 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections2" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-02</b>&nbsp;Section / elevation</span></button>
-<button type="button" class="mp-dw" data-dw="6" style="display: {{dwT6}}" onClick="{{openS2}}" aria-label="Open S-03 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections3" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-03</b>&nbsp;Section / elevation</span></button>
+<button type="button" class="mp-dw" data-dw="6" style="display: {{dwT6}}" onClick="{{openS0}}" aria-label="Open S-01 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-01</b>&nbsp;Section / elevation</span></button>
+<button type="button" class="mp-dw" data-dw="7" style="display: {{dwT7}}" onClick="{{openS1}}" aria-label="Open S-02 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections2" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-02</b>&nbsp;Section / elevation</span></button>
+<button type="button" class="mp-dw" data-dw="8" style="display: {{dwT8}}" onClick="{{openS2}}" aria-label="Open S-03 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections3" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-03</b>&nbsp;Section / elevation</span></button>
+<button type="button" class="mp-dw" data-dw="9" style="display: {{dwT9}}" onClick="{{openS3}}" aria-label="Open S-04 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections4" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-04</b>&nbsp;Section / elevation</span></button>
+<button type="button" class="mp-dw" data-dw="10" style="display: {{dwT10}}" onClick="{{openS4}}" aria-label="Open S-05 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections5" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-05</b>&nbsp;Section / elevation</span></button>
+<button type="button" class="mp-dw" data-dw="11" style="display: {{dwT11}}" onClick="{{openS5}}" aria-label="Open S-06 at full size"><span class="mp-dwimg"><dc-import name="Slot-C2-DrawSections6" hint-size="100%,100%"></dc-import></span><span class="mp-dwcap"><b>S-06</b>&nbsp;Section / elevation</span></button>
 </div>
 <blockquote class="mp-quote" style="font-size: 15px">Even a brick wants to be something</blockquote>
 <p class="mp-by" style="font-size: 8px">Louis Kahn</p>
 <dl class="mp-tbl"><div><dt>Project</dt><dd>The breakfast club</dd></div><div><dt>Category</dt><dd>Hospitality interior</dd></div><div><dt>Drawing</dt><dd>Plans / Sections</dd></div><div><dt>Drawn by</dt><dd>Shanmathi Sivakumar</dd></div></dl>
 </section></div>
-<div class="mp-dream"><dc-import name="DreamFooter" title="The breakfast club" scale="0.62" band="300px" hint-size="100%,300px"></dc-import>
+<div class="mp-dream"><div class="mp-dreamrow" style="font-size: {{navSize}}; font-family: {{navFam}};">
+<dc-import name="DreamFooter" title="The breakfast club" scale="0.62" band="300px" hint-size="100%,300px"></dc-import>
+<a style="position:absolute;top:38%;transform:translateY(-50%);z-index:4;left:18px;white-space:nowrap" class="xk mp-dnav mp-dprev" href="Chapter4.dc.html">previous<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M15.8 35.2 Q21.8 27.8 26.7 24.4 Q31.6 21.1 38.8 18.5 Q45.9 16.0 54.1 14.2 Q62.2 12.3 70.9 11.1 Q79.7 10.0 88.8 10.2 Q97.9 10.4 106.2 11.8 Q114.6 13.2 122.4 14.3 Q130.3 15.5 138.9 16.2 Q147.5 17.0 156.0 18.5 Q164.5 20.0 170.9 22.9 Q177.3 25.8 181.7 29.3 Q186.1 32.8 189.2 36.6 Q192.4 40.3 193.3 44.3 Q194.1 48.3 192.3 52.1 Q190.4 56.0 187.8 59.7 Q185.1 63.3 182.0 66.9 Q178.9 70.5 173.5 73.6 Q168.1 76.7 160.5 78.7 Q152.9 80.7 145.3 82.2 Q137.6 83.8 130.2 85.9 Q122.8 87.9 114.3 89.5 Q105.9 91.2 96.6 91.4 Q87.3 91.7 78.2 90.7 Q69.1 89.7 60.8 87.9 Q52.4 86.2 45.7 83.4 Q38.9 80.7 34.6 77.2 L30.3 73.7"></path></svg></a>
+<a style="position:absolute;top:38%;transform:translateY(-50%);z-index:4;right:18px;white-space:nowrap" class="xk mp-dnav mp-dnext" href="Chapter5.dc.html">next<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M65.6 13.0 Q82.5 9.8 91.6 9.4 Q100.8 8.9 109.9 9.7 Q118.9 10.5 127.6 11.6 Q136.3 12.8 145.0 14.3 Q153.6 15.7 160.7 18.4 Q167.8 21.0 171.7 24.7 Q175.6 28.5 177.8 32.2 Q180.1 35.9 182.8 39.4 Q185.5 42.9 187.6 46.6 Q189.7 50.3 189.7 54.2 Q189.8 58.1 188.4 62.1 Q186.9 66.0 183.7 69.9 Q180.5 73.8 174.2 76.9 Q167.8 80.0 159.2 81.8 Q150.6 83.6 142.1 84.8 Q133.6 86.1 125.3 87.5 Q117.0 88.9 108.1 89.5 Q99.2 90.1 90.4 89.2 Q81.6 88.4 73.6 86.9 Q65.5 85.4 57.5 83.8 Q49.5 82.2 42.1 80.1 Q34.7 77.9 28.6 75.0 Q22.5 72.1 17.3 68.8 Q12.0 65.5 7.9 61.7 Q3.8 57.9 3.4 53.8 Q3.0 49.6 6.8 45.8 Q10.7 41.9 15.3 38.6 L20.0 35.2"></path></svg></a>
+</div>
 <div class="mp-contact"><a class="mp-hand" href="https://www.instagram.com/shansivakumar" target="_blank" rel="noopener"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAAMFBMVEUAAAAkGRAjGA8jGA8jGA89AAAjGA8kFxAjGA8kGA4dGw9VAAAlJQAfFw8AAAAAAADc8FODAAAAEHRSTlMA+rvOjgRMFytuDwMGIAAAECzfBgAAAiZJREFUeNp1lD9oE3EUxz/3u7v8MRbuJaF/BvGuiAhmaJbazXYoSKc4BBeHxG52yaQuYiuiLkInRxEEwUW6Cg6Z2i6WOJlBJJugpZ6CJM3JxeEuaX4X8uDH/e77fu+93/u+934GwL1PJx2Goi6uvAQM4MkLdFn+AAZkMyTlUQMD1lqw+GsEyjcwjwFLpHh3/PjbNZFVoC75hu5oxpNZOCeyauuKiiXy2rQs9SXUFe1wobfCG5mfuBQ7Mmc67dJSO4HnPmaU6uDuaejmZfoWoergaHjq/c/twCBUjlqKIbtaBUJwKrZrIAXdf1akBmUxs3Rj6OnNwe0mqWKwD9keko/xOyJS2IVMA/BkpLBEREbseKKGvi8AMDgY1Sv+Wj5X7j9w+DoiNHZVl2ITUhHhY67sFqV17I0KQ3oMMU6ATFb9CcAezGSOA8DzIwv7H2YABCb9YDx4EGIAcOpS0W5lsBBt/NDVFAN+JGoSx1BE5bUdtatZ2Bg2gNkZ5BLBe1sAfay+ZnHqcEC1wnW8QKdkRwrb8FikthdREmeeC3Ko5f5R1LVnmfN3Y5vw8AhK6FxB6moHyHxnZBFxQf+GA/O34vMOlAvN+Cf9/NnQz/lyAU8awxyjBZCWvHLxIz6DeEXUKeXSrCWb3Q5RyqFXSSqCh1wyP1thd2I+fvtbymAwOWodHKhLvqUr0p7MTh/nqQ/A1CdDQXcziV9rgAnsvzqc88/aY3H9HfAfVU2RNlmGjKkAAAAASUVORK5CYII=" alt="" aria-hidden="true" style="width:1em!important;height:1em!important;display:inline-block;vertical-align:-0.14em;margin-right:0.4em;object-fit:contain!important">shansivakumar</a><span class="mp-dot">·</span><a class="mp-hand" href="mailto:shanmathisivakumar30@gmail.com">shanmathisivakumar30@gmail.com</a></div>
 </div>
-<nav class="mp-fnav" aria-label="Other projects" style="font-size: {{navSize}}; font-family: {{navFam}};"><a style="position:relative" class="xk" href="Chapter4.dc.html">previous<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M15.8 35.2 Q21.8 27.8 26.7 24.4 Q31.6 21.1 38.8 18.5 Q45.9 16.0 54.1 14.2 Q62.2 12.3 70.9 11.1 Q79.7 10.0 88.8 10.2 Q97.9 10.4 106.2 11.8 Q114.6 13.2 122.4 14.3 Q130.3 15.5 138.9 16.2 Q147.5 17.0 156.0 18.5 Q164.5 20.0 170.9 22.9 Q177.3 25.8 181.7 29.3 Q186.1 32.8 189.2 36.6 Q192.4 40.3 193.3 44.3 Q194.1 48.3 192.3 52.1 Q190.4 56.0 187.8 59.7 Q185.1 63.3 182.0 66.9 Q178.9 70.5 173.5 73.6 Q168.1 76.7 160.5 78.7 Q152.9 80.7 145.3 82.2 Q137.6 83.8 130.2 85.9 Q122.8 87.9 114.3 89.5 Q105.9 91.2 96.6 91.4 Q87.3 91.7 78.2 90.7 Q69.1 89.7 60.8 87.9 Q52.4 86.2 45.7 83.4 Q38.9 80.7 34.6 77.2 L30.3 73.7"></path></svg></a><a style="position:relative" class="xk mp-idx" href="Home.dc.html">Home<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M6.7 47.2 Q9.2 39.2 12.0 35.4 Q14.8 31.5 20.1 28.2 Q25.5 24.8 33.1 22.5 Q40.7 20.2 48.7 18.6 Q56.7 16.9 64.4 15.2 Q72.1 13.5 80.4 12.1 Q88.7 10.7 97.7 10.3 Q106.7 9.9 115.7 10.5 Q124.7 11.1 133.5 12.3 Q142.2 13.6 150.1 15.7 Q158.0 17.7 164.1 20.7 Q170.3 23.7 175.2 27.0 Q180.1 30.3 184.2 33.9 Q188.4 37.4 190.4 41.3 Q192.4 45.1 191.2 49.1 Q190.1 53.0 187.4 56.6 Q184.7 60.3 182.0 63.9 Q179.3 67.5 175.7 71.1 Q172.1 74.6 166.4 77.7 Q160.7 80.9 153.5 83.3 Q146.2 85.8 137.9 87.7 Q129.5 89.5 120.3 90.2 Q111.1 90.9 101.9 90.3 Q92.8 89.6 84.2 88.5 Q75.7 87.3 67.3 86.2 Q58.9 85.0 50.9 83.1 Q43.0 81.3 36.8 78.5 Q30.6 75.6 26.0 72.3 Q21.3 69.0 17.3 65.6 Q13.2 62.1 10.5 58.4 Q7.7 54.6 7.2 50.6 Q6.8 46.6 8.1 42.7 L9.5 38.7"></path><path class="xk-b" d="M56.7 19.2 Q76.9 16.0 87.5 14.9 Q98.2 13.8 109.1 14.4 Q120.0 15.0 129.8 16.9 Q139.7 18.8 148.1 21.5 Q156.5 24.2 162.1 27.8 Q167.7 31.5 172.3 35.2 Q176.9 39.0 182.1 43.0 Q187.3 47.0 188.0 51.6 Q188.8 56.2 184.4 60.4 Q180.1 64.7 174.0 68.4 Q167.8 72.1 159.6 75.0 Q151.3 77.8 141.7 79.6 Q132.2 81.5 122.3 83.0 Q112.4 84.5 101.8 84.6 L91.2 84.6"></path></svg></a><a style="position:relative" class="xk" href="Chapter5.dc.html">next<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M65.6 13.0 Q82.5 9.8 91.6 9.4 Q100.8 8.9 109.9 9.7 Q118.9 10.5 127.6 11.6 Q136.3 12.8 145.0 14.3 Q153.6 15.7 160.7 18.4 Q167.8 21.0 171.7 24.7 Q175.6 28.5 177.8 32.2 Q180.1 35.9 182.8 39.4 Q185.5 42.9 187.6 46.6 Q189.7 50.3 189.7 54.2 Q189.8 58.1 188.4 62.1 Q186.9 66.0 183.7 69.9 Q180.5 73.8 174.2 76.9 Q167.8 80.0 159.2 81.8 Q150.6 83.6 142.1 84.8 Q133.6 86.1 125.3 87.5 Q117.0 88.9 108.1 89.5 Q99.2 90.1 90.4 89.2 Q81.6 88.4 73.6 86.9 Q65.5 85.4 57.5 83.8 Q49.5 82.2 42.1 80.1 Q34.7 77.9 28.6 75.0 Q22.5 72.1 17.3 68.8 Q12.0 65.5 7.9 61.7 Q3.8 57.9 3.4 53.8 Q3.0 49.6 6.8 45.8 Q10.7 41.9 15.3 38.6 L20.0 35.2"></path></svg></a></nav>
+<nav class="mp-fnav mp-fone" aria-label="Other projects" style="font-size: {{navSize}}; font-family: {{navFam}};"><a style="position:relative" class="xk mp-idx" href="Home.dc.html">Home<svg class="xk-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="xk-a" d="M6.7 47.2 Q9.2 39.2 12.0 35.4 Q14.8 31.5 20.1 28.2 Q25.5 24.8 33.1 22.5 Q40.7 20.2 48.7 18.6 Q56.7 16.9 64.4 15.2 Q72.1 13.5 80.4 12.1 Q88.7 10.7 97.7 10.3 Q106.7 9.9 115.7 10.5 Q124.7 11.1 133.5 12.3 Q142.2 13.6 150.1 15.7 Q158.0 17.7 164.1 20.7 Q170.3 23.7 175.2 27.0 Q180.1 30.3 184.2 33.9 Q188.4 37.4 190.4 41.3 Q192.4 45.1 191.2 49.1 Q190.1 53.0 187.4 56.6 Q184.7 60.3 182.0 63.9 Q179.3 67.5 175.7 71.1 Q172.1 74.6 166.4 77.7 Q160.7 80.9 153.5 83.3 Q146.2 85.8 137.9 87.7 Q129.5 89.5 120.3 90.2 Q111.1 90.9 101.9 90.3 Q92.8 89.6 84.2 88.5 Q75.7 87.3 67.3 86.2 Q58.9 85.0 50.9 83.1 Q43.0 81.3 36.8 78.5 Q30.6 75.6 26.0 72.3 Q21.3 69.0 17.3 65.6 Q13.2 62.1 10.5 58.4 Q7.7 54.6 7.2 50.6 Q6.8 46.6 8.1 42.7 L9.5 38.7"></path><path class="xk-b" d="M56.7 19.2 Q76.9 16.0 87.5 14.9 Q98.2 13.8 109.1 14.4 Q120.0 15.0 129.8 16.9 Q139.7 18.8 148.1 21.5 Q156.5 24.2 162.1 27.8 Q167.7 31.5 172.3 35.2 Q176.9 39.0 182.1 43.0 Q187.3 47.0 188.0 51.6 Q188.8 56.2 184.4 60.4 Q180.1 64.7 174.0 68.4 Q167.8 72.1 159.6 75.0 Q151.3 77.8 141.7 79.6 Q132.2 81.5 122.3 83.0 Q112.4 84.5 101.8 84.6 L91.2 84.6"></path></svg></a></nav>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"navSize": {"editor": "text", "default": "14px"}, "navFont": {"editor": "enum", "options": ["Penpoint", "Helvetica Neue"], "default": "Penpoint"}, "$preview": {"width": 390, "height": 844}}'>
@@ -508,7 +542,45 @@ try { document.removeEventListener('visibilitychange', this._ndVis); } catch (e)
 try { window.removeEventListener('pageshow', this._ndVis); } catch (e) {}
 try { if (this._ndIO) { this._ndIO.disconnect(); this._ndIO = null; } } catch (e) {}
 }
+// A finger moving across a picture should move the picture. One helper for
+// both places: it only acts on a flat sideways drag, so a scroll down the
+// page is never mistaken for a swipe.
+swipeOn(el, prev, next) {
+if (!el || el._swipeOn) return;
+el._swipeOn = 1;
+let x0 = 0, y0 = 0, on = false;
+el.addEventListener('touchstart', (e) => {
+if (!e.touches || e.touches.length !== 1) { on = false; return; }
+x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; on = true;
+}, { passive: true });
+el.addEventListener('touchend', (e) => {
+if (!on) return;
+on = false;
+const t = (e.changedTouches && e.changedTouches[0]) || null;
+if (!t) return;
+const dx = t.clientX - x0, dy = t.clientY - y0;
+if (Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+try { (dx < 0 ? next : prev)(); } catch (err) {}
+}, { passive: true });
+}
+swipeBind() {
+try {
+// the enlarged drawing
+this.swipeOn(document.querySelector('.mp-lb'),
+() => { if (this._lbPrev) this._lbPrev(); },
+() => { if (this._lbNext) this._lbNext(); });
+// a day in the life
+this.swipeOn(document.querySelector('.mp-day'),
+() => { if (this._tPrev) this._tPrev(); },
+() => { if (this._tNext) this._tNext(); });
+} catch (e) {}
+}
+swipeWatch() {
+this.swipeBind();
+try { [0, 500, 1500].forEach((t) => setTimeout(() => this.swipeBind(), t)); } catch (e) {}
+}
 componentDidMount() {
+this.swipeWatch();
 this.xkWatch(); this.ndBind(); this.cpBind(); }
 componentWillUnmount() {
 this.ndFree(); this.cpFree(); }
@@ -572,13 +644,15 @@ v['tTc' + k] = on ? '#786653' : '#262525';
 v['pickT' + k] = () => this.setState({ t: k });
 }
 v.tNext = () => this.setState({ t: (t + 1) % 4 });
+v.tPrev = () => this.setState({ t: (t + 3) % 4 });
+this._tNext = v.tNext; this._tPrev = v.tPrev;
 }
 
 // the drawing viewer
-const tiles = 7;
+const tiles = 12;
 // only the slots that hold a drawing, plans then sections, one run.
 // _all is the strip as it stands: a slide with no tile is not in it.
-const _all = [0,1,2,4,5,6];
+const _all = [0,1,2,3,4,5,6,7,8,9,10,11];
 const _dl = st.dwLive || null;
 const seq = [];
 for (let q = 0; q < _all.length; q++) {
@@ -592,17 +666,20 @@ v.lbLabel = (at >= 0 ? pad(at + 1) : '00') + ' / ' + pad(seq.length);
 v.lbClose = () => this.setState({ lb: -1 });
 v.lbNext = () => { if (seq.length) this.setState({ lb: seq[(at + 1 + seq.length) % seq.length] }); };
 v.lbPrev = () => { if (seq.length) this.setState({ lb: seq[(at - 1 + seq.length) % seq.length] }); };
+// the swipe handler is bound to the element once; it reaches the
+// current step functions through these
+this._lbNext = v.lbNext; this._lbPrev = v.lbPrev;
 for (let k = 0; k < tiles; k++) { v['lbD' + k] = k === lb ? 'block' : 'none'; }
 for (let q = 0; q < _all.length; q++) {
 v['dwT' + _all[q]] = seq.indexOf(_all[q]) >= 0 ? 'block' : 'none';
 }
-for (let k = 0; k < 4; k++) { v['openP' + k] = ((i) => () => this.setState({ lb: i }))(k); }
-for (let k = 0; k < tiles - 4; k++) {
-v['openS' + k] = ((i) => () => this.setState({ lb: i }))(4 + k);
+for (let k = 0; k < 6; k++) { v['openP' + k] = ((i) => () => this.setState({ lb: i }))(k); }
+for (let k = 0; k < tiles - 6; k++) {
+v['openS' + k] = ((i) => () => this.setState({ lb: i }))(6 + k);
 }
 if (!this._dwPend) {
 this._dwPend = true;
-try { setTimeout(() => { this._dwPend = false; this.dwScan(); this.dwWatch(); }, 0); }
+try { setTimeout(() => { this._dwPend = false; this.dwScan(); this.dwWatch(); this.swipeBind(); }, 0); }
 catch (e) { this._dwPend = false; }
 }
 const _nf = this.props.navFont ?? 'Penpoint';

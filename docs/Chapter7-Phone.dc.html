@@ -13,6 +13,8 @@
 <style>
 @font-face{font-family:'Penpoint';src:url('./assets/e9d9f28ee1522a75635f0352c96fc9a9.otf');font-weight:400;font-style:normal;font-display:swap}
 .mf-pg{position:relative;box-sizing:border-box;width:100%;min-height:100vh;
+/* the screen as it actually is, with the browser bars showing */
+min-height:100dvh;
 display:flex;flex-direction:column;background-color:#FBF6E6;color:#262525;
 font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
 .mf-grid{position:absolute;left:0;top:0;right:0;bottom:0;z-index:0;pointer-events:none;
@@ -385,7 +387,65 @@ xkWatch(sel) {
 this.xkBind(sel);
 try { [0, 400, 1400].forEach((t) => setTimeout(() => this.xkBind(sel), t)); } catch (e) {}
 }
+// What is on the page has to fit the screen that is actually showing, bars
+// and all. If it does not, the one elastic thing on the page comes down by
+// exactly the overflow - the type, the hint and the footer keep their size.
+mfBox() { try { return document.querySelector('.mf-canvas, .mf-sq'); } catch (e) { return null; } }
+mfFit() {
+try {
+const pg = document.querySelector('.mf-pg');
+const box = this.mfBox();
+if (!pg || !box) return;
+const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+if (!vh) return;
+// the drawn height, remembered once: measuring after a squeeze would
+// feed the squeeze back into itself
+if (this._mfNat === undefined) {
+box.style.height = '';
+this._mfNat = Math.round(box.getBoundingClientRect().height);
+}
+const nat = this._mfNat;
+if (!nat) return;
+// what is inside it sets the floor: the band may tighten around the
+// pictures, never cut into them
+let floor = Math.round(nat * 0.55);
+try {
+const inner = box.querySelector('.fl-deck');
+if (inner) floor = Math.max(floor, Math.ceil(inner.getBoundingClientRect().height) + 10);
+} catch (e) {}
+const inner = box.querySelector('.fl-deck');
+if (inner) { inner.style.transform = ''; }
+box.style.height = nat + 'px';
+const over = Math.ceil(pg.scrollHeight - vh);
+const want = over > 1 ? Math.max(floor, nat - over) : nat;
+box.style.height = Math.round(want) + 'px';
+// the band has tightened as far as the pictures allow; if the page is
+// still long, the pictures themselves come down the rest of the way
+if (inner) {
+const left = Math.ceil(pg.scrollHeight - vh);
+if (left > 1) {
+const ih = inner.getBoundingClientRect().height;
+if (ih > 0) {
+const s = Math.max(0.6, (ih - left) / ih);
+inner.style.transformOrigin = 'top center';
+inner.style.transform = 'scale(' + s + ')';
+box.style.height = Math.round(Math.max(nat * 0.5, want - (ih - ih * s))) + 'px';
+}
+}
+}
+} catch (e) {}
+}
+mfFitBind() {
+this._mfF = () => this.mfFit();
+this.mfFit();
+try { window.addEventListener('resize', this._mfF); } catch (e) {}
+try { [120, 600, 1600].forEach((t) => setTimeout(this._mfF, t)); } catch (e) {}
+}
+mfFitFree() {
+try { window.removeEventListener('resize', this._mfF); } catch (e) {}
+}
 componentDidMount() {
+this.mfFitBind();
 this.xkWatch();
 this._rot = 0; this._vis = true; this._hid = false;
 
@@ -393,6 +453,7 @@ this.flApply();
 this.flBind();
 }
 componentWillUnmount() {
+this.mfFitFree();
 this.flDisarm();
 try { if (this._io) { this._io.disconnect(); this._io = null; } } catch (e) {}
 try { document.removeEventListener('visibilitychange', this._vh); } catch (e) {}
