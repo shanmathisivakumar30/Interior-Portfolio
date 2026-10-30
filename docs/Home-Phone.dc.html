@@ -53,6 +53,10 @@ cursor:pointer;-webkit-tap-highlight-color:transparent}
 /* the opening flicker: only the light moves, the drawing stays put */
 .ph-art.ph-flick .ph-beams{transition:opacity 90ms linear}
 .ph-art.ph-flick .ph-room,.ph-art.ph-flick .ph-plant{animation:none}
+/* except for one rock as the first strike lands: the drawing settles
+   while the lamps carry on flickering */
+.ph-art.ph-rock .ph-room{animation:ph-shake 640ms ease-in-out}
+.ph-art.ph-rock .ph-plant{animation:ph-leaf 820ms ease-in-out}
 @keyframes ph-shake{
 0%,100%{transform:translate(0,0) rotate(0deg)}
 18%{transform:translate(-2.5px,1px) rotate(-0.22deg)}
@@ -77,7 +81,8 @@ opacity:0;transition:opacity 300ms ease}
 .ph-hint.ph-off{opacity:0}
 
 @media (prefers-reduced-motion:reduce){
-.ph-art.ph-lit .ph-room,.ph-art.ph-lit .ph-plant{animation:none}
+.ph-art.ph-lit .ph-room,.ph-art.ph-lit .ph-plant,
+.ph-art.ph-rock .ph-room,.ph-art.ph-rock .ph-plant{animation:none}
 .ph-beams{transition:none}
 .ph-ring path{stroke-dashoffset:0}
 .ph-navlink:active .ph-ring path,.ph-navlink.xk-on .ph-ring path{animation:none}}
@@ -102,7 +107,7 @@ opacity:0;transition:opacity 300ms ease}
 </nav>
 
 <div class="ph-mid">
-<button type="button" class="ph-art{{lit}}{{flick}}" onClick="{{light}}" aria-label="Light the studio lamps">
+<button type="button" class="ph-art{{lit}}{{flick}}{{rock}}" onClick="{{light}}" aria-label="Light the studio lamps">
 <img class="ph-room" src="./assets/415248465336bcb713bb791855b91c49.svg" alt="Pen and ink drawing of my studio: a heavy wooden worktable spread with drawings, books and three task lamps, a chair at the right and drawings leaning against the table.">
 <img class="ph-plant" src="./assets/5a8f36b20e80b66ab4cf69a9a253e484.svg" alt="">
 <svg class="ph-beams" viewBox="0 246 1500 800" aria-hidden="true" focusable="false"><defs><linearGradient id="ph-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.62"></stop><stop offset="0.55" stop-color="#F4D45B" stop-opacity="0.28"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></linearGradient><radialGradient id="ph-pool"><stop offset="0" stop-color="#F4D45B" stop-opacity="0.5"></stop><stop offset="1" stop-color="#F4D45B" stop-opacity="0"></stop></radialGradient></defs><path d="M456 446 L532 426 L650 582 L388 608 Z" fill="url(#ph-beam)"></path><ellipse cx="519" cy="595" rx="86" ry="17" fill="url(#ph-pool)"></ellipse><path d="M750 420 L826 400 L944 558 L682 582 Z" fill="url(#ph-beam)"></path><ellipse cx="813" cy="570" rx="86" ry="17" fill="url(#ph-pool)"></ellipse><path d="M858 386 L934 406 L1050 558 L798 582 Z" fill="url(#ph-beam)"></path><ellipse cx="924" cy="570" rx="86" ry="17" fill="url(#ph-pool)"></ellipse></svg>
@@ -199,7 +204,7 @@ try { (this._seq || []).forEach(clearTimeout); } catch (e) {}
 this._seq = [];
 try { clearTimeout(this._lit); } catch (e) {}
 this._lampOn = false;
-this.setState({ flick: false, lit: false, done: false, touched: false });
+this.setState({ flick: false, lit: false, rock: false, done: false, touched: false });
 this.lampWait();
 }
 lampArt() { try { return document.querySelector('.ph-art'); } catch (e) { return null; } }
@@ -240,6 +245,10 @@ this._lampOn = true;
 this._lampAt = Date.now();
 // four strikes, slow enough to read as a lamp being switched on
 const ON = 260, OFF = 210, START = 380, TIMES = 4;
+// the drawing rocks once, starting with the first strike (the leaf is
+// the longer of the two at 820ms, so clear it after that)
+this._seq.push(setTimeout(() => this.setState({ rock: true }), START));
+this._seq.push(setTimeout(() => this.setState({ rock: false }), START + 900));
 let t = START;
 for (let k = 0; k < TIMES; k++) {
 this._seq.push(setTimeout(() => this.setState({ flick: true, lit: true }), t));
@@ -247,7 +256,7 @@ t += ON;
 this._seq.push(setTimeout(() => this.setState({ flick: true, lit: false }), t));
 t += OFF;
 }
-this._seq.push(setTimeout(() => this.setState({ flick: false, lit: false, done: true }), t));
+this._seq.push(setTimeout(() => this.setState({ flick: false, lit: false, rock: false, done: true }), t));
 }
 lampStop() {
 try { (this._seq || []).forEach(clearTimeout); } catch (e) {}
@@ -267,13 +276,15 @@ const st = this.state || {};
 return {
 lit: st.lit ? ' ph-lit' : '',
 flick: st.flick ? ' ph-flick' : '',
+// one rock on arrival, cleared before the strikes are over
+rock: st.rock ? ' ph-rock' : '',
 // the hint waits for the flicker to finish, then goes once the drawing is tapped
 hint: (st.done && !st.touched) ? ' ph-on' : ' ph-off',
 light: () => {
 try { clearTimeout(this._lit); } catch (e) {}
 // a tap during the strikes ends them rather than fighting them
 this.lampStop();
-this.setState({ lit: true, touched: true, flick: false, done: true });
+this.setState({ lit: true, touched: true, flick: false, rock: false, done: true });
 this._lit = setTimeout(() => this.setState({ lit: false }), 1600);
 }
 };
