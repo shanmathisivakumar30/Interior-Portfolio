@@ -270,6 +270,45 @@ a.xk:focus{outline:none}
 a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a,
 a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b{
 animation:none;stroke-dashoffset:0}}
+
+/* She walks the plan's own circulation line: up the porch, through the foyer, round the great room and on to the bedroom.
+   Traced from the drawing, so each stop is where the dashes turn. */
+.pf-walk{position:absolute;z-index:3;pointer-events:none;
+width:var(--walk-w,5%);left:49.84%;top:67.33%;
+transform:translate(-50%,-50%);
+animation:pf-walk var(--walk-t,16s) ease-in-out infinite alternate;
+animation-play-state:var(--walk-play,running)}
+.pf-walk > *{display:block;width:100%!important;height:auto!important}
+@keyframes pf-walk{
+0.0%{left:49.84%;top:67.33%}
+6.9%{left:49.5%;top:60.0%}
+14.4%{left:49.64%;top:52.09%}
+17.7%{left:49.9%;top:48.6%}
+20.1%{left:49.3%;top:46.3%}
+21.9%{left:48.4%;top:45.3%}
+23.8%{left:47.25%;top:45.27%}
+26.8%{left:45.95%;top:43.21%}
+28.3%{left:45.07%;top:43.33%}
+31.7%{left:43.34%;top:41.41%}
+37.1%{left:40.43%;top:39.24%}
+40.9%{left:38.17%;top:38.9%}
+44.7%{left:36.14%;top:40.56%}
+46.1%{left:35.71%;top:41.75%}
+48.8%{left:35.77%;top:44.63%}
+51.5%{left:37.0%;top:46.54%}
+60.8%{left:42.28%;top:48.98%}
+64.7%{left:44.37%;top:47.36%}
+67.3%{left:45.43%;top:45.24%}
+72.8%{left:48.54%;top:46.65%}
+75.7%{left:50.25%;top:46.67%}
+81.1%{left:50.84%;top:41.06%}
+84.5%{left:52.82%;top:41.23%}
+85.0%{left:52.98%;top:40.72%}
+90.0%{left:52.83%;top:35.47%}
+93.1%{left:54.58%;top:34.35%}
+94.8%{left:55.4%;top:33.32%}
+100.0%{left:57.19%;top:28.85%}}
+@media (prefers-reduced-motion:reduce){.pf-walk{animation:none}}
 </style>
 </helmet>
 <div class="pf-rt" id="pf-rt-Chapter3">
@@ -351,7 +390,7 @@ animation:none;stroke-dashoffset:0}}
 </section>
 <section class="pf-drop" style="animation-delay: 270ms; padding: 32px 36px 80px; ">
 <div style="width: 100%; max-width: 1280px; margin: auto; height: 677px">
-<div class="pf-thrbox" style="position: relative; display: block; overflow: hidden; background-color: #FFFFFF; width: 100%; height: 707px"><dc-import name="Slot-C3-Threshold" hint-size="100%,100%"></dc-import></div>
+<div class="pf-thrbox" style="position: relative; display: block; overflow: hidden; background-color: #FFFFFF; width: 100%; height: 707px"><dc-import name="Slot-C3-Threshold" hint-size="100%,100%"></dc-import><div class="pf-walk" aria-hidden="true"><dc-import name="AnnotFace" face="{{walkFace}}" motion="on" intensity="subtle" hint-size="150,116"></dc-import></div></div>
 <div style="display: flex; align-items: center; gap: 8px; margin-top: 14px; color: #0b0b0b; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500">INTO THE FILES</div>
 </div>
 </section>
@@ -492,8 +531,21 @@ animation:none;stroke-dashoffset:0}}
 </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;cpH&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;460px&quot;}, &quot;cpCount&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;], &quot;default&quot;: &quot;5&quot;}, &quot;ig&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shansivakumar&quot;}, &quot;mail&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shanmathisivakumar30@gmail.com&quot;}, &quot;prevLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;previous&quot;}, &quot;nextLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;next&quot;}, &quot;nightDemo&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;on&quot;, &quot;off&quot;], &quot;default&quot;: &quot;on&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FBF6E6&quot;}, &quot;border&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2px&quot;}, &quot;pad&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;54px 46px 46px 58px&quot;}, &quot;gridOp&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;0.17&quot;}, &quot;gridStep&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;17px&quot;}, &quot;bigSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;134px&quot;}, &quot;quote&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Even a brick wants to be something&quot;}, &quot;quoteBy&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;LUDWIG MIES VAN DER ROHE&quot;}, &quot;quoteShow&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;show&quot;, &quot;hide&quot;], &quot;default&quot;: &quot;show&quot;}, &quot;qSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;30px&quot;}, &quot;qWeight&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;300&quot;}, &quot;qLead&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;1.3&quot;}, &quot;qTrack&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;-0.01em&quot;}, &quot;qAlign&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;left&quot;, &quot;center&quot;, &quot;right&quot;], &quot;default&quot;: &quot;left&quot;}, &quot;qColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0B0B0B&quot;}, &quot;planCount&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;], &quot;default&quot;: &quot;2&quot;}, &quot;title&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A house that listens&quot;}, &quot;slogan&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Add a closing line from the project&#x27;s actual design story.&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#786653&quot;, &quot;options&quot;: [&quot;#786653&quot;, &quot;#241910&quot;, &quot;#9C9795&quot;]}, &quot;fitDay&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;on&quot;, &quot;off&quot;], &quot;default&quot;: &quot;on&quot;}, &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 4640}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;walkFace&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;curious&quot;, &quot;smile&quot;, &quot;neutral&quot;, &quot;thoughtful&quot;], &quot;default&quot;: &quot;curious&quot;, &quot;section&quot;: &quot;Walk&quot;}, &quot;walkSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;5%&quot;, &quot;section&quot;: &quot;Walk&quot;}, &quot;walkSpeed&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;16s&quot;, &quot;section&quot;: &quot;Walk&quot;}, &quot;walkMotion&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;on&quot;, &quot;off&quot;], &quot;default&quot;: &quot;on&quot;, &quot;section&quot;: &quot;Walk&quot;}, &quot;cpH&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;460px&quot;}, &quot;cpCount&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;], &quot;default&quot;: &quot;5&quot;}, &quot;ig&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shansivakumar&quot;}, &quot;mail&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;shanmathisivakumar30@gmail.com&quot;}, &quot;prevLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;previous&quot;}, &quot;nextLabel&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;next&quot;}, &quot;nightDemo&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;on&quot;, &quot;off&quot;], &quot;default&quot;: &quot;on&quot;}, &quot;paper&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FBF6E6&quot;}, &quot;border&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2px&quot;}, &quot;pad&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;54px 46px 46px 58px&quot;}, &quot;gridOp&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;0.17&quot;}, &quot;gridStep&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;17px&quot;}, &quot;bigSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;134px&quot;}, &quot;quote&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Even a brick wants to be something&quot;}, &quot;quoteBy&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;LUDWIG MIES VAN DER ROHE&quot;}, &quot;quoteShow&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;show&quot;, &quot;hide&quot;], &quot;default&quot;: &quot;show&quot;}, &quot;qSize&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;30px&quot;}, &quot;qWeight&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;300&quot;}, &quot;qLead&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;1.3&quot;}, &quot;qTrack&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;-0.01em&quot;}, &quot;qAlign&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;left&quot;, &quot;center&quot;, &quot;right&quot;], &quot;default&quot;: &quot;left&quot;}, &quot;qColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0B0B0B&quot;}, &quot;planCount&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;], &quot;default&quot;: &quot;2&quot;}, &quot;title&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A house that listens&quot;}, &quot;slogan&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Add a closing line from the project&#x27;s actual design story.&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#786653&quot;, &quot;options&quot;: [&quot;#786653&quot;, &quot;#241910&quot;, &quot;#9C9795&quot;]}, &quot;fitDay&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;on&quot;, &quot;off&quot;], &quot;default&quot;: &quot;on&quot;}, &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 4640}}">
 class Component extends DCLogic {
+// the walk's size, pace and whether it runs - as custom properties, so a
+// drag in the properties panel cannot overwrite them
+walkApply() {
+try {
+const r = document.documentElement;
+if (!r) return;
+const p = this.props;
+r.style.setProperty('--walk-w', p.walkSize ?? '5%');
+r.style.setProperty('--walk-t', p.walkSpeed ?? '16s');
+r.style.setProperty('--walk-play', (p.walkMotion ?? 'on') === 'on' ? 'running' : 'paused');
+} catch (e) {}
+}
+
 pfFit() {
 try {
 const stage = document.getElementById('pf-stage-Chapter3');
@@ -527,6 +579,7 @@ try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e
 }
 
 componentDidMount() {
+this.walkApply();
 this.rtBind();
 this.cpBind();
 this.pfFitBind();
@@ -878,6 +931,7 @@ try { [60, 400, 1200, 2500].forEach((t) => setTimeout(this._dwTick, t)); } catch
 }
 
 renderVals() {
+this.walkApply();
 const a = this.props.accent ?? '#786653';
 const st = this.state || {};
 const cp = st.cp || 0;
@@ -996,6 +1050,7 @@ v.cpNext = () => this.cpGo(1);
 const _wide = ((this.state || {}).wide) !== false;
 v.desk = _wide;
 v.phone = !_wide;
+v.walkFace = this.props.walkFace ?? 'curious';
 return v;}
 }
 </script>

@@ -290,6 +290,27 @@ a.xk:focus{outline:none}
 a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a,a.xk.xk-on .xk-a,
 a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b,a.xk.xk-on .xk-b{
 animation:none;stroke-dashoffset:0}}
+
+/* She walks the plan's own circulation line: the dashed route from the foyer
+   up into the drawing room, left across the house and on to the courtyard
+   stair. Traced from the drawing, so each stop is where the dashes turn. */
+.mp-walk{position:absolute;z-index:3;pointer-events:none;
+width:var(--walk-w,7.2%);left:67.3%;top:74.4%;
+transform:translate(-50%,-50%);
+animation:mp-walk var(--walk-t,16s) ease-in-out infinite alternate;
+animation-play-state:var(--walk-play,running)}
+.mp-walk > *{display:block;width:100%!important;height:auto!important}
+@keyframes mp-walk{
+0.0%{left:67.3%;top:74.4%}
+14.4%{left:67.0%;top:65.9%}
+22.6%{left:65.5%;top:61.8%}
+36.3%{left:65.0%;top:53.8%}
+42.5%{left:64.5%;top:50.2%}
+66.8%{left:56.5%;top:49.1%}
+81.9%{left:51.5%;top:49.7%}
+95.6%{left:47.8%;top:45.3%}
+100.0%{left:47.0%;top:43.0%}}
+@media (prefers-reduced-motion:reduce){.mp-walk{animation:none}}
 </style>
 </helmet>
 <sc-if value="{{lbOpen}}" hint-placeholder-val="{{ false }}">
@@ -327,7 +348,7 @@ animation:none;stroke-dashoffset:0}}
 
 
 </section></div></div>
-<div class="mp-thr"><dc-import name="Slot-C1-Threshold" hint-size="100%,100%"></dc-import></div>
+<div class="mp-thr"><dc-import name="Slot-C1-Threshold" hint-size="100%,100%"></dc-import><div class="mp-walk" aria-hidden="true"><dc-import name="AnnotFace" face="{{walkFace}}" motion="on" intensity="subtle" hint-size="150,116"></dc-import></div></div>
 <div class="mp-in"></div>
 <div class="mp-band">
 <div class="mp-backdrop" aria-hidden="true"><dc-import name="Slot-C1-Backdrop" hint-size="100%,100%"></dc-import></div>
@@ -409,8 +430,21 @@ animation:none;stroke-dashoffset:0}}
 </nav>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"navSize": {"editor": "text", "default": "14px"}, "navFont": {"editor": "enum", "options": ["Penpoint", "Helvetica Neue"], "default": "Penpoint"}, "$preview": {"width": 390, "height": 844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"walkFace": {"editor": "enum", "options": ["curious", "smile", "neutral", "thoughtful"], "default": "curious", "section": "Walk"}, "walkSize": {"editor": "text", "default": "7.2%", "section": "Walk"}, "walkSpeed": {"editor": "text", "default": "16s", "section": "Walk"}, "walkMotion": {"editor": "enum", "options": ["on", "off"], "default": "on", "section": "Walk"}, "navSize": {"editor": "text", "default": "14px"}, "navFont": {"editor": "enum", "options": ["Penpoint", "Helvetica Neue"], "default": "Penpoint"}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
+// the walk's size, pace and whether it runs - as custom properties, so a
+// drag in the properties panel cannot overwrite them
+walkApply() {
+try {
+const r = document.documentElement;
+if (!r) return;
+const p = this.props;
+r.style.setProperty('--walk-w', p.walkSize ?? '7.2%');
+r.style.setProperty('--walk-t', p.walkSpeed ?? '16s');
+r.style.setProperty('--walk-play', (p.walkMotion ?? 'on') === 'on' ? 'running' : 'paused');
+} catch (e) {}
+}
+
 cpEl() { try { return document.getElementById('mp-strip-Chapter1'); } catch (e) { return null; } }
 cpGo(dir) {
 const el = this.cpEl();
@@ -586,6 +620,7 @@ this.swipeBind();
 try { [0, 500, 1500].forEach((t) => setTimeout(() => this.swipeBind(), t)); } catch (e) {}
 }
 componentDidMount() {
+this.walkApply();
 this.swipeWatch();
 this.xkWatch(); this.ndBind(); this.cpBind(); }
 componentWillUnmount() {
@@ -617,6 +652,7 @@ try { [60, 400, 1200, 2500].forEach((t) => setTimeout(this._dwTick, t)); } catch
 }
 
 renderVals() {
+this.walkApply();
 const st = this.state || {};
 const pad = (k) => (k < 10 ? '0' : '') + k;
 const v = {};
@@ -693,6 +729,7 @@ v.navSize = this.props.navSize ?? '14px';
 v.navFam = _nf === 'Helvetica Neue'
 ? "'Helvetica Neue', Helvetica, Arial, sans-serif"
 : "'Penpoint', 'Bradley Hand', 'Segoe Print', cursive";
+v.walkFace = this.props.walkFace ?? 'curious';
 return v;
 }
 }

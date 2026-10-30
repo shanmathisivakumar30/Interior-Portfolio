@@ -270,6 +270,36 @@ a.xk:focus{outline:none}
 a.xk:hover .xk-a,a.xk:focus-visible .xk-a,a.xk:active .xk-a,
 a.xk:hover .xk-b,a.xk:focus-visible .xk-b,a.xk:active .xk-b{
 animation:none;stroke-dashoffset:0}}
+
+/* She walks the plan's own circulation line: in at the gate, round the garden planter and up the spine of the house.
+   Traced from the drawing, so each stop is where the dashes turn. */
+.pf-walk{position:absolute;z-index:3;pointer-events:none;
+width:var(--walk-w,5%);left:50.94%;top:86.42%;
+transform:translate(-50%,-50%);
+animation:pf-walk var(--walk-t,16s) ease-in-out infinite alternate;
+animation-play-state:var(--walk-play,running)}
+.pf-walk > *{display:block;width:100%!important;height:auto!important}
+@keyframes pf-walk{
+0.0%{left:50.94%;top:86.42%}
+2.8%{left:51.18%;top:84.15%}
+14.7%{left:51.31%;top:74.45%}
+16.4%{left:51.72%;top:73.21%}
+17.2%{left:52.04%;top:73.11%}
+20.2%{left:53.22%;top:74.39%}
+30.6%{left:57.88%;top:75.78%}
+34.0%{left:59.27%;top:76.95%}
+37.8%{left:60.83%;top:75.8%}
+40.3%{left:61.12%;top:73.81%}
+44.8%{left:60.86%;top:70.14%}
+48.1%{left:60.06%;top:67.88%}
+54.4%{left:57.41%;top:65.98%}
+65.4%{left:52.44%;top:65.7%}
+69.6%{left:51.54%;top:62.66%}
+87.7%{left:51.31%;top:47.87%}
+93.7%{left:51.5%;top:42.97%}
+95.1%{left:51.87%;top:42.03%}
+100.0%{left:53.98%;top:40.74%}}
+@media (prefers-reduced-motion:reduce){.pf-walk{animation:none}}
 </style>
 </helmet>
 <div class="pf-rt" id="pf-rt-Chapter2">
@@ -357,7 +387,7 @@ animation:none;stroke-dashoffset:0}}
 </section>
 <section class="pf-drop" style="animation-delay: 270ms; padding: 32px 36px 80px; ">
 <div style="width: 100%; max-width: 1280px; margin: auto; height: 677px">
-<div class="pf-thrbox" style="position: relative; display: block; overflow: hidden; background-color: #FFFFFF; width: 100%; height: 707px"><dc-import name="Slot-C2-Threshold" hint-size="100%,100%"></dc-import></div>
+<div class="pf-thrbox" style="position: relative; display: block; overflow: hidden; background-color: #FFFFFF; width: 100%; height: 707px"><dc-import name="Slot-C2-Threshold" hint-size="100%,100%"></dc-import><div class="pf-walk" aria-hidden="true"><dc-import name="AnnotFace" face="{{walkFace}}" motion="on" intensity="subtle" hint-size="150,116"></dc-import></div></div>
 <div style="display: flex; align-items: center; gap: 8px; margin-top: 14px; color: #0b0b0b; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500">INTO THE FILES</div>
 </div>
 </section>
@@ -503,8 +533,21 @@ animation:none;stroke-dashoffset:0}}
 </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"cpH": {"editor": "text", "default": "460px"}, "cpCount": {"editor": "enum", "options": ["1", "2", "3", "4", "5"], "default": "5"}, "ig": {"editor": "text", "default": "shansivakumar"}, "mail": {"editor": "text", "default": "shanmathisivakumar30@gmail.com"}, "prevLabel": {"editor": "text", "default": "previous"}, "nextLabel": {"editor": "text", "default": "next"}, "nightDemo": {"editor": "enum", "options": ["on", "off"], "default": "on"}, "paper": {"editor": "color", "default": "#FBF6E6"}, "border": {"editor": "text", "default": "2px"}, "pad": {"editor": "text", "default": "54px 46px 46px 58px"}, "gridOp": {"editor": "text", "default": "0.17"}, "gridStep": {"editor": "text", "default": "17px"}, "bigSize": {"editor": "text", "default": "134px"}, "quote": {"editor": "text", "default": "Even a brick wants to be something"}, "quoteBy": {"editor": "text", "default": "Louis Kahn"}, "quoteShow": {"editor": "enum", "options": ["show", "hide"], "default": "show"}, "qSize": {"editor": "text", "default": "30px"}, "qWeight": {"editor": "text", "default": "300"}, "qLead": {"editor": "text", "default": "1.3"}, "qTrack": {"editor": "text", "default": "-0.01em"}, "qAlign": {"editor": "enum", "options": ["left", "center", "right"], "default": "left"}, "qColor": {"editor": "color", "default": "#0B0B0B"}, "planCount": {"editor": "enum", "options": ["0", "1", "2", "3", "4", "5", "6"], "default": "4"}, "sectCount": {"editor": "enum", "options": ["0", "1", "2", "3", "4", "5", "6"], "default": "3"}, "title": {"editor": "text", "default": "The breakfast club"}, "slogan": {"editor": "text", "default": "Add a closing line from the project&#39;s actual design story."}, "accent": {"editor": "color", "default": "#786653", "options": ["#786653", "#241910", "#9C9795"]}, "fitDay": {"editor": "enum", "options": ["on", "off"], "default": "on"}, "$preview": {"width": 1440, "height": 4720}}'>
+<script type="text/x-dc" data-dc-script data-props='{"walkFace": {"editor": "enum", "options": ["curious", "smile", "neutral", "thoughtful"], "default": "curious", "section": "Walk"}, "walkSize": {"editor": "text", "default": "5%", "section": "Walk"}, "walkSpeed": {"editor": "text", "default": "16s", "section": "Walk"}, "walkMotion": {"editor": "enum", "options": ["on", "off"], "default": "on", "section": "Walk"}, "cpH": {"editor": "text", "default": "460px"}, "cpCount": {"editor": "enum", "options": ["1", "2", "3", "4", "5"], "default": "5"}, "ig": {"editor": "text", "default": "shansivakumar"}, "mail": {"editor": "text", "default": "shanmathisivakumar30@gmail.com"}, "prevLabel": {"editor": "text", "default": "previous"}, "nextLabel": {"editor": "text", "default": "next"}, "nightDemo": {"editor": "enum", "options": ["on", "off"], "default": "on"}, "paper": {"editor": "color", "default": "#FBF6E6"}, "border": {"editor": "text", "default": "2px"}, "pad": {"editor": "text", "default": "54px 46px 46px 58px"}, "gridOp": {"editor": "text", "default": "0.17"}, "gridStep": {"editor": "text", "default": "17px"}, "bigSize": {"editor": "text", "default": "134px"}, "quote": {"editor": "text", "default": "Even a brick wants to be something"}, "quoteBy": {"editor": "text", "default": "Louis Kahn"}, "quoteShow": {"editor": "enum", "options": ["show", "hide"], "default": "show"}, "qSize": {"editor": "text", "default": "30px"}, "qWeight": {"editor": "text", "default": "300"}, "qLead": {"editor": "text", "default": "1.3"}, "qTrack": {"editor": "text", "default": "-0.01em"}, "qAlign": {"editor": "enum", "options": ["left", "center", "right"], "default": "left"}, "qColor": {"editor": "color", "default": "#0B0B0B"}, "planCount": {"editor": "enum", "options": ["0", "1", "2", "3", "4", "5", "6"], "default": "4"}, "sectCount": {"editor": "enum", "options": ["0", "1", "2", "3", "4", "5", "6"], "default": "3"}, "title": {"editor": "text", "default": "The breakfast club"}, "slogan": {"editor": "text", "default": "Add a closing line from the project&#39;s actual design story."}, "accent": {"editor": "color", "default": "#786653", "options": ["#786653", "#241910", "#9C9795"]}, "fitDay": {"editor": "enum", "options": ["on", "off"], "default": "on"}, "$preview": {"width": 1440, "height": 4720}}'>
 class Component extends DCLogic {
+// the walk's size, pace and whether it runs - as custom properties, so a
+// drag in the properties panel cannot overwrite them
+walkApply() {
+try {
+const r = document.documentElement;
+if (!r) return;
+const p = this.props;
+r.style.setProperty('--walk-w', p.walkSize ?? '5%');
+r.style.setProperty('--walk-t', p.walkSpeed ?? '16s');
+r.style.setProperty('--walk-play', (p.walkMotion ?? 'on') === 'on' ? 'running' : 'paused');
+} catch (e) {}
+}
+
 pfFit() {
 try {
 const stage = document.getElementById('pf-stage-Chapter2');
@@ -538,6 +581,7 @@ try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e
 }
 
 componentDidMount() {
+this.walkApply();
 this.rtBind();
 this.cpBind();
 this.pfFitBind();
@@ -889,6 +933,7 @@ try { [60, 400, 1200, 2500].forEach((t) => setTimeout(this._dwTick, t)); } catch
 }
 
 renderVals() {
+this.walkApply();
 const a = this.props.accent ?? '#786653';
 const st = this.state || {};
 const cp = st.cp || 0;
@@ -1007,6 +1052,7 @@ v.cpNext = () => this.cpGo(1);
 const _wide = ((this.state || {}).wide) !== false;
 v.desk = _wide;
 v.phone = !_wide;
+v.walkFace = this.props.walkFace ?? 'curious';
 return v;}
 }
 </script>
