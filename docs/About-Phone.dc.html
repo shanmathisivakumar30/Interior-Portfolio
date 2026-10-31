@@ -25,6 +25,14 @@ letter-spacing:var(--ab-track,normal);font-weight:300;overflow-x:hidden}
 .ph-wrap{position:relative;z-index:1;width:100%;max-width:430px;margin:0 auto;
 padding:0 18px;box-sizing:border-box}
 
+/* the studio wordmark at the head of the page - tap it to go back to
+   the studio. Its own class, not the home page's, so the two boards
+   can never read each other's rule. */
+.ph-abbrand{display:flex;align-items:center;justify-content:center;
+margin:0 0 8px;padding:9px 0 11px;-webkit-tap-highlight-color:transparent}
+.ph-abbrand img{display:block;height:var(--ab-logo,24px);width:auto;max-width:100%}
+.ph-abbrand:active img{opacity:0.55}
+
 .ph-hand{font-family:'Penpoint','Bradley Hand','Segoe Print',cursive;font-weight:400}
 
 /* one column of notes, alternating a slight tilt, no tape */
@@ -115,6 +123,8 @@ a.xk:hover .xk-a,a.xk:hover .xk-b{animation:none}}
 </helmet>
 <div class="ph-ab">
 <div class="ph-wrap">
+
+<a class="ph-abbrand" href="Home.dc.html" aria-label="The Shan Studio - back to the studio home page"><img src="./assets/58089e4d5f83f916b857797223656dab.webp" alt="The Shan Studio"></a>
 
 <section class="ph-note"><div class="ph-punch" aria-hidden="true"><i></i><i></i><i></i></div>
 <h1 class="ph-name ph-hand" style="text-align: center">Shanmathi Sivakumar</h1>
@@ -214,7 +224,7 @@ a.xk:hover .xk-a,a.xk:hover .xk-b{animation:none}}
 </div>
 </div>
 <helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&amp;display=swap"></helmet></x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"nameSize": {"editor": "text", "default": "20px", "section": "Type"}, "roleSize": {"editor": "text", "default": "9px", "section": "Type"}, "headSize": {"editor": "text", "default": "26px", "section": "Type"}, "headFace": {"editor": "enum", "options": ["hand", "sans", "display"], "default": "hand", "section": "Type"}, "bodySize": {"editor": "text", "default": "13px", "section": "Type"}, "bodyFace": {"editor": "enum", "options": ["sans", "hand", "display"], "default": "sans", "section": "Type"}, "labelSize": {"editor": "text", "default": "10px", "section": "Type"}, "footSize": {"editor": "text", "default": "17px", "section": "Type"}, "lead": {"editor": "text", "default": "1.55", "section": "Type"}, "track": {"editor": "text", "default": "normal", "section": "Type"}, "faceSize": {"editor": "text", "default": "62px", "section": "Character"}, "face": {"editor": "enum", "options": ["smile", "neutral", "curious", "thoughtful"], "default": "smile", "section": "Character"}, "cvFile": {"editor": "text", "default": "./assets/e0ca70f8b8cadb60d5131c329b277eae.pdf", "section": "CV"}, "cvName": {"editor": "text", "default": "Shanmathi-Sivakumar-CV.pdf", "section": "CV"}, "$preview": {"width": 390, "height": 844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"nameSize": {"editor": "text", "default": "20px", "section": "Type"}, "roleSize": {"editor": "text", "default": "9px", "section": "Type"}, "headSize": {"editor": "text", "default": "26px", "section": "Type"}, "headFace": {"editor": "enum", "options": ["hand", "sans", "display"], "default": "hand", "section": "Type"}, "bodySize": {"editor": "text", "default": "13px", "section": "Type"}, "bodyFace": {"editor": "enum", "options": ["sans", "hand", "display"], "default": "sans", "section": "Type"}, "labelSize": {"editor": "text", "default": "10px", "section": "Type"}, "footSize": {"editor": "text", "default": "17px", "section": "Type"}, "lead": {"editor": "text", "default": "1.55", "section": "Type"}, "track": {"editor": "text", "default": "normal", "section": "Type"}, "logoSize": {"editor": "text", "default": "24px", "section": "Header"}, "faceSize": {"editor": "text", "default": "62px", "section": "Character"}, "face": {"editor": "enum", "options": ["smile", "neutral", "curious", "thoughtful"], "default": "smile", "section": "Character"}, "cvFile": {"editor": "text", "default": "./assets/e0ca70f8b8cadb60d5131c329b277eae.pdf", "section": "CV"}, "cvName": {"editor": "text", "default": "Shanmathi-Sivakumar-CV.pdf", "section": "CV"}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
 componentDidMount() { this.abType(); this.xkWatch(); }
 // One place to set the type. Each control writes a custom property, and the
@@ -242,6 +252,7 @@ set('--ab-foot', p.footSize ?? '17px');
 set('--ab-lead', p.lead ?? '1.55');
 set('--ab-track', p.track ?? 'normal');
 set('--face-w', p.faceSize ?? '62px');
+set('--ab-logo', p.logoSize ?? '24px');
 } catch (e) {}
 }
 // A tap is not a hover. The ring goes on when the finger lands, and the
