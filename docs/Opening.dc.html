@@ -59,6 +59,15 @@ section,main,header{padding-left:20px !important;padding-right:20px !important}
 [data-pf-marquee] h1,[data-pf-marquee] span{font-size:32px !important}
 .pf-tab h2{font-size:24px !important}
 .op-name{font-size:34px !important}
+/* the figure keeps her desktop width unless she is told otherwise, and at
+   317px she and the name together are wider than a phone - so she rides off
+   the left edge for the whole run and you never see who is pushing.
+   What actually sets the width here is the line above the name, at 9px with
+   a quarter-em of tracking: letting that off its leash is what buys the
+   room. The pair then measures 314px, inside even a 320px screen. */
+.op-girl{width:110px !important;margin-top:4px !important;margin-right:-12px !important}
+.op-group > div:last-child{padding-right:10px !important}
+.op-group p{font-size:8px !important;letter-spacing:0.16em !important;margin-bottom:14px !important}
 }
 </style>
 </helmet>
