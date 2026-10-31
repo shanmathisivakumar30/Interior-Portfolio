@@ -222,16 +222,38 @@ try { (this._seq || []).forEach(clearTimeout); } catch (e) {}
 this._seq = [];
 try { clearTimeout(this._lit); } catch (e) {}
 this._lampOn = false;
+// a fresh arrival looks for the opening again from scratch
+this._introDone = undefined;
+this._introSince = undefined;
 this.setState({ flick: false, lit: false, rock: false, done: false, touched: false });
 this.lampWait();
 }
 lampArt() { try { return document.querySelector('.ph-art'); } catch (e) { return null; } }
+// Is the opening still over the page? Nothing watching the drawing can
+// tell: it is behind a sheet that covers the window, and an observer counts
+// a covered thing as perfectly visible. So look for the sheet. Ten seconds
+// is the longest the lamps will ever hold for one.
+introUp() {
+try {
+if (this._introDone) return false;
+if (this._introSince === undefined) this._introSince = Date.now();
+if (Date.now() - this._introSince > 10000) { this._introDone = true; return false; }
+const v = document.querySelector('.pf-veil');
+if (!v) { this._introDone = true; return false; }
+const cs = getComputedStyle(v);
+if (cs.display === 'none' || cs.visibility === 'hidden'
+|| (parseFloat(cs.opacity) || 0) < 0.05) { this._introDone = true; return false; }
+return true;
+} catch (e) { return false; }
+}
 // The strikes were being spent before the page was worth looking at: they
 // fired a third of a second after mounting, which on a phone is usually
 // before the drawing has loaded. Wait for the picture, then for the drawing
 // to actually be on screen, and only then strike.
 lampWait() {
 if (this._lampOn) return;
+// the opening comes first: a flicker behind it is a flicker nobody sees
+if (this.introUp()) { this._seq.push(setTimeout(() => this.lampWait(), 140)); return; }
 const el = this.lampArt();
 if (!el) { this._seq.push(setTimeout(() => this.lampWait(), 120)); return; }
 const img = el.querySelector('.ph-room');
