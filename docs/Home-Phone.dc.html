@@ -24,10 +24,13 @@ background-size:26px 26px;color:#241910;
 font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;overflow-x:hidden}
 .ph-wrap{display:flex;flex-direction:column;flex:1 1 auto;width:100%;max-width:430px;margin:0 auto}
 
+/* the wordmark takes a line of its own, with the two words beneath it */
+.ph-brand{display:flex;align-items:center;justify-content:center;padding:2px 0 4px}
+.ph-brand img{display:block;height:var(--ph-logo,24px);width:auto;max-width:100%}
 .ph-nav{display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 0 0}
 .ph-navlink{position:relative;display:inline-flex;align-items:center;padding:9px 16px;
 text-decoration:none;-webkit-tap-highlight-color:transparent}
-.ph-navlink img{display:block;height:24px;width:auto}
+.ph-navlink img{display:block;height:var(--ph-nav,20px);width:auto}
 .ph-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .ph-ring path{fill:none;stroke:#C8432B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
 vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200}
@@ -91,6 +94,7 @@ opacity:0;transition:opacity 300ms ease}
 <div class="ph-home">
 <div class="ph-wrap">
 
+<div class="ph-brand"><img src="./assets/58089e4d5f83f916b857797223656dab.webp" alt="The Shan Studio"></div>
 <nav class="ph-nav" aria-label="Main navigation">
 <a class="ph-navlink" href="About.dc.html">
 <img src="./assets/dd23c601f5e5efbe7428059e7df3295e.svg" alt="About">
@@ -120,9 +124,23 @@ opacity:0;transition:opacity 300ms ease}
 </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"logoSize": {"editor": "text", "default": "24px", "section": "Header"}, "navSize": {"editor": "text", "default": "20px", "section": "Header"}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
+// The wordmark stands at the height the two words used to, and they
+// step down beneath it. Both are controls; both are custom properties,
+// out of reach of a drag in the properties panel.
+hdType() {
+try {
+const r = document.documentElement;
+if (!r) return;
+const p = this.props;
+r.style.setProperty('--ph-logo', p.logoSize ?? '24px');
+r.style.setProperty('--ph-nav', p.navSize ?? '20px');
+} catch (e) {}
+}
+
 componentDidMount() {
+this.hdType();
 this.xkWatch('a.ph-navlink');
 let reduced = false;
 try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
@@ -272,6 +290,7 @@ try { window.removeEventListener('pageshow', this._lampVis); } catch (e) {}
 try { if (this._lampBack) { this._lampBack.disconnect(); this._lampBack = null; } } catch (e) {}
 }
 renderVals() {
+this.hdType();
 const st = this.state || {};
 return {
 lit: st.lit ? ' ph-lit' : '',

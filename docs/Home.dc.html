@@ -55,6 +55,16 @@ img{max-width:100%}
 font-weight:400;font-size:48px;letter-spacing:0.18em;text-indent:0.18em;line-height:1.1;
 text-align:center;color:#241910;text-transform:uppercase}
 
+/* --- the studio wordmark, left of the nav and on the same line. The
+       same 24px inset as a nav link, so both ends of the row match. --- */
+.pf-logo{display:inline-flex;align-items:center;margin-right:auto;padding:15px 24px}
+.pf-logo img{display:block;height:var(--logo-h,40px);width:auto}
+/* the two nav words carry their heights inline on the images, which
+   out-ranks a plain rule - hence important. They move together, in the
+   27 / 26 they were drawn at, so one number keeps them balanced. */
+.pf-navbar .pf-ink-abt{height:var(--nav-h,27px)!important}
+.pf-navbar .pf-ink-prj{height:calc(var(--nav-h,27px) * 26 / 27)!important}
+
 /* --- navigation: handwriting + a quick red circle on hover/focus --- */
 .pf-nav{position:relative;display:inline-flex;align-items:center;padding:15px 24px}
 .pf-ring{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
@@ -119,6 +129,7 @@ html,body{margin:0;overflow-x:hidden}
 
 
 <header class="pf-navbar pf-hide{{enter}}" aria-label="Main navigation" style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 26px 44px 0; animation-delay: 0ms;">
+<span class="pf-logo"><img src="./assets/58089e4d5f83f916b857797223656dab.webp" alt="The Shan Studio"></span>
 <a class="pf-nav" href="About.dc.html">
 <img class="pf-ink-abt" src="./assets/dd23c601f5e5efbe7428059e7df3295e.svg" alt="About" style="display: block; height: 27px; width: auto;">
 <svg class="pf-ring" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -150,8 +161,21 @@ html,body{margin:0;overflow-x:hidden}
 </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"intro": {"editor": "enum", "options": ["once per visit", "every time", "off"], "default": "once per visit"}, "$preview": {"width": 1440, "height": 900}}'>
+<script type="text/x-dc" data-dc-script data-props='{"intro": {"editor": "enum", "options": ["once per visit", "every time", "off"], "default": "once per visit"}, "logoSize": {"editor": "text", "default": "40px", "section": "Header"}, "navSize": {"editor": "text", "default": "27px", "section": "Header"}, "$preview": {"width": 1440, "height": 900}}'>
 class Component extends DCLogic {
+// How tall the wordmark and the two nav words stand. Written as custom
+// properties rather than onto the elements, so a drag in the properties
+// panel cannot wipe them out.
+hdType() {
+try {
+const r = document.documentElement;
+if (!r) return;
+const p = this.props;
+r.style.setProperty('--logo-h', p.logoSize ?? '40px');
+r.style.setProperty('--nav-h', p.navSize ?? '27px');
+} catch (e) {}
+}
+
 pfFit() {
 try {
 const stage = document.getElementById('pf-stage-Home');
@@ -188,6 +212,7 @@ try { if (this._pfRO) { this._pfRO.disconnect(); this._pfRO = null; } } catch (e
 }
 
 componentDidMount() {
+this.hdType();
 this.rtBind();
 this.pfFitBind();
 try { window.scrollTo(0, 0); } catch (e) {}
@@ -242,6 +267,7 @@ try { window.removeEventListener('resize', this._rt); } catch (e) {}
 try { if (this._rtRO) { this._rtRO.disconnect(); this._rtRO = null; } } catch (e) {}
 }
 renderVals() {
+this.hdType();
 const st = this.state || {};
 const done = st.introDone ?? this.introSkipped();
 const v = {
