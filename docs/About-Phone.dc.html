@@ -224,7 +224,7 @@ a.xk:hover .xk-a,a.xk:hover .xk-b{animation:none}}
 </div>
 </div>
 <helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&amp;display=swap"></helmet></x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"nameSize": {"editor": "text", "default": "20px", "section": "Type"}, "roleSize": {"editor": "text", "default": "9px", "section": "Type"}, "headSize": {"editor": "text", "default": "26px", "section": "Type"}, "headFace": {"editor": "enum", "options": ["hand", "sans", "display"], "default": "hand", "section": "Type"}, "bodySize": {"editor": "text", "default": "13px", "section": "Type"}, "bodyFace": {"editor": "enum", "options": ["sans", "hand", "display"], "default": "sans", "section": "Type"}, "labelSize": {"editor": "text", "default": "10px", "section": "Type"}, "footSize": {"editor": "text", "default": "17px", "section": "Type"}, "lead": {"editor": "text", "default": "1.55", "section": "Type"}, "track": {"editor": "text", "default": "normal", "section": "Type"}, "logoSize": {"editor": "text", "default": "24px", "section": "Header"}, "faceSize": {"editor": "text", "default": "62px", "section": "Character"}, "face": {"editor": "enum", "options": ["smile", "neutral", "curious", "thoughtful"], "default": "smile", "section": "Character"}, "cvFile": {"editor": "text", "default": "./assets/e0ca70f8b8cadb60d5131c329b277eae.pdf", "section": "CV"}, "cvName": {"editor": "text", "default": "Shanmathi-Sivakumar-CV.pdf", "section": "CV"}, "$preview": {"width": 390, "height": 844}}'>
+<script type="text/x-dc" data-dc-script data-props='{"nameSize": {"editor": "text", "default": "20px", "section": "Type"}, "roleSize": {"editor": "text", "default": "9px", "section": "Type"}, "headSize": {"editor": "text", "default": "26px", "section": "Type"}, "headFace": {"editor": "enum", "options": ["hand", "sans", "display"], "default": "hand", "section": "Type"}, "bodySize": {"editor": "text", "default": "13px", "section": "Type"}, "bodyFace": {"editor": "enum", "options": ["sans", "hand", "display"], "default": "sans", "section": "Type"}, "labelSize": {"editor": "text", "default": "10px", "section": "Type"}, "footSize": {"editor": "text", "default": "17px", "section": "Type"}, "lead": {"editor": "text", "default": "1.55", "section": "Type"}, "track": {"editor": "text", "default": "normal", "section": "Type"}, "logoSize": {"editor": "text", "default": "24px", "section": "Header"}, "faceSize": {"editor": "text", "default": "62px", "section": "Character"}, "face": {"editor": "enum", "options": ["smile", "neutral", "curious", "thoughtful"], "default": "smile", "section": "Character"}, "cvFile": {"editor": "text", "default": "./assets/Shanmathi-Sivakumar-Resume-2026-11.pdf", "section": "CV"}, "cvName": {"editor": "text", "default": "Shanmathi-Sivakumar-CV.pdf", "section": "CV"}, "$preview": {"width": 390, "height": 844}}'>
 class Component extends DCLogic {
 componentDidMount() { this.abType(); this.xkWatch(); }
 // One place to set the type. Each control writes a custom property, and the
@@ -300,7 +300,7 @@ const p = this.props;
 this.abType();
 // where the CV lives, and the name it is saved under
 return { face: p.face ?? 'smile',
-cvFile: p.cvFile ?? './assets/e0ca70f8b8cadb60d5131c329b277eae.pdf', cvName: p.cvName ?? 'Shanmathi-Sivakumar-CV.pdf' };
+cvFile: p.cvFile ?? './assets/Shanmathi-Sivakumar-Resume-2026-11.pdf', cvName: p.cvName ?? 'Shanmathi-Sivakumar-CV.pdf' };
 }
 }
 </script>

@@ -34,9 +34,11 @@ SITE = os.path.join(ROOT, "docs")
 # Files that belong to this site, not to any export. Never overwritten.
 PROTECTED = {
     "CNAME", ".nojekyll", "Library.dc.html", "index.html",
-    # Her resume behind "Download CV" on About (desktop and phone). Replaced
-    # directly on the site in Nov 2026; Claude Design still holds the older
-    # copy under this name, so an About export must not put it back.
+    # Her resume behind "Download CV" on About (desktop and phone), replaced
+    # directly on the site in Nov 2026. The pages link to the dated file;
+    # Claude Design still holds the older resume under the hashed name, so
+    # both carry the new resume and an About export cannot restore the old.
+    "assets/Shanmathi-Sivakumar-Resume-2026-11.pdf",
     "assets/e0ca70f8b8cadb60d5131c329b277eae.pdf",
 }
 
