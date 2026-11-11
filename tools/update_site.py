@@ -32,7 +32,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, "docs")
 
 # Files that belong to this site, not to any export. Never overwritten.
-PROTECTED = {"CNAME", ".nojekyll", "Library.dc.html", "index.html"}
+PROTECTED = {
+    "CNAME", ".nojekyll", "Library.dc.html", "index.html",
+    # Her resume behind "Download CV" on About (desktop and phone). Replaced
+    # directly on the site in Nov 2026; Claude Design still holds the older
+    # copy under this name, so an About export must not put it back.
+    "assets/e0ca70f8b8cadb60d5131c329b277eae.pdf",
+}
 
 # Added to the <head> of every full page so phones report their real width
 # and each page's width switch shows the phone artboard.
